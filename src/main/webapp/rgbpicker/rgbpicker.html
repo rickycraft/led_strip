@@ -1,0 +1,26 @@
+<div ng-controller="RgbCtrl" layout="column" flex >
+
+	<div layout="column" flex="15" ng-attr-style="background: rgb({{color.red}},{{color.green}},{{color.blue}}); border-radius:5px; margin-top:10px">
+	</div>
+	<div layout="column" flex style="margin-top:20px;">
+		<md-slider-container>
+		  <span style="margin-right:0px;">R</span>
+		  <md-slider min="0" max="255" ng-model="color.red" id="red-slider" class="md-warn" step="5"></md-slider>
+		  <span>{{color.red}}</span>
+		</md-slider-container>
+	    <md-slider-container>
+		  <span style="margin-right:0px;">G</span>
+		  <md-slider min="0" max="255" ng-model="color.green" id="green-slider" step="5"></md-slider>
+		  <span>{{color.green}}</span>
+		</md-slider-container>
+		<md-slider-container>
+		  <span style="margin-right:0px;">B</span>
+		  <md-slider min="0" max="255" ng-model="color.blue" id="blu-slider" class="md-primary" step="5"></md-slider>
+		  <span>{{color.blue}}</span>
+		</md-slider-container>
+    </div>
+    <div layout="column" flex >
+    	<md-button class="md-raised md-primary" ng-click="toggleFade()">turn fade {{fadeStatus}}</md-button>
+    	<md-button class="md-raised md-primary" ng-click="toggleElwire()">turn elwire {{elwireStatus}}</md-button>
+    </div>	
+</div>

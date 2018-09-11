@@ -20,7 +20,8 @@
   <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script> 
 <!--   app controller -->
   <script type="text/javascript" src="index.js"></script>
-  <script type="text/javascript" src="main/main.js"></script> 
+  <script type="text/javascript" src="main/main.js"></script>
+  <script type="text/javascript" src="rgbpicker/rgbpicker.js"></script>
      
   
 	<div layout="column" flex>
@@ -30,14 +31,13 @@
 		<md-icon class="material-icons" class="favorite-icon">favorite</md-icon>
 		</div>
 	</md-toolbar>
-	<div layout="column" flex>
-	<md-tabs md-selected="selectedIndex" md-border-bottom md-swipe-content flex>
-      <md-tab label="main" layout="column" flex>
-      	<div layout="column" style="height:100%;" ng-include="'main/main.html'"></div>
+	<div layout="column" flex style="padding-bottom:10px;">
+	<md-tabs md-selected="selectedIndex" md-swipe-content md-border-bottom flex>
+      <md-tab label="main">
+      	<div layout="column" style="height:100%; padding-left:5px; padding-right:5px;" ng-include="'main/main.html'"></div>
       </md-tab>
-       <md-tab label="more" layout="column" flex>
-      	<div layout="column" style="height:100%;">
-	  	</div>
+       <md-tab label="rgb">
+      	<div layout="column" style="height:100%; padding-left:10px; padding-right:10px;" ng-include="'rgbpicker/rgbpicker.html'"></div>
       </md-tab>
     </md-tabs>
 	</div>
