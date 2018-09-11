@@ -10,6 +10,19 @@ app.config(function($urlRouterProvider, localStorageServiceProvider){
 
 app.controller("IndexCtrl", IndexCtrl);
 
-function IndexCtrl($scope){
-
+function IndexCtrl($scope, $log){		
+	var nTab = 1; //as array index 0,1,2,...
+	$scope.selectedIndex = 0;
+	
+	$scope.swipeRight = function(){
+		if ($scope.selectedIndex > 0){
+			$scope.selectedIndex -= 1;
+		}
+	};
+	
+	$scope.swipeLeft = function(){
+		if ($scope.selectedIndex < nTab){
+			$scope.selectedIndex += 1;
+		}
+	};	
 }
