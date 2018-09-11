@@ -11,20 +11,20 @@ app.config(function($urlRouterProvider, localStorageServiceProvider){
 app.controller("IndexCtrl", IndexCtrl);
 
 function IndexCtrl($scope, $log){		
-	var nTab = 1; //as array index 0,1,2,...
-	$scope.selectedIndex = 1;
+	$scope.status = false;
+	$scope.statusText = "off";
 	
-	$scope.swipeRight = function(){
-		if ($scope.selectedIndex > 0){
-			$scope.selectedIndex -= 1;
+	$scope.toggleStatus = function(){
+		if ($scope.status){
+			$scope.statusText = "off";
+			$scope.color.red = 0;
+			$scope.color.green = 0;
+			$scope.color.blue = 0;
+		} else {
+			$scope.statusText = "on";
 		}
-	};
-	
-	$scope.swipeLeft = function(){
-		if ($scope.selectedIndex < nTab){
-			$scope.selectedIndex += 1;
-		}
-	};
+		$scope.status = !$scope.status;
+	}
 	
 	 $scope.color = {
 		      red: 0,

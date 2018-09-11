@@ -1,5 +1,11 @@
 <div ng-controller="MainCtrl" layout="column" flex style="padding-top:5px;">
 
-     div flexed
+     <div layout="column" flex style="margin-top:10px;">
+     <md-button class="md-raised md-primary" ng-click="toggleFade()" ng-disabled="!status">turn fade {{fadeStatus}}</md-button>
+     </div>
+     
+     <div layout="row" layout-align="end end">
+    	<md-button class="md-fab" ng-click="toggleStatus()">{{statusText}}</md-button>
+     </div>
      	
 </div>
