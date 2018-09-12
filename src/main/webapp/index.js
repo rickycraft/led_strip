@@ -20,6 +20,7 @@ function IndexCtrl($scope, $log){
 			$scope.color.red = 0;
 			$scope.color.green = 0;
 			$scope.color.blue = 0;
+			$scope.fadeStatus = "on"
 		} else {
 			$scope.statusText = "on";
 		}
@@ -45,6 +46,15 @@ function IndexCtrl($scope, $log){
 	
 	$scope.toggleElwire = function(){
 		$scope.elwireStatus = ($scope.elwireStatus == "off")? "on" : "off";
+	};
+	
+	$scope.isElwire = function(){	
+//		if ($scope.elwireStatus == "on"){
+//			return false;
+//		} else {
+//			return true;
+//		}
+		return (($scope.elwireStatus == "on")? false : true);
 	};
 	
 }

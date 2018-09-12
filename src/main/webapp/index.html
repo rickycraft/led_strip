@@ -28,7 +28,10 @@
 	<md-toolbar>
 		<div class="md-toolbar-tools">
 		<h1 flex md-truncate>LedStrip</h1>
-		<md-icon class="material-icons" class="favorite-icon">offline_bolt</md-icon>
+		<md-button class="md-icon-button" ng-click="toggleElwire()">
+			<md-icon class="material-icons" ng-if="isElwire()" >offline_bolt</md-icon>
+			<md-icon class="material-icons" ng-if="!isElwire()" >power_settings_new</md-icon>
+		</md-button>
 		</div>
 	</md-toolbar>
 	<div layout="column" flex style="padding-bottom:10px;">
