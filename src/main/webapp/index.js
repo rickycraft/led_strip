@@ -11,11 +11,11 @@ app.config(function($urlRouterProvider, localStorageServiceProvider){
 app.controller("IndexCtrl", IndexCtrl);
 
 function IndexCtrl($scope, $log){		
-	$scope.status = false;
+	$scope.isOn = false;
 	$scope.statusText = "off";
 	
 	$scope.toggleStatus = function(){
-		if ($scope.status){
+		if ($scope.isOn){
 			$scope.statusText = "off";
 			$scope.color.red = 0;
 			$scope.color.green = 0;
@@ -23,7 +23,7 @@ function IndexCtrl($scope, $log){
 		} else {
 			$scope.statusText = "on";
 		}
-		$scope.status = !$scope.status;
+		$scope.isOn = !$scope.isOn;
 	}
 	
 	 $scope.color = {
@@ -35,4 +35,16 @@ function IndexCtrl($scope, $log){
 	 $scope.$watch('', function() {
 	        console.log('');
 	    });
+	 
+	$scope.fadeStatus = "on";
+	$scope.elwireStatus = "on";
+	
+	$scope.toggleFade = function(){
+		$scope.fadeStatus = ($scope.fadeStatus == "off")? "on" : "off";
+	};
+	
+	$scope.toggleElwire = function(){
+		$scope.elwireStatus = ($scope.elwireStatus == "off")? "on" : "off";
+	};
+	
 }

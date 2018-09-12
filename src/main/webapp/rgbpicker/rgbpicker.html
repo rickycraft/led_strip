@@ -5,19 +5,20 @@
 	<div layout="column" flex style="margin-top:20px;">
 		<md-slider-container>
 		<md-button class="md-fab md-mini" style="margin-left:0px; margin-right:12px; background-color:rgb(213,0,0)">R</md-button>
-		  <md-slider min="0" max="255" ng-model="color.red" id="red-slider" class="md-warn" step="5" ng-disabled="!status"></md-slider>
+		  <md-slider min="0" max="255" ng-model="color.red" id="red-slider" class="md-warn" step="5" ng-disabled="rgbEnabled()"></md-slider>
 		  <span>{{color.red}}</span>
 		</md-slider-container>
 	    <md-slider-container>
 			<md-button class="md-fab md-mini" style="margin-left:0px; margin-right:12px; background-color:rgb(65, 233, 156);">G</md-button>
-			<md-slider min="0" max="255" ng-model="color.green" id="green-slider" step="5" ng-disabled="!status"></md-slider>
+			<md-slider min="0" max="255" ng-model="color.green" id="green-slider" step="5" ng-disabled="rgbEnabled()"></md-slider>
 		  	<span>{{color.green}}</span>
 		</md-slider-container>
 		<md-slider-container>
 			<md-button class="md-fab md-mini" style="margin-left:0px; margin-right:12px; background-color:rgb(41, 98, 255);">B</md-button>
-			<md-slider min="0" max="255" ng-model="color.blue" id="blu-slider" class="md-primary" step="5" ng-disabled="!status"></md-slider>
+			<md-slider min="0" max="255" ng-model="color.blue" id="blu-slider" class="md-primary" step="5" ng-disabled="rgbEnabled()"></md-slider>
 		  	<span>{{color.blue}}</span>
 		</md-slider-container>
+		<md-button class="md-raised md-primary" ng-click="toggleFade()" ng-disabled="!isOn" style="margin-top:5px;">turn fade {{fadeStatus}}</md-button>
     </div>
     <div layout="column" flex >
     	<md-button class="md-raised md-primary" ng-click="toggleElwire()">turn elwire {{elwireStatus}}</md-button>
