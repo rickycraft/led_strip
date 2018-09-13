@@ -20,6 +20,7 @@ function IndexCtrl($scope, $log){
 			$scope.color.red = 0;
 			$scope.color.green = 0;
 			$scope.color.blue = 0;
+			$scope.color.lux = 0;
 			$scope.isFade = false;
 		} else {
 			$scope.statusText = "on";
@@ -32,7 +33,7 @@ function IndexCtrl($scope, $log){
 		      green: 0,
 		      blue: 0
 		    };
-	 
+		
 	 $scope.$watch('', function() {
 	        console.log('');
 	    });
