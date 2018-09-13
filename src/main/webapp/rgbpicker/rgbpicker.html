@@ -18,12 +18,8 @@
 			<md-slider min="0" max="255" ng-model="color.blue" id="blu-slider" class="md-primary" step="5" ng-disabled="!rgbEnabled()"></md-slider>
 		  	<span>{{color.blue}}</span>
 		</md-slider-container>
-		<md-button class="md-raised md-primary" ng-click="toggleFade()" ng-disabled="!isOn" style="margin-top:5px;">turn fade {{fadeStatus}}</md-button>
     </div>
     <div layout="column" flex >
-    	<md-button class="md-raised md-primary" ng-click="toggleElwire()">turn elwire {{elwireStatus}}</md-button>
     </div>
-    <div layout="row" layout-align="end end">
-    	<md-button class="md-fab" ng-click="toggleStatus()">{{statusText}}</md-button>
-    </div>
+    
 </div>

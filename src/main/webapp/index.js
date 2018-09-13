@@ -20,7 +20,7 @@ function IndexCtrl($scope, $log){
 			$scope.color.red = 0;
 			$scope.color.green = 0;
 			$scope.color.blue = 0;
-			$scope.fadeStatus = "on"
+			$scope.isFade = false;
 		} else {
 			$scope.statusText = "on";
 		}
@@ -37,23 +37,22 @@ function IndexCtrl($scope, $log){
 	        console.log('');
 	    });
 	 
-	$scope.fadeStatus = "on";
+	$scope.isFade = false;
 	$scope.elwireStatus = "on";
 	
 	$scope.toggleFade = function(){
-		$scope.fadeStatus = ($scope.fadeStatus == "off")? "on" : "off";
+		$scope.isFade = !$scope.isFade;
 	};
+	
+	$scope.fadeIcon = function(){
+		return ($scope.isFade)? "cancel" : "tonality";
+	}
 	
 	$scope.toggleElwire = function(){
 		$scope.elwireStatus = ($scope.elwireStatus == "off")? "on" : "off";
 	};
 	
 	$scope.isElwire = function(){	
-//		if ($scope.elwireStatus == "on"){
-//			return false;
-//		} else {
-//			return true;
-//		}
 		return (($scope.elwireStatus == "on")? false : true);
 	};
 	

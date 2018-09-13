@@ -28,7 +28,7 @@
 	<md-toolbar>
 		<div class="md-toolbar-tools">
 		<h1 flex md-truncate>LedStrip</h1>
-		<md-button class="md-icon-button" ng-click="toggleElwire()">
+		<md-button class="md-icon-button" ng-click="toggleElwire()" md-no-ink="true">
 			<md-icon class="material-icons" ng-if="isElwire()" >offline_bolt</md-icon>
 			<md-icon class="material-icons" ng-if="!isElwire()" >power_settings_new</md-icon>
 		</md-button>
@@ -43,7 +43,16 @@
       	<div layout="column" style="height:100%; padding-left:10px; padding-right:10px;" ng-include="'rgbpicker/rgbpicker.html'"></div>
       </md-tab>
     </md-tabs>
+	    <div layout="row">
+	    	<md-button ng-click="toggleFade()" class="md-fab" ng-disabled="!isOn">
+	    		<md-icon class="material-icons" ng-if="!isFade">tonality</md-icon>
+	    		<md-icon class="material-icons" ng-if="isFade">cancel</md-icon>
+	    	</md-button>
+	    	<md-truncate flex></md-truncate>
+	    	<md-button class="md-fab" ng-click="toggleStatus()">{{statusText}}</md-button>
+	    </div>
 	</div>
+	
 	</div>
 		
 </body>
