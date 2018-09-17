@@ -2,6 +2,12 @@ app.service('ColorList', ColorList);
 
 function ColorList() {
 	
+	this.white = {
+			r: 240,
+			g: 240,
+			b: 255
+	};
+	
 	this.red = {
 			r: 255,
 			g: 0,
