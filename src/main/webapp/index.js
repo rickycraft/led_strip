@@ -57,4 +57,13 @@ function IndexCtrl($scope, $log){
 		return (($scope.elwireStatus == "on")? false : true);
 	};
 	
+	$scope.rgb = function(r,g,b){
+		var rgbPromise = Services.rgb(r,g,b);
+		rgbPromise.then(function onSuccess(){
+			console.log('success');
+		}, function onError(error){
+			console.log('error '+error);
+		});	
+	}
+	
 }
