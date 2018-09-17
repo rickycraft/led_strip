@@ -22,6 +22,8 @@
   <script type="text/javascript" src="index.js"></script>
   <script type="text/javascript" src="main/main.js"></script>
   <script type="text/javascript" src="rgbpicker/rgbpicker.js"></script>
+  <script type="text/javascript" src="services.js"></script>
+  <script type="text/javascript" src="colorList.js"></script>
      
   
 	<div layout="column" flex>
@@ -39,8 +41,12 @@
       <md-tab label="main">
       	<div layout="column" style="height:100%; padding:10px;" ng-include="'main/main.html'"></div>
       </md-tab>
-       <md-tab label="rgb">
-      	<div layout="column" style="height:100%; padding:10px;" ng-include="'rgbpicker/rgbpicker.html'"></div>
+       <md-tab>
+       	<md-tab-label><md-icon class="material-icons">color_lens</md-icon></md-tab-label>
+       <md-tab-body>
+       	<div layout="column" style="height:100%; padding:10px;" ng-include="'rgbpicker/rgbpicker.html'"></div>
+       </md-tab-body>
+      	
       </md-tab>
 <!--       <md-tab ng-disabled="true"> -->
 <!--       <md-tab-label>{{color.lux}}</md-tab-label> -->
@@ -49,10 +55,10 @@
 	    <div layout="row" layout-align="space-between end">
 	    	<md-button ng-click="toggleFade()" class="md-fab" ng-disabled="!isOn">
 	    		<md-icon class="material-icons" ng-if="!isFade">tonality</md-icon>
-	    		<md-icon class="material-icons" ng-if="isFade">cancel</md-icon>
+	    		<md-icon class="material-icons" ng-if="isFade">highlight_off</md-icon>
 	    	</md-button>
 	    	<div flex style="margin-left:5px; margin-right:5px;">
-	    	<md-slider min="0" max="10" ng-model="color.lux" id="lux-slider" ng-disabled="!isOn" md-discrete></md-slider>
+	    	<md-slider min="0" max="10" ng-model="color.lux" id="lux-slider" ng-disabled="!luxEnabled()" md-discrete></md-slider>
 	    	</div>
 	    	<md-button class="md-fab" ng-click="toggleStatus()">{{statusText}}</md-button>
 	    </div>

@@ -10,4 +10,10 @@ function RgbCtrl($scope){
 		}
 	};
 	
+	$scope.resetSlider = function(){
+		$scope.color.red = 0;
+		$scope.color.green = 0;
+		$scope.color.blue = 0;
+	}
+	
 }

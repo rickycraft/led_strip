@@ -18,8 +18,14 @@
 			<md-slider min="0" max="255" step="5" ng-model="color.blue" id="blu-slider" class="md-primary" ng-disabled="!rgbEnabled()"></md-slider>
 		  	<span>{{color.blue}}</span>
 		</md-slider-container>
-    </div>
-    <div layout="column" flex >
+		<div layout="row" layout-align="end">
+		<md-button class="md-fab md-mini"  ng-click="resetSlider()" ng-disabled="!rgbEnabled()">
+    		<md-icon class="material-icons">settings_backup_restore</md-icon>
+    	</md-button>
+		</div>
+		
+    </div>   
+    <div layout="column" flex>
     </div>
     
 </div>
