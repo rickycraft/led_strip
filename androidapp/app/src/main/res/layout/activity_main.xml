@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/connecting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/rgbButton"
+        android:layout_width="@dimen/big_button_width"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/RGB"
+        app:layout_constraintBottom_toTopOf="@+id/whiteButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/colorsButton"
+        android:layout_width="@dimen/big_button_width"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginBottom="32dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/colors"
+        app:layout_constraintBottom_toTopOf="@+id/redButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/bluButton"
+        android:layout_width="@dimen/default_button_width"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/material_blu"
+        android:text="@string/blu"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/whiteButton"
+        app:layout_constraintStart_toEndOf="@+id/greenButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <Button
+        android:id="@+id/offButton"
+        android:layout_width="@dimen/default_button_width"
+        android:layout_height="80dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/off"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/redButton"
+        android:layout_width="@dimen/default_button_width"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/material_red"
+        android:text="@string/red"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/greenButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <Button
+        android:id="@+id/whiteButton"
+        android:layout_width="@dimen/default_button_width"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/black"
+        android:text="@string/white"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bluButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <Button
+        android:id="@+id/greenButton"
+        android:layout_width="@dimen/default_button_width"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/material_green"
+        android:text="@string/green"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bluButton"
+        app:layout_constraintStart_toEndOf="@+id/redButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/number_picker_lux"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="48dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/offButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:np_dividerColor="@color/colorPrimaryDark"
+        app:np_fadingEdgeEnabled="true"
+        app:np_formatter="@string/number_picker_formatter"
+        app:np_height="@dimen/orizzontal_picker_height"
+        app:np_max="10"
+        app:np_min="1"
+        app:np_orientation="horizontal"
+        app:np_scrollerEnabled="true"
+        app:np_selectedTextColor="@color/colorPrimary"
+        app:np_selectedTextSize="@dimen/small_text_size"
+        app:np_textColor="@color/dark_grey"
+        app:np_textSize="@dimen/small_text_size"
+        app:np_typeface="@string/roboto_light"
+        app:np_value="10"
+        app:np_width="@dimen/orizzontal_picker_width"
+        app:np_wrapSelectorWheel="true" />
+
+    <Switch
+        android:id="@+id/elwireSwitch"
+        android:layout_width="127dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:checked="false"
+        android:text="@string/elwire"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:checked="false" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Led controls</string>
+
+    <string name="on">on</string>
+    <string name="connect">connect</string>
+    <string name="disconnect">disconnect</string>
+    <string name="connecting">connecting</string>
+    <string name="off">off</string>
+    <string name="power_on">power on</string>
+    <string name="fade_on">start fade</string>
+    <string name="fade_off">stop fade</string>
+    <string name="RGB">RGB</string>
+    <string name="colors">more colors</string>
+    <string name="elwire">EL WIRE</string>
+
+    <!-- Color -->
+    <string name="white">white</string>
+    <string name="purple">purple</string>
+    <string name="red">red</string>
+    <string name="green">green</string>
+    <string name="blu">blu</string>
+    <string name="orange">orange</string>
+    <string name="pink">pink</string>
+
+    <!-- Font -->
+    <string name="roboto_regular">sans-serif</string>
+    <string name="roboto_light">sans-serif-light</string>
+    <string name="roboto_condensed">sans-serif-condensed</string>
+    <string name="roboto_thin">sans-serif-thin</string>
+    <string name="roboto_medium">sans-serif-medium</string>
+    <string name="number_picker_formatter">%02d</string>
+
+</resources>
