@@ -1,8 +1,8 @@
 #include <SoftwareSerial.h>
 
-int redPin = 10;
+int redPin = 9;
 int bluPin = 11;
-int greenPin = 9;
+int greenPin = 10;
 int elwire = 3;
 String msg = "";
 char data;
