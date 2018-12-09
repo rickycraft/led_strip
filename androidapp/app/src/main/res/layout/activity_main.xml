@@ -38,6 +38,28 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/pinkButton"
+        android:layout_width="235dp"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/pink"
+        android:text="@string/pink"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/purpleButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/purpleButton"
+        android:layout_width="235dp"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/purple"
+        android:text="@string/purple"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/greenButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/bluButton"
         android:layout_width="235dp"
         android:layout_height="@dimen/default_button_height"
@@ -56,7 +78,7 @@
         android:backgroundTint="@color/material_red"
         android:text="@string/red"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/greenButton"
+        app:layout_constraintBottom_toTopOf="@+id/pinkButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -88,12 +110,12 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="46dp"
+        android:layout_marginEnd="48dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintVertical_bias="0.76"
         app:np_dividerColor="@color/colorPrimaryDark"
         app:np_fadingEdgeEnabled="true"
         app:np_formatter="@string/number_picker_formatter"
@@ -107,8 +129,8 @@
         app:np_textColor="@color/dark_grey"
         app:np_textSize="@dimen/small_text_size"
         app:np_typeface="@string/roboto_light"
-        app:np_value="10"
-        app:np_width="160dp"
+        app:np_value="00"
+        app:np_width="165dp"
         app:np_wrapSelectorWheel="true" />
 
     <Switch
@@ -121,6 +143,8 @@
         android:text="@string/elwire"
         android:textAlignment="textStart"
         android:textAllCaps="false"
+        android:textOff="EL WIRE OFF"
+        android:textOn="EL WIRE ON"
         android:textSize="18sp"
         android:textStyle="bold"
         android:typeface="monospace"

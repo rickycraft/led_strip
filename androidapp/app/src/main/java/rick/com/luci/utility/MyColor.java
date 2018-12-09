@@ -103,6 +103,10 @@ public class MyColor {
 
     }
 
+    public String getRawColor(int r, int b, int g){
+        return getRaw(r) + ":" + getRaw(b) + ":" + getRaw(g);
+    }
+
     public String getMessage() {
         return checkZero(red * lux) + ":" + checkZero(green * lux) + ":" + checkZero(blu * lux);
     }
@@ -124,5 +128,14 @@ public class MyColor {
             check = 0;
         }
         return check;
+    }
+
+    private String getRaw(int check){
+        if (check > 255){
+            check = 255;
+        } else if (check < 0) {
+            check = 0;
+        }
+        return checkZero(check);
     }
 }

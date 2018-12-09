@@ -10,7 +10,7 @@ import com.shawnlin.numberpicker.NumberPicker;
 import rick.com.luci.utility.MyUtility;
 
 
-public class NumberPickerActivity extends MyUtility {
+public class RgbActivity extends MyUtility {
     private NumberPicker redNumberPicker;
     private NumberPicker greenNumberPicker;
     private NumberPicker bluNumberPicker;
@@ -102,8 +102,7 @@ public class NumberPickerActivity extends MyUtility {
 
     private void fade() { //TODO fix rgb
         if (!isFading) {
-            mColor.setColorRGB(25, 0, 0);
-            mBluetooth.sendColorMessage();
+            mBluetooth.sendColorName("red");
             mBluetooth.sendMessage("fdi");
             fadeButton.setText(R.string.fade_off);
             snackPrint("Start fading");

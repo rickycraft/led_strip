@@ -28,6 +28,9 @@ public class MainActivity extends MyUtility {
     private Button whiteButton;
     private Button rgbButton;
     private Button colorsButton;
+    private Button purpleButton;
+    private Button pinkButton;
+    private Button[] buttonMap;
     private NumberPicker luxPicker;
     private Switch elwireSwitch;
 
@@ -65,14 +68,11 @@ public class MainActivity extends MyUtility {
         connectButton.setText(R.string.connect);
         rgbButton = findViewById(R.id.rgbButton);
         colorsButton = findViewById(R.id.colorsButton);
-        redButton = findViewById(R.id.redButton);
-        greenButton = findViewById(R.id.greenButton);
-        bluButton = findViewById(R.id.bluButton);
-        whiteButton = findViewById(R.id.whiteButton);
-
-        currentView = findViewById(R.id.my_layout);
-        luxPicker = findViewById(R.id.number_picker_lux);
         elwireSwitch = findViewById(R.id.elwireSwitch);
+        luxPicker = findViewById(R.id.number_picker_lux);
+        currentView = findViewById(R.id.my_layout);
+
+        addButtons(new int[]{R.id.purpleButton, R.id.pinkButton, R.id.redButton, R.id.greenButton, R.id.bluButton, R.id.whiteButton});
     }
 
     private void listenerSetup() {
@@ -98,7 +98,7 @@ public class MainActivity extends MyUtility {
         colorsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startColorsActivity();
+                //startColorsActivity();
             }
         });
         luxPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -114,16 +114,22 @@ public class MainActivity extends MyUtility {
                 }
             }
         });
+    }
+
+    private void addButtons(int[] id) {
+        buttonMap = new Button[id.length];
+        int index = 0;
         View.OnClickListener listener = new colorListener();
-        greenButton.setOnClickListener(listener);
-        bluButton.setOnClickListener(listener);
-        whiteButton.setOnClickListener(listener);
-        redButton.setOnClickListener(listener);
+        for (int i : id) {
+            buttonMap[index] = findViewById(i);
+            buttonMap[index].setOnClickListener(listener);
+            index++;
+        }
     }
 
 
     private void startRGBActivity() {
-        Intent rgbIntent = new Intent(this, NumberPickerActivity.class);
+        Intent rgbIntent = new Intent(this, RgbActivity.class);
         startActivity(rgbIntent);
         luxPicker.setValue(10);
     }

@@ -176,6 +176,10 @@ public class MyBluetooth {
         sendColorMessage();
     }
 
+    public void sendRawColorRGB(int r, int g, int b){
+        sendMessage(mColor.getRawColor(r,g,b));
+    }
+
     public void sendLux(int lux){
         mColor.setLux(lux);
         sendColorMessage();
