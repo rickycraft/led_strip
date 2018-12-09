@@ -9,8 +9,8 @@
 
     <Button
         android:id="@+id/connectButton"
-        android:layout_width="130dp"
-        android:layout_height="80dp"
+        android:layout_width="180dp"
+        android:layout_height="70dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:text="@string/connect"
@@ -19,104 +19,88 @@
 
     <Button
         android:id="@+id/rgbButton"
-        android:layout_width="@dimen/big_button_width"
-        android:layout_height="@dimen/default_button_height"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_width="180dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/RGB"
-        app:layout_constraintBottom_toTopOf="@+id/whiteButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/colorsButton" />
 
     <Button
         android:id="@+id/colorsButton"
-        android:layout_width="@dimen/big_button_width"
-        android:layout_height="@dimen/default_button_height"
+        android:layout_width="180dp"
+        android:layout_height="70dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
         android:text="@string/colors"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bluButton"
+        android:layout_width="235dp"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/material_blu"
+        android:text="@string/blu"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/redButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/bluButton"
-        android:layout_width="@dimen/default_button_width"
-        android:layout_height="@dimen/default_button_height"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/material_blu"
-        android:text="@string/blu"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/whiteButton"
-        app:layout_constraintStart_toEndOf="@+id/greenButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
-
-    <Button
         android:id="@+id/redButton"
-        android:layout_width="@dimen/default_button_width"
+        android:layout_width="235dp"
         android:layout_height="@dimen/default_button_height"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:backgroundTint="@color/material_red"
         android:text="@string/red"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/greenButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintBottom_toTopOf="@+id/greenButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/whiteButton"
-        android:layout_width="@dimen/default_button_width"
+        android:layout_width="235dp"
         android:layout_height="@dimen/default_button_height"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:backgroundTint="@color/black"
         android:text="@string/white"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bluButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintBottom_toTopOf="@+id/bluButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/greenButton"
-        android:layout_width="@dimen/default_button_width"
+        android:layout_width="235dp"
         android:layout_height="@dimen/default_button_height"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
         android:backgroundTint="@color/material_green"
         android:text="@string/green"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bluButton"
-        app:layout_constraintStart_toEndOf="@+id/redButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.shawnlin.numberpicker.NumberPicker
         android:id="@+id/number_picker_lux"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
         app:np_dividerColor="@color/colorPrimaryDark"
         app:np_fadingEdgeEnabled="true"
         app:np_formatter="@string/number_picker_formatter"
-        app:np_height="100dp"
+        app:np_height="430dp"
         app:np_max="10"
         app:np_min="0"
-        app:np_orientation="horizontal"
+        app:np_orientation="vertical"
         app:np_scrollerEnabled="true"
         app:np_selectedTextColor="@color/colorPrimary"
         app:np_selectedTextSize="@dimen/small_text_size"
@@ -124,15 +108,15 @@
         app:np_textSize="@dimen/small_text_size"
         app:np_typeface="@string/roboto_light"
         app:np_value="10"
-        app:np_width="370dp"
+        app:np_width="160dp"
         app:np_wrapSelectorWheel="true" />
 
     <Switch
         android:id="@+id/elwireSwitch"
-        android:layout_width="130dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="180dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:checked="false"
         android:text="@string/elwire"
         android:textAlignment="textStart"
@@ -140,8 +124,8 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:typeface="monospace"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connectButton"
         tools:checked="false" />
 
 </android.support.constraint.ConstraintLayout>
