@@ -167,7 +167,7 @@ public class MyBluetooth {
 
     public void sendColorName(String s) {
         mColor.setColorByName(s);
-        snackPrint("Color is set to " + s);
+        //snackPrint("Color is set to " + s);
         sendColorMessage();
     }
 
@@ -208,10 +208,10 @@ public class MyBluetooth {
     public void switchEl(boolean b){
         if (b){
             sendMessage("eli");
-            snackPrint("El Wire on");
+            //snackPrint("El Wire on");
         } else {
             sendMessage("elo");
-            snackPrint("El Wire off");
+            //snackPrint("El Wire off");
         }
         elStateHandler.changeState(b);
     }
