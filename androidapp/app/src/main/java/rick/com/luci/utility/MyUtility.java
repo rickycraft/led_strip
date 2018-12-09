@@ -27,18 +27,10 @@ public abstract class MyUtility extends AppCompatActivity {
         this.mBluetooth = MyBluetooth.getInstance();
         this.mColor = mBluetooth.getColor();
         this.TAG = TAG;
-
-    }
-
-    public void updateLux(int i) {
-        mColor.setLux(i);
-        if (mBluetooth.isConnected() && mColor.isOn()) {
-            mBluetooth.sendColorMessage();
-        }
     }
 
     public void turnOff() {
-        mBluetooth.sendColorRGB(0, 0, 0);
+        mBluetooth.sendLux(0);
         snackPrint("Led strip OFF");
     }
 

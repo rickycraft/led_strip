@@ -22,6 +22,7 @@ public class MyBluetooth {
     private Bluetooth bt;
     private ArrayList<PrintHandler> handlers;
     private ConnectionStateHandler btStateHandler;
+    private ConnectionStateHandler elStateHandler;
     private MyColor mColor;
 
     private MyBluetooth(Context context) {
@@ -69,18 +70,18 @@ public class MyBluetooth {
 
             @Override
             public void onError(String message) {
-                print("error " + message);
+                snackPrint("error " + message);
             }
         });
         bt.setBluetoothCallback(new BluetoothCallback() {
             @Override
             public void onBluetoothTurningOn() {
-                print("Buetooth is turning on");
+                snackPrint("Buetooth is turning on");
             }
 
             @Override
             public void onBluetoothOn() {
-                print("Bluetooth is on");
+                snackPrint("Bluetooth is on");
             }
 
             @Override
@@ -100,13 +101,14 @@ public class MyBluetooth {
         bt.setDeviceCallback(new DeviceCallback() {
             @Override
             public void onDeviceConnected(BluetoothDevice device) {
-                print("Connected to " + device.getName());
+                snackPrint("Connected to " + device.getName());
                 changeConnectionState(true);
+                onConnect();
             }
 
             @Override
             public void onDeviceDisconnected(BluetoothDevice device, String message) {
-                print("Disconnetted from " + device.getName());
+                snackPrint("Disconnetted from " + device.getName());
                 changeConnectionState(false);
             }
 
@@ -120,26 +122,40 @@ public class MyBluetooth {
 
             @Override
             public void onConnectError(BluetoothDevice device, String message) {
-                print("Device not aviable");
+                snackPrint("Device not aviable");
                 Log.d(TAG, "Error " + message + " on device " + device.getName());
                 changeConnectionState(false);
             }
         });
-
     }
 
     //UTILITY
+
+    //CONNECTION
     public void connect() {
         if (!isConnecting) {
             isConnecting = true;
-            longPrint("Connecting to " + bluetoothName);
+            //longPrint("Connecting to " + bluetoothName);
             bt.connectToName(bluetoothName);
         }
     }
 
+    private void onConnect(){
+        sendColorName("white");
+        switchEl(true);
+    }
+
+    public void disconnect() {
+        sendColorName("off");
+        switchEl(false);
+        bt.disconnect();
+    }
+
+    //MESSAGES
     public void sendMessage(String s) {
         if (bt.isConnected()) {
             bt.send("<" + s + ">");
+            Log.d(TAG, s);
         } else {
             Log.d(TAG, "No device connected");
         }
@@ -151,13 +167,18 @@ public class MyBluetooth {
 
     public void sendColorName(String s) {
         mColor.setColorByName(s);
-        print("Color is set to " + s);
-        sendMessage(mColor.getMessage());
+        snackPrint("Color is set to " + s);
+        sendColorMessage();
     }
 
     public void sendColorRGB(int r, int g, int b) {
         mColor.setColorRGB(r, g, b);
-        sendMessage(mColor.getMessage());
+        sendColorMessage();
+    }
+
+    public void sendLux(int lux){
+        mColor.setLux(lux);
+        sendColorMessage();
     }
 
     public MyColor getColor() {
@@ -174,12 +195,28 @@ public class MyBluetooth {
         changeConnectionState(false);
     }
 
+    public void addElStatusHandler(ConnectionStateHandler handler){
+        elStateHandler = handler;
+    }
+
     private void changeConnectionState(Boolean status) {
         btStateHandler.changeState(status);
         isConnecting = status;
+
     }
 
-    private void print(String s) {
+    public void switchEl(boolean b){
+        if (b){
+            sendMessage("eli");
+            snackPrint("El Wire on");
+        } else {
+            sendMessage("elo");
+            snackPrint("El Wire off");
+        }
+        elStateHandler.changeState(b);
+    }
+
+    private void snackPrint(String s) {
         for (PrintHandler p : handlers) {
             p.print(s);
         }
@@ -196,7 +233,5 @@ public class MyBluetooth {
         return bt.isConnected();
     }
 
-    public void disconnect() {
-        bt.disconnect();
-    }
+
 }

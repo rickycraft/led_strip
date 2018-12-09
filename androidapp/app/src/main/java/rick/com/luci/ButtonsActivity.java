@@ -37,7 +37,7 @@ public class ButtonsActivity extends MyUtility {
         luxPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateLux(newVal);
+                mBluetooth.sendLux(newVal);
             }
         });
         luxPicker.setValue(mColor.getLux());

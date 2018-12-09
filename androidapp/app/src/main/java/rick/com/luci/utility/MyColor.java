@@ -10,7 +10,6 @@ public class MyColor {
     private int green;
     private int blu;
     private int lux;
-    private boolean isOn;
     private String colorName;
 
     public MyColor() {
@@ -18,78 +17,51 @@ public class MyColor {
         green = 0;
         blu = 0;
         lux = 10;
-        isOn = false;
-    }
-
-    public String getColorName() {
-        return colorName;
     }
 
     public int getRed() {
-        return red / lux;
-    }
-
-    private void setRed(int nRed) {
-        red = checkInt(nRed) * lux;
-    }
-
-    public int getGreen() {
-        return green / lux;
-    }
-
-    private void setGreen(int nGreen) {
-        green = checkInt(nGreen) * lux;
-    }
-
-    public int getBlu() {
-        return blu / lux;
-    }
-
-    private void setBlu(int nBlu) {
-        blu = checkInt(nBlu) * lux;
-    }
-
-    public int getRawRed() {
         return red;
     }
 
-    public int getRawGreen() {
+    public int getGreen() {
         return green;
     }
 
-    public int getRawBlu() {
+    public int getBlu() {
         return blu;
+    }
+
+    public int getLuxRed() {
+        return red * lux;
+    }
+
+    public int getLuxGreen() {
+        return green * lux;
+    }
+
+    public int getLuxBlu() {
+        return blu * lux;
     }
 
     public void setLux(int i) {
         if (i > 10) {
             i = 10;
-        } else if (i < 1) {
-            i = 1;
+        } else if (i < 0) {
+            i = 0;
         }
         lux = i;
-        setColorRGB(red, green, blu); //update all color lux
     }
 
     public int getLux() {
         return lux;
     }
 
-    private int checkInt(int check) {
-        if (check > 25) {
-            check = 25;
-        } else if (check < 0) {
-            check = 0;
-        }
-        return check;
-    }
-
     public void setColorByName(String color) {
-        // Log.d(TAG, "color is "+color);
-        colorName = color;
+        Log.d(TAG, "color is "+color);
         switch (color) {
             case "red":
                 setColorRGB(25, 0, 0);
+                Log.d(TAG, "red");
                 break;
             case "green":
                 setColorRGB(0, 25, 0);
@@ -109,6 +81,9 @@ public class MyColor {
             case "purple":
                 setColorRGB(16, 4, 18);
                 break;
+            case "off":
+                setColorRGB(0,0,0);
+                break;
         }
     }
 
@@ -119,20 +94,17 @@ public class MyColor {
     }
 
     public void setColorRGB(int r, int g, int b) {
-        isOn = (r + g + b != 0);
-        setRed(r);
-        setGreen(g);
-        setBlu(b);
-
-        Log.d(TAG, "red set to " + red);
-        Log.d(TAG, "green set to " + green);
-        Log.d(TAG, "blu set to " + blu);
-        Log.d(TAG, "lux is " + lux);
+        Log.d(TAG, "r set to " + r);
+        Log.d(TAG, "g set to " + g);
+        Log.d(TAG, "b set to " + b);
+        red = checkInt(r);
+        green = checkInt(g);
+        blu = checkInt(b);
 
     }
 
     public String getMessage() {
-        return checkZero(red) + ":" + checkZero(green) + ":" + checkZero(blu);
+        return checkZero(red * lux) + ":" + checkZero(green * lux) + ":" + checkZero(blu * lux);
     }
 
     private String checkZero(int colorPrimary) {
@@ -145,7 +117,12 @@ public class MyColor {
         return color;
     }
 
-    public boolean isOn() {
-        return isOn;
-    } //the led strip
+    private int checkInt(int check) {
+        if (check > 25) {
+            check = 25;
+        } else if (check < 0) {
+            check = 0;
+        }
+        return check;
+    }
 }

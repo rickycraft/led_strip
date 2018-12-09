@@ -100,9 +100,9 @@ public class NumberPickerActivity extends MyUtility {
         }
     }
 
-    private void fade() {
+    private void fade() { //TODO fix rgb
         if (!isFading) {
-            mColor.setColorRGB(255, 0, 0);
+            mColor.setColorRGB(25, 0, 0);
             mBluetooth.sendColorMessage();
             mBluetooth.sendMessage("fdi");
             fadeButton.setText(R.string.fade_off);

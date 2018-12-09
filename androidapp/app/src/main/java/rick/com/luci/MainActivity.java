@@ -26,7 +26,6 @@ public class MainActivity extends MyUtility {
     private Button greenButton;
     private Button bluButton;
     private Button whiteButton;
-    private Button offButton;
     private Button rgbButton;
     private Button colorsButton;
     private NumberPicker luxPicker;
@@ -70,7 +69,6 @@ public class MainActivity extends MyUtility {
         greenButton = findViewById(R.id.greenButton);
         bluButton = findViewById(R.id.bluButton);
         whiteButton = findViewById(R.id.whiteButton);
-        offButton = findViewById(R.id.offButton);
 
         currentView = findViewById(R.id.my_layout);
         luxPicker = findViewById(R.id.number_picker_lux);
@@ -79,6 +77,7 @@ public class MainActivity extends MyUtility {
 
     private void listenerSetup() {
         mBluetooth.addConnectButtonListener(new ConnectButtonHandler());
+        mBluetooth.addElStatusHandler(new ElWireHandler());
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,58 +101,35 @@ public class MainActivity extends MyUtility {
                 startColorsActivity();
             }
         });
-
         luxPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateLux(newVal);
+                mBluetooth.sendLux(newVal);
             }
         });
-
         elwireSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (mBluetooth.isConnected()) {
-                    if (isChecked) {
-                        mBluetooth.sendMessage("ewi");
-                        snackPrint("El Wire on");
-                    } else {
-                        mBluetooth.sendMessage("ewo");
-                        snackPrint("El Wire off");
-                    }
+                    mBluetooth.switchEl(isChecked);
                 }
-            }
-        });
-        offButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                turnOff();
             }
         });
         View.OnClickListener listener = new colorListener();
         greenButton.setOnClickListener(listener);
         bluButton.setOnClickListener(listener);
         whiteButton.setOnClickListener(listener);
-
         redButton.setOnClickListener(listener);
     }
 
 
     private void startRGBActivity() {
-        //if (mBluetooth.isConnected()) {
         Intent rgbIntent = new Intent(this, NumberPickerActivity.class);
         startActivity(rgbIntent);
         luxPicker.setValue(10);
-        //} else {
-        //    notConnected();
-        //} TODO sconnection check off for debug
     }
 
     private void startColorsActivity() {
-        //if (mBluetooth.isConnected()) {
         startActivity(new Intent(this, ButtonsActivity.class));
-        //} else {
-        //    notConnected();
-        //} TODO sconnection check off for debug
     }
 
     //BT HANDLER
@@ -162,15 +138,35 @@ public class MainActivity extends MyUtility {
     private class ConnectButtonHandler implements ConnectionStateHandler {
         @Override
         public void changeState(boolean b) {
-            if (b) {
-                connectButton.setText(R.string.disconnect);
-            } else {
-                connectButton.setText(R.string.connect);
-            }
-            elwireSwitch.setClickable(b);
-            elwireSwitch.setActivated(b);
+            final boolean status = b;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (status) {
+                        connectButton.setText(R.string.disconnect);
+                    } else {
+                        connectButton.setText(R.string.connect);
+                    }
+                    elwireSwitch.setClickable(status);
+                    elwireSwitch.setActivated(status);
+                }
+            });
         }
     }
+
+    private class ElWireHandler implements ConnectionStateHandler {
+        @Override
+        public void changeState(boolean b) {
+            final boolean status = b;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    elwireSwitch.setChecked(status);
+                }
+            });
+        }
+    }
+
 
     private class colorListener implements View.OnClickListener {
         @Override
@@ -178,7 +174,6 @@ public class MainActivity extends MyUtility {
             Button b = (Button) v;
             String text = String.valueOf(b.getText());
             mBluetooth.sendColorName(text);
-            //snackPrintColor();
         }
     }
 
