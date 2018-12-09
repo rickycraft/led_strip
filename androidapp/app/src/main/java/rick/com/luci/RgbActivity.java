@@ -102,7 +102,7 @@ public class RgbActivity extends MyUtility {
 
     private void fade() { //TODO fix rgb
         if (!isFading) {
-            mBluetooth.sendColorName("red");
+            mBluetooth.sendRawColorRGB(255,0,0);
             mBluetooth.sendMessage("fdi");
             fadeButton.setText(R.string.fade_off);
             snackPrint("Start fading");
@@ -110,6 +110,7 @@ public class RgbActivity extends MyUtility {
             mBluetooth.sendMessage("fdo");
             fadeButton.setText(R.string.fade_on);
             snackPrint("Stop fading");
+            mBluetooth.sendColorMessage();
         }
         isFading = !isFading;
     }

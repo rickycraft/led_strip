@@ -6,8 +6,8 @@
     <dimen name="default_button_height">70dp</dimen>
     <dimen name="default_button_width">110dp</dimen>
     <dimen name="big_button_width">130dp</dimen>
-    <dimen name="vertical_picker_width">75dp</dimen>
-    <dimen name="vertical_picker_height">185dp</dimen>
+    <dimen name="vertical_picker_width">95dp</dimen>
+    <dimen name="vertical_picker_height">250dp</dimen>
     <dimen name="orizzontal_picker_width">270dp</dimen>
     <dimen name="orizzontal_picker_height">70dp</dimen>
     <integer name="max_value">25</integer>

@@ -22,18 +22,8 @@
         android:layout_width="180dp"
         android:layout_height="70dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/RGB"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/colorsButton" />
-
-    <Button
-        android:id="@+id/colorsButton"
-        android:layout_width="180dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:text="@string/colors"
+        android:text="@string/RGB"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -135,7 +125,7 @@
 
     <Switch
         android:id="@+id/elwireSwitch"
-        android:layout_width="180dp"
+        android:layout_width="175dp"
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"

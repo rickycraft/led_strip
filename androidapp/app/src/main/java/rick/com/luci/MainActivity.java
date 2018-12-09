@@ -22,14 +22,7 @@ import rick.com.luci.utility.MyUtility;
 public class MainActivity extends MyUtility {
 
     private Button connectButton;
-    private Button redButton;
-    private Button greenButton;
-    private Button bluButton;
-    private Button whiteButton;
     private Button rgbButton;
-    private Button colorsButton;
-    private Button purpleButton;
-    private Button pinkButton;
     private Button[] buttonMap;
     private NumberPicker luxPicker;
     private Switch elwireSwitch;
@@ -45,7 +38,7 @@ public class MainActivity extends MyUtility {
         mBluetooth.addBtListener(new MyBtHandler());
         layoutSetup();
         listenerSetup();
-        //mBluetooth.connect(); TODO to test
+        mBluetooth.connect();
     }
 
     @Override
@@ -67,8 +60,7 @@ public class MainActivity extends MyUtility {
         connectButton = findViewById(R.id.connectButton);
         connectButton.setText(R.string.connect);
         rgbButton = findViewById(R.id.rgbButton);
-        colorsButton = findViewById(R.id.colorsButton);
-        elwireSwitch = findViewById(R.id.elwireSwitch);
+        elwireSwitch = findViewById(R.id.elwireSwitch);;
         luxPicker = findViewById(R.id.number_picker_lux);
         currentView = findViewById(R.id.my_layout);
 
@@ -95,12 +87,6 @@ public class MainActivity extends MyUtility {
                 startRGBActivity();
             }
         });
-        colorsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startColorsActivity();
-            }
-        });
         luxPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -123,21 +109,16 @@ public class MainActivity extends MyUtility {
         for (int i : id) {
             buttonMap[index] = findViewById(i);
             buttonMap[index].setOnClickListener(listener);
+            buttonMap[index].setEnabled(false);
             index++;
         }
     }
-
 
     private void startRGBActivity() {
         Intent rgbIntent = new Intent(this, RgbActivity.class);
         startActivity(rgbIntent);
         luxPicker.setValue(10);
     }
-
-    private void startColorsActivity() {
-        startActivity(new Intent(this, ButtonsActivity.class));
-    }
-
     //BT HANDLER
 
 
@@ -150,11 +131,23 @@ public class MainActivity extends MyUtility {
                 public void run() {
                     if (status) {
                         connectButton.setText(R.string.disconnect);
+                        luxPicker.setEnabled(true);
+                        luxPicker.setValue(10);
                     } else {
                         connectButton.setText(R.string.connect);
+                        luxPicker.setValue(0);
+                        luxPicker.setEnabled(false);
                     }
-                    elwireSwitch.setClickable(status);
-                    elwireSwitch.setActivated(status);
+                    elwireSwitch.setEnabled(status);
+                    rgbButton.setEnabled(status);
+                    float alpha = (status)? 1 : .5f ;
+                    for (Button b : buttonMap){
+                        b.setEnabled(status);
+                        b.setAlpha(alpha);
+                    }
+                    luxPicker.setAlpha(alpha);
+                    rgbButton.setAlpha(alpha);
+                    elwireSwitch.setAlpha(alpha);
                 }
             });
         }
