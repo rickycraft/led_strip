@@ -1,23 +1,22 @@
 //-----------WiFi Settings-----------
 #include <ESP8266WiFi.h>
-const char* ssid = "TP_LINK";      
-const char* wifiPass = "hunter2";    
+const char* ssid = "TP-LINK";      
+const char* wifiPass = "123clienti";    
 WiFiServer server(80);
 //the three next lines are for static IP configuration
 //if you activate this remember to uncomment the WiFi.config line in the setupWifi() function
-IPAddress ip(192,168,1,300);       //static IP adress of device 
+IPAddress ip(192,168,1,211);       //static IP adress of device 
 IPAddress gateway(192,168,1,1);   //gateway
 IPAddress subnet(255,255,255,0);  //network mask
 
 //----------Libraries-----------
-#include <WiFiUdp.h>
 // #include <EEPROM.h>
 // http://arduino.esp8266.com/stable/package_esp8266com_index.json
 
 //-----------LED Settings-----------
 const int ARRAY_LED_COUNT = 3;      //3 for RGB leds, 5 for RGB + Cold and Warm leds
 //arrays are set up to hold the values in the order: red blue green cold warm
-const int ledPin[ARRAY_LED_COUNT] = {14, 13, 12}; //D5 D7 D6 D1 D2 on weMos d1 mini
+const int ledPin[ARRAY_LED_COUNT] = {14, 13, 12}; //D5 D7 D6on weMos d1 mini
 int ledCurrentVal[ARRAY_LED_COUNT] = {0, 0, 0};   //the current value of leds
 int ledFadeTo[ARRAY_LED_COUNT] = {0, 0, 0};       //the final value leds are fading towards
 
@@ -26,7 +25,6 @@ int ledFadeTo[ARRAY_LED_COUNT] = {0, 0, 0};       //the final value leds are fad
 unsigned long standardDelay = 1, fadeDelay = standardDelay, longDelay = 160;   //delays used for fading lights
 unsigned long currentMs = 0, prevMs = 0;    //loop time variables
 int switchFade = 0, fadeCounter = 0;        //used for fading softly between rgb colors
-unsigned long wifiReboot = 0;     //used to reboot server after 8 hour continous up time
 
 bool elWireStatus = false;
 const int ewPin = 5;
@@ -34,7 +32,6 @@ const int ewPin = 5;
 void setup() 
 {
   Serial.begin(115200);
-  
   delay(10);
   
   for(int i = 0; i < ARRAY_LED_COUNT; i++)    
@@ -46,15 +43,8 @@ void setup()
 
 void loop() 
 { 
-  incrementLights();    //if led final values have changed, this funciton fades lights up or down
-
-  //if(millis() - wifiReboot > (5*60*60*1000))
-  if(WiFi.localIP() != ip)
-  {
-    setupWifi();
-    wifiReboot = millis();
-  }
-
+  //incrementLights();    //if led final values have changed, this funciton fades lights up or down
+  
   //-----------Handles HTTP Requests-----------
   WiFiClient client = server.available();   //checking for client connection
   if (!client) 
@@ -68,17 +58,15 @@ void loop()
   {
     unavailableCount++;
     delay(1);
-    Serial.print("N/A ");
+    Serial.print(".");
   }
-  Serial.println("");
   Serial.println(unavailableCount);
 
   String inRequest = client.readStringUntil('\r');  //reads inRequest until end of line
   inRequest.toUpperCase();    //shifts string to upper letters to increase useablity 
   Serial.print("Incomming request:  ");
   Serial.println(inRequest);
-
-  //returns response to avoid error on client side
+  
   client.flush();   //clears data from client
   client.println("HTTP/1.1 200 OK");
   client.println("Content-Type: text/html");
@@ -87,11 +75,10 @@ void loop()
   client.println("<html>");
   
   //-----------Web Page Visible When Visiting ESP8266's Local IP-----------
-  client.print("Current LED values RGBCW: ");
-  client.print("&");
+  client.print("Current LED values RGB: ");
   for(int i = 0; i < ARRAY_LED_COUNT; i++)
   {
-    if(i != ARRAY_LED_COUNT)
+    if(i != ARRAY_LED_COUNT - 1)
     {
       client.print(ledCurrentVal[i]);
       client.print(",");
@@ -99,17 +86,10 @@ void loop()
     else
       client.print(ledCurrentVal[i]);
   }
-  client.print("&");
   client.print("<br/>");
-  
-  client.print("Minutes since server reboot: ");
-  int msDummy = millis() - wifiReboot;
-  client.print(msDummy/(1000*60));
-  client.print("<br/>");
-  
-  reactToRequest(inRequest);  //reacts to information sent from client
 
-  delay(1);
+  reactToRequest(inRequest);  //reacts to information sent from client
+  delay(10);
 }
 
 void reactToRequest(String inRequest)
@@ -119,9 +99,9 @@ void reactToRequest(String inRequest)
   {
     fadeDelay = standardDelay;
     switchFade = 0;
-    
-    for(int i = 0; i < ARRAY_LED_COUNT; i++)
+    for(int i = 0; i < ARRAY_LED_COUNT; i++){
       ledFadeTo[i] = 0;
+    }
   }
 
   if(inRequest.indexOf("/ELWIRE") != -1)
@@ -146,8 +126,9 @@ void reactToRequest(String inRequest)
     valueIndex[2] = inRequest.indexOf("B=");
 
     //saves invalues as led values to fade towards
-    for(int i = 0; i < ARRAY_LED_COUNT; i++)
+    for(int i = 0; i < ARRAY_LED_COUNT; i++){
       ledFadeTo[i] = (inRequest.substring((valueIndex[i] + 2), (valueIndex[i] + 6))).toInt();
+    }
   }
 
   //flashes the given colors two times to indicate notification
@@ -354,6 +335,8 @@ void setupWifi()
   Serial.print("Local IP adress: ");
   Serial.println(WiFi.localIP());
   Serial.println(ip);
+  WiFi.mode(WIFI_STA);
+  WiFi.printDiag(Serial);
 
-  WiFi.config(ip, gateway, subnet);   //config for static connection
+  //WiFi.config(ip, gateway, subnet);   //config for static connection
 }
