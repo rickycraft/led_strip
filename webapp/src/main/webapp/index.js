@@ -4,7 +4,7 @@ app.config(function($urlRouterProvider, localStorageServiceProvider){
 	$urlRouterProvider.otherwise(function($injector){
 		return "/home";
 	});
-	localStorageServiceProvider.setPrefix('LedStrip');
+	localStorageServiceProvider.setPrefix('ledstrip');
 	localStorageServiceProvider.setDefaultToCookie(false);
 });
 

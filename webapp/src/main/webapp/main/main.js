@@ -6,4 +6,6 @@ function MainCtrl($scope, ColorList){
 		console.log(eval("ColorList."+color));
 	}
 	
+	
+	
 }
