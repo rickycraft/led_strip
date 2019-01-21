@@ -70,12 +70,12 @@ void loop()
   reactToRequest(inRequest);  //reacts to information sent from client
   delay(10);
   //--------Creating JSON------------
-  
+
 
   root["red"] = ledFadeTo[0];
   root["green"] = ledFadeTo[1];
   root["blue"] = ledFadeTo[2];
-  
+
   char jsonBuffer[root.measureLength()+1];
   root.printTo(jsonBuffer, sizeof(jsonBuffer));
   //----------HTTP Headers-------------------
@@ -86,21 +86,6 @@ void loop()
   root.printTo(Serial);
   Serial.println();
   root.printTo(client);
-  // client.println("Content-Type: text/html");
-  // client.println("");   //always needs to be here to avoid error
-  // client.println("<!DOCTYPE HTML><html>");
-  // client.println("<head><title>LedStrip</title></head>");
-  // client.println("<body>");
-  //
-  // //-----------Web Page Visible When Visiting ESP8266's Local IP-----------
-  // client.print("Current LED values RGB: ");
-  // for(int i = 0; i < LED_COUNT; i++)
-  // {
-  //   client.print(ledFadeTo[i]);
-  //   if(i != LED_COUNT - 1)
-  //     client.print(",");
-  // }
-  // client.print("</body></html>");
 
   incrementLights();
 }
@@ -216,8 +201,4 @@ void setupWifi()
   Serial.println("");
 
   //WiFi.printDiag(Serial);
-}
-
-void encodeJson(/* arguments */) {
-  /* code */
 }
