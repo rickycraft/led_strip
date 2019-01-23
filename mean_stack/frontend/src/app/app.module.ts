@@ -1,20 +1,32 @@
+//angular
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HttpModule } from '@angular/http'
+import { HttpModule } from '@angular/http';
+import { RouterModule } form '@angular/router'
 
 //material
 import {MatButtonModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+//app
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+const routes = [
+  {path:"path", component:someComponent}
+];
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpModule
-    MatButtonModule
+    BrowserModule,
+    HttpModule,
+    RouterModule.forRoot(routes),
+    MatButtonModule,
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
