@@ -1,15 +1,16 @@
 //angular
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { RouterModule } form '@angular/router'
+import { RouterModule } from '@angular/router';
 
 //material
-import {MatButtonModule} from '@angular/material';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {
+  MatButtonModule
+} from '@angular/material';
 
 //app
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 const routes = [
@@ -25,7 +26,6 @@ const routes = [
     HttpModule,
     RouterModule.forRoot(routes),
     MatButtonModule,
-    AppRoutingModule,
     BrowserAnimationsModule
   ],
   providers: [],
