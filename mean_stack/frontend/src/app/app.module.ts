@@ -14,7 +14,7 @@ import {
 import { AppComponent } from './app.component';
 
 const routes = [
-  {path:"path", component:someComponent}
+  //{path:"path", component:someComponent}
 ];
 
 @NgModule({
