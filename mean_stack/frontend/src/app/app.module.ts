@@ -1,21 +1,18 @@
-//angular
+//angular import
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-
-//material
-import {
+import { 
   MatButtonModule
 } from '@angular/material';
 
-//app
+//app component
 import { AppComponent } from './app.component';
 
 const routes = [
-  //{path:"path", component:someComponent}
-];
+  //{path:"", component:PostComponent}
+]
 
 @NgModule({
   declarations: [
@@ -23,10 +20,9 @@ const routes = [
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
-    MatButtonModule,
-    BrowserAnimationsModule
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
