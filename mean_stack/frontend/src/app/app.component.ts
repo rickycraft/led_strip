@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ColorService } from './services/color.service';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +12,10 @@ import { Component } from '@angular/core';
   `
 })
 export class AppComponent {
+  constructor(private colorService : ColorService){}
+
+  ngOnInit(){
+    //on init this block gets executed
+  }
   title = 'frontend';
 }
