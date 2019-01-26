@@ -3,7 +3,7 @@
 #include <math.h>
 #include <ArduinoJson.h>
 const char* ssid = "TP-LINK";
-const char* wifiPass = "";
+const char* wifiPass = "123clienti";
 WiFiServer server(80);
 //the three next lines are for static IP configuration
 //if you activate this remember to uncomment the WiFi.config line in the setupWifi() function
@@ -70,8 +70,12 @@ void loop()
   reactToRequest(inRequest);  //reacts to information sent from client
   delay(10);
   //--------Creating JSON------------
+  response(client);
 
+  incrementLights();
+}
 
+void response(WiFiClient client){
   root["red"] = ledFadeTo[0];
   root["green"] = ledFadeTo[1];
   root["blue"] = ledFadeTo[2];
@@ -86,8 +90,6 @@ void loop()
   root.printTo(Serial);
   Serial.println();
   root.printTo(client);
-
-  incrementLights();
 }
 
 void reactToRequest(String inRequest)
@@ -100,6 +102,10 @@ void reactToRequest(String inRequest)
   {
     for(int i = 0; i < LED_COUNT; i++)
       ledFadeTo[i] = 0;
+  }
+
+  if(inRequest.indexOf("/STATUS") != -1){
+    return;
   }
 
   if(inRequest.indexOf("/ELWIRE") != -1)
