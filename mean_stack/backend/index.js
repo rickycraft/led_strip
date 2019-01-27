@@ -21,25 +21,18 @@ app.get('/status', (req, res) => {
     })
 })
 
-app.post('/rgb', (req,res) => {
-    new Promise((resolve, reject) => { //creating promise
-        request.get( //get params
-            baseUrl+'/led/&'+req.body.red+':'+req.body.green+':'+req.body.blu+':'+req.body.lux,
-            (err, response, body) => { //get request
-                if (response.statusCode == 500) {
-                   reject(); //on promise fail
-               } else 
-                   resolve(body); //on promise success
-           })
-        }).then(
-            (result) => { //if promise success
-                //console.log(result);
-                res.status(200).send(JSON.parse(result));
-            }, () => { //if promise fail
-                res.sendStatus(500);
-            }
-        )
-});
+app.post('/rgb', async (req,res) => {
+    await request.get(
+        baseUrl+'/led/&'+req.body.red+':'+req.body.green+':'+req.body.blu+':'+req.body.lux,
+        (err, response, body) => { //get request
+            if (response.statusCode == 500) {
+                res.sendStatus(500); 
+           } else{ 
+                res.status(200).send(JSON.parse(body));
+                 
+           } 
+       });
+})
 
 app.post('/elwire', (req,res) => {
     request.get(baseUrl+'/elwire', (err,response,body) => {

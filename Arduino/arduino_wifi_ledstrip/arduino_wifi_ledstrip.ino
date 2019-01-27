@@ -31,7 +31,6 @@ bool ewStatus = false;
 const int ewPin = 13; //D8
 
 //-------JSON-------
-const int bufferLen = JSON_OBJECT_SIZE(5);
 StaticJsonBuffer<150> jsonBuffer;
 JsonObject& root = jsonBuffer.createObject();
 
@@ -48,15 +47,16 @@ void setup()
   //createJson
   setValues(0,0,0,0);
   root["ew"] = false;
-  Serial.println(bufferLen);
 }
 
 void loop()
 {
+  incrementLights(); //fade to value
   //-----------Handles HTTP Requests-----------
   client = server.available();   //checking for client connection
-  if (!client)
+  if (!client){
     return;   //restarts loop function
+  }
 
   unavailableCount = 0;
   while(!client.available() && unavailableCount < 9000) //waits until the client sends data
@@ -71,14 +71,12 @@ void loop()
   Serial.print("incoming request:\t");Serial.println(inRequest);
 
   reactToRequest(inRequest);  //reacts to information sent from client
-  //delay(10);
-  incrementLights(); //fade to value
 }
 
 void setValues(int r, int g, int b, int l){
   root["red"] = r;
   root["green"] = g;
-  root["blue"] = b;
+  root["blu"] = b;
   root["lux"] = l;
 }
 
@@ -86,18 +84,16 @@ void response(){
   char jsonBuffer[root.measureLength()+1];
   root.printTo(jsonBuffer, sizeof(jsonBuffer));
   //----------HTTP Headers-------------------
+  client.flush();   //clears data from client
   client.println(status200);
   client.println("Content-Type: application/json");
   client.println("");
   root.printTo(client);
-  client.flush();   //clears data from client
   root.printTo(Serial); Serial.println();
 }
 
 void reactToRequest(String req)
 {
-  //if (req.indexOf("/FAVICON.ICO") != -1) //return if is a FAVICON
-  //  return;
     if(req.indexOf("/STATUS") != -1){
       Serial.println("Status requested");
 
