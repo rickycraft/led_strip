@@ -11,14 +11,26 @@ import { Observable } from 'rxjs';
     Welcome to {{ title?.ciao }}!
   </h1>
   <button (click)="getStatus()">GetStatus</button>
+  <ul>
+    <li>{{ status?.red }} </li>
+    <li>{{ status?.green }} </li>
+    <li>{{ status?.blu }} </li>
+    <li>{{ status?.lux }} </li>
+  </ul>
   </div>
   `
 })
 export class AppComponent {
   constructor(private colorService : ColorService){}
 
+  status: Led;
+
   getStatus(){
-    this.colorService.getStatus();
+    let status$ = this.colorService.getStatus();
+    status$.subscribe( (status) => {
+      this.status = status;
+      console.log(status);
+    })
   }
 
   title = 'frontend';

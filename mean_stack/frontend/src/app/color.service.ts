@@ -1,9 +1,11 @@
 //service
 import { HttpClient } from '@angular/common/http';
+import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Led } from './led';
 import { Observable } from 'rxjs';
+
 
 @Injectable()
 export class ColorService {
@@ -12,12 +14,8 @@ export class ColorService {
     
     constructor(private http: HttpClient, private route: Router){}
 
-    getStatus() {
-        let status =  this.http.get(this.root_url+'/status');
-        status.subscribe( (res) => {
-            console.log(res);
-            return res;
-        })
+    getStatus(): Observable<Led> {
+        return this.http.get<Led>(this.root_url+'/status');
     }
 
     setLed(data: Led){

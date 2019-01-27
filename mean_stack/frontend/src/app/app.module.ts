@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule} from '@angular/http';
 import {
   MatButtonModule
 } from '@angular/material';
@@ -28,6 +29,7 @@ const routes = [
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
+    HttpModule,
     MatButtonModule
   ],
   providers: [ColorService],
