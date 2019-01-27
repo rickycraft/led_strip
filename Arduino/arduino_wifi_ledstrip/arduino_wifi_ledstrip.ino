@@ -16,20 +16,23 @@ IPAddress subnet(255,255,255,0);  //network mask
 
 //-----------LED Settings-----------
 const int LED_COUNT = 3;      //3 for RGB leds, 5 for RGB + Cold and Warm leds
+int lux = 0;
 //arrays are set up to hold the values in the order: red blue green cold warm
 const int ledPin[LED_COUNT] = {14, 5, 4}; //D5 D6 D7 on weMos d1 mini
 int ledCurrentVal[LED_COUNT] = {0, 0, 0};   //the current value of leds
 int ledFadeTo[LED_COUNT] = {0, 0, 0};       //the final value leds are fading towards
-unsigned long currTime = 0;
-int unavailableCount = 0;
+unsigned int unavailableCount = 0;
+
+WiFiClient client;
+String status200 = "HTTP/1.1 200 OK";
 
 //-----------Other Variables-----------
 bool ewStatus = false;
 const int ewPin = 13; //D8
 
 //-------JSON-------
-const int bufferLen = JSON_OBJECT_SIZE(3);
-StaticJsonBuffer<100> jsonBuffer;
+const int bufferLen = JSON_OBJECT_SIZE(5);
+StaticJsonBuffer<150> jsonBuffer;
 JsonObject& root = jsonBuffer.createObject();
 
 void setup()
@@ -42,97 +45,99 @@ void setup()
 
   setupWifi();    //setting up and connecting to wifi
   delay(10);
+  //createJson
+  setValues(0,0,0,0);
+  root["ew"] = false;
   Serial.println(bufferLen);
 }
 
 void loop()
 {
-  //incrementLights();    //if led final values have changed, this funciton fades lights up or down
-
   //-----------Handles HTTP Requests-----------
-  WiFiClient client = server.available();   //checking for client connection
+  client = server.available();   //checking for client connection
   if (!client)
     return;   //restarts loop function
 
-  currTime = millis();
-  //waits until the client sends data
   unavailableCount = 0;
-  while(!client.available() && unavailableCount < 9000)
+  while(!client.available() && unavailableCount < 9000) //waits until the client sends data
   {
     unavailableCount++;
     delay(1);
-    //Serial.print("...");
   }
   //request handling
-  String inRequest = client.readStringUntil('\r');  //reads inRequest until end of line
-  inRequest.toUpperCase();    //shifts string to upper letters to increase useablity
-  Serial.print("incoming request:\t");
-  reactToRequest(inRequest);  //reacts to information sent from client
-  delay(10);
-  //--------Creating JSON------------
-  response(client);
+  String inRequest = client.readStringUntil('H');
+  inRequest.toUpperCase();  //reads inRequest until end of line
+  inRequest.substring(inRequest.indexOf("/"));
+  Serial.print("incoming request:\t");Serial.println(inRequest);
 
-  incrementLights();
+  reactToRequest(inRequest);  //reacts to information sent from client
+  //delay(10);
+  incrementLights(); //fade to value
 }
 
-void response(WiFiClient client){
-  root["red"] = ledFadeTo[0];
-  root["green"] = ledFadeTo[1];
-  root["blue"] = ledFadeTo[2];
+void setValues(int r, int g, int b, int l){
+  root["red"] = r;
+  root["green"] = g;
+  root["blue"] = b;
+  root["lux"] = l;
+}
 
+void response(){
   char jsonBuffer[root.measureLength()+1];
   root.printTo(jsonBuffer, sizeof(jsonBuffer));
   //----------HTTP Headers-------------------
-  client.flush();   //clears data from client
-  client.println("HTTP/1.1 200 OK");
+  client.println(status200);
   client.println("Content-Type: application/json");
   client.println("");
-  root.printTo(Serial);
-  Serial.println();
   root.printTo(client);
+  client.flush();   //clears data from client
+  root.printTo(Serial); Serial.println();
 }
 
-void reactToRequest(String inRequest)
+void reactToRequest(String req)
 {
-  if (inRequest.indexOf("/FAVICON.ICO") != -1) //return if is a FAVICON
-    return;
-  Serial.println(inRequest);
-  //turns off all lights
-  if (inRequest.indexOf("/LED=OFF") != -1)
-  {
-    for(int i = 0; i < LED_COUNT; i++)
-      ledFadeTo[i] = 0;
-  }
+  //if (req.indexOf("/FAVICON.ICO") != -1) //return if is a FAVICON
+  //  return;
+    if(req.indexOf("/STATUS") != -1){
+      Serial.println("Status requested");
 
-  if(inRequest.indexOf("/STATUS") != -1){
-    return;
-  }
+    } else if (req.indexOf("/LED/OFF") != -1) //turns off all lights
+    {
+      for(int i = 0; i < LED_COUNT; i++)
+        ledFadeTo[i] = 0;
+      setValues(0,0,0,0);
 
-  if(inRequest.indexOf("/ELWIRE") != -1)
-  {
+    } else if(req.indexOf("/LED/&") != -1) //ex. 192.168.1.220/led/&25:25:25:10
+    {
+      int ind = req.indexOf('&')+1; //start index
+      int ledVal[LED_COUNT] = { //storing rgb values
+        req.substring(ind, ind +2).toInt(),
+        req.substring(ind +3, ind +5).toInt(),
+        req.substring(ind +6, ind +8).toInt()
+      };
+      int luxVal = req.substring(ind +9, ind+11).toInt(); //storing lux values
+      setValues(ledVal[0],ledVal[1],ledVal[2],luxVal); //setting json values
 
-    ewStatus = !ewStatus;
-  }
-  //manually sets all incomming colors as colors the microcontroller is going to fade towards
-  if(inRequest.indexOf("/&&") != -1) //e.g. 192.168.0.63/&&R=255G=255B=255
-  {
-    //indices for splitting individual values from data:
-    int valueIndex[LED_COUNT];
-    valueIndex[0] = inRequest.indexOf("R=");
-    valueIndex[1] = inRequest.indexOf("G=");
-    valueIndex[2] = inRequest.indexOf("B=");
+      for(int i = 0; i < LED_COUNT; i++)  //saves invalues as led values to fade towards (already multiplied by lux)
+        ledFadeTo[i] = checkReadVal(ledVal[i]*luxVal);
 
-    //saves invalues as led values to fade towards
-    for(int i = 0; i < LED_COUNT; i++)
-      ledFadeTo[i] = checkReadVal(inRequest.substring(valueIndex[i] + 2, valueIndex[i] + 5).toInt());
-  }
+    } else if(req.indexOf("/ELWIRE") != -1)
+    {
+      ewStatus = !ewStatus;
+      root["ew"] = ewStatus;
 
-  //slowly fades RGB values for ambience
-  if(inRequest.indexOf("/LED=FADE") != -1)
-  {
-    //TODO fade
-  }
+    }else if(req.indexOf("/FADE") != -1) //fade to values
+    {
+      //TODO fade
 
+    } else {
+      Serial.println("Error");
+      client.println("HTTP/1.1 500 Internal Server Error");
+      client.println("");
+      client.flush();
+      return;
+    }
+    response();
 }//end of function reactToRequest
 
 int checkReadVal(int inVal) //check if are valid rgb values
