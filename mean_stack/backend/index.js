@@ -7,7 +7,6 @@ const port = 3000;
 
 const baseUrl = 'http://192.168.1.220';
 app.use(cors());
-//app.use(bodyParser.json());
 app.use(express.json());
 
 app.get('/status', (req, res) => {
@@ -23,7 +22,7 @@ app.get('/status', (req, res) => {
 
 app.post('/rgb', async (req,res) => {
     await request.get(
-        baseUrl+'/led/&'+req.body.red+':'+req.body.green+':'+req.body.blu+':'+req.body.lux,
+        baseUrl+'/led/&'+checkColor(req.body.red)+':'+checkColor(req.body.green)+':'+checkColor(req.body.blu)+':'+checkColor(req.body.lux),
         (err, response, body) => { //get request
             if (response.statusCode == 500) {
                 res.sendStatus(500); 
@@ -33,6 +32,14 @@ app.post('/rgb', async (req,res) => {
            } 
        });
 })
+
+function checkColor(color){
+    if (color<10){
+        return "0"+color;
+    } else {
+        return color;
+    }
+}
 
 app.post('/elwire', (req,res) => {
     request.get(baseUrl+'/elwire', (err,response,body) => {

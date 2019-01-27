@@ -51,7 +51,7 @@ void setup()
 
 void loop()
 {
-  incrementLights(); //fade to value
+  //incrementLights(); //fade to value
   //-----------Handles HTTP Requests-----------
   client = server.available();   //checking for client connection
   if (!client){
@@ -65,12 +65,14 @@ void loop()
     delay(1);
   }
   //request handling
-  String inRequest = client.readStringUntil('H');
+  String inRequest = client.readStringUntil('\r');
   inRequest.toUpperCase();  //reads inRequest until end of line
   //inRequest.substring(inRequest.indexOf("/"));
   Serial.print("incoming request:\t");Serial.println(inRequest);
 
   reactToRequest(inRequest);  //reacts to information sent from client
+  delay(10);
+  incrementLights();
 }
 
 void setValues(int r, int g, int b, int l){
@@ -84,10 +86,8 @@ void response(){
   char jsonBuffer[root.measureLength()+1];
   root.printTo(jsonBuffer, sizeof(jsonBuffer));
   //----------HTTP Headers-------------------
-  client.flush();   //clears data from client
-  client.println(status200);
-  client.println("Content-Type: application/json");
-  client.println("");
+//  client.flush();
+  client.print(F("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n"));
   root.printTo(client);
   root.printTo(Serial); Serial.println();
 }
@@ -127,12 +127,17 @@ void reactToRequest(String req)
       //TODO fade
 
     } else {
+      client.flush();
       Serial.println("Error");
       client.println("HTTP/1.1 500 Internal Server Error");
-      client.println("");
-      client.flush();
+      client.print("\n");
+      delay(1);
       return;
     }
+    while (client.available()) {
+    // byte by byte is not very efficient
+    client.read();
+  }
     response();
 }//end of function reactToRequest
 
@@ -152,10 +157,11 @@ void incrementLights()    //if final led values have changed this funciton fades
   for(int i = 0; i < LED_COUNT; i++) //if value are changed
     if (ledCurrentVal[i] != ledFadeTo[i]){
       isChanged = true;
-      break;
+    //  break;
     }
 
   if (isChanged){ //if value has changed, fade to value for each color
+    Serial.println("fading to color");
     float fadeTime = 1020; //total ms to fade
     int deltaValue[LED_COUNT] = {0,0,0};
     float incrementValue[LED_COUNT] = {0,0,0};
