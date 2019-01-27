@@ -67,7 +67,7 @@ void loop()
   //request handling
   String inRequest = client.readStringUntil('H');
   inRequest.toUpperCase();  //reads inRequest until end of line
-  inRequest.substring(inRequest.indexOf("/"));
+  //inRequest.substring(inRequest.indexOf("/"));
   Serial.print("incoming request:\t");Serial.println(inRequest);
 
   reactToRequest(inRequest);  //reacts to information sent from client

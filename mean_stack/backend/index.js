@@ -5,14 +5,13 @@ const request = require('request');
 const app = express();
 const port = 3000;
 
-const url = 'http://192.168.1.220';
+const baseUrl = 'http://192.168.1.220';
 app.use(cors());
 //app.use(bodyParser.json());
 app.use(express.json());
 
 app.get('/status', (req, res) => {
-    request.get(url+'/status', (err,response,body) => {
-        console.log(body);
+    request.get(baseUrl+'/status', (err,response,body) => {
         if (err) {
             console.log(err);
             res.sendStatus(500);
@@ -23,16 +22,34 @@ app.get('/status', (req, res) => {
 })
 
 app.post('/rgb', (req,res) => {
-    let values = '/rgb/'+req.body.red+':'+req.body.green+':'+req.body.blu+':'+req.body.lux;
-    request.get(url+values, (err, response, request) => {
+    new Promise((resolve, reject) => { //creating promise
+        request.get( //get params
+            baseUrl+'/led/&'+req.body.red+':'+req.body.green+':'+req.body.blu+':'+req.body.lux,
+            (err, response, body) => { //get request
+                if (response.statusCode == 500) {
+                   reject(); //on promise fail
+               } else 
+                   resolve(body); //on promise success
+           })
+        }).then(
+            (result) => { //if promise success
+                //console.log(result);
+                res.status(200).send(JSON.parse(result));
+            }, () => { //if promise fail
+                res.sendStatus(500);
+            }
+        )
+});
+
+app.post('/elwire', (req,res) => {
+    request.get(baseUrl+'/elwire', (err,response,body) => {
         if (err) {
             console.log(err);
+            res.sendStatus(500);
         } else {
-            console.log('success');
+            res.status(200).send(JSON.parse(body));
         }
-    }) 
-    res.json(req.body);
+    })
 })
-
 
 app.listen(port);
