@@ -9,8 +9,8 @@ const baseUrl = 'http://192.168.1.220';
 app.use(cors());
 app.use(express.json());
 
-app.get('/status', (req, res) => {
-    request.get(baseUrl+'/status', (err,response,body) => {
+app.get('/status', async (req, res) => {
+    await request.get(baseUrl+'/status', (err,response,body) => {
         if (err) {
             console.log(err);
             res.sendStatus(500);
@@ -18,6 +18,7 @@ app.get('/status', (req, res) => {
             res.status(200).send(JSON.parse(body));
         }
     })
+    console.log("status requested");
 })
 
 app.post('/rgb', async (req,res) => {
@@ -31,6 +32,7 @@ app.post('/rgb', async (req,res) => {
                  
            } 
        });
+    console.log("rgb request");
 })
 
 function checkColor(color){

@@ -1,4 +1,4 @@
-import { ColorService } from 'src/app/services/color.service';
+import { ColorService } from 'src/app/color.service';
 import { Component } from '@angular/core';
 
 //rgb component
