@@ -5,32 +5,36 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  template: `
-  <div style="text-align:center">
-  <h1>
-    Welcome to {{ title?.ciao }}!
-  </h1>
-  <button (click)="getStatus()">GetStatus</button>
-  <ul>
-    <li>{{ status?.red }} </li>
-    <li>{{ status?.green }} </li>
-    <li>{{ status?.blu }} </li>
-    <li>{{ status?.lux }} </li>
-  </ul>
-  </div>
-  `
+  templateUrl: './app.component.html'
 })
+/*
+reactiveform to change dinamically the values as i move the values on the slider
+debounce operator
+*/
 export class AppComponent {
-  constructor(private colorService : ColorService){}
+  constructor(private colorService : ColorService){
+    this.status = new Led(0,0,0,0,false);
+  }
 
   status: Led;
 
+  ngOnInit(){
+    this.getStatus();
+  }
+
   getStatus(){
-    let status$ = this.colorService.getStatus();
-    status$.subscribe( (status) => {
-      this.status = status;
-      console.log(status);
-    })
+    this.colorService.getStatus()
+      .subscribe( (res) => {
+        this.status = res;
+        console.log(res);
+      });
+  }
+
+  setLed(){
+    this.colorService.setLed(this.status)
+      .subscribe( res => {
+        this.status = res;
+      });
   }
 
   title = 'frontend';

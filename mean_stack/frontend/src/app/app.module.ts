@@ -2,12 +2,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { FormsModule }   from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule} from '@angular/http';
 import {
-  MatButtonModule
+  MatButtonModule,
+  MatSliderModule
 } from '@angular/material';
+import 'hammerjs';
 
 //app component
 import { AppComponent } from './app.component';
@@ -30,7 +33,9 @@ const routes = [
     RouterModule.forRoot(routes),
     HttpClientModule,
     HttpModule,
-    MatButtonModule
+    FormsModule,
+    MatButtonModule,
+    MatSliderModule
   ],
   providers: [ColorService],
   bootstrap: [AppComponent]

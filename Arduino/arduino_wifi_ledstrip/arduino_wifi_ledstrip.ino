@@ -65,7 +65,7 @@ void loop()
     delay(1);
   }
   //request handling
-  String inRequest = client.readStringUntil('\r');
+  String inRequest = client.readStringUntil('H');
   inRequest.toUpperCase();  //reads inRequest until end of line
   //inRequest.substring(inRequest.indexOf("/"));
   Serial.print("incoming request:\t");Serial.println(inRequest);
@@ -89,7 +89,9 @@ void response(){
 //  client.flush();
   client.print(F("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n"));
   root.printTo(client);
-  root.printTo(Serial); Serial.println();
+  client.flush();
+  Serial.println("responding");
+  //root.printTo(Serial); Serial.println();
 }
 
 void reactToRequest(String req)
@@ -138,7 +140,7 @@ void reactToRequest(String req)
     // byte by byte is not very efficient
     client.read();
   }
-    response();
+  response();
 }//end of function reactToRequest
 
 int checkReadVal(int inVal) //check if are valid rgb values
@@ -157,7 +159,7 @@ void incrementLights()    //if final led values have changed this funciton fades
   for(int i = 0; i < LED_COUNT; i++) //if value are changed
     if (ledCurrentVal[i] != ledFadeTo[i]){
       isChanged = true;
-    //  break;
+      break;
     }
 
   if (isChanged){ //if value has changed, fade to value for each color

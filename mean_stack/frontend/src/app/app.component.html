@@ -1,7 +1,14 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<div>
   <h1>
-    Welcome to {{ title }}!
+    Welcome to {{ title?.ciao }}!
   </h1>
-</div>
-
+  <button (click)="getStatus()">GetStatus</button>
+  <button (click)="setLed()">SetLed</button>
+  <ul>
+    <li>{{ status?.red }} </li>
+    <li>{{ status?.green }} </li>
+    <li>{{ status?.blu }} </li>
+    <li>{{ status?.lux }} </li>
+  </ul>
+  <mat-slider min="0" max="10" step="1" [(ngModel)]="status.lux" thumbLabel></mat-slider>
+  </div>
