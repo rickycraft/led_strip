@@ -8,7 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule} from '@angular/http';
 import {
   MatButtonModule,
-  MatSliderModule
+  MatSliderModule,
+  MatListModule
 } from '@angular/material';
 import 'hammerjs';
 
@@ -35,6 +36,7 @@ const routes = [
     HttpModule,
     FormsModule,
     MatButtonModule,
+    MatListModule,
     MatSliderModule
   ],
   providers: [ColorService],
