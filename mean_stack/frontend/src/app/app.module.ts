@@ -9,8 +9,10 @@ import { HttpModule} from '@angular/http';
 import {
   MatButtonModule,
   MatSliderModule,
-  MatListModule
+  MatListModule,
+  MatIconModule
 } from '@angular/material';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import 'hammerjs';
 
 //app component
@@ -18,6 +20,7 @@ import { AppComponent } from './app.component';
 import { ColorService } from './color.service';
 import { RgbComponent } from "./tabs/rgb/rgb.component";
 import { ColorsComponent } from './tabs/color/color.component';
+import { BottomComponent } from './bottom/bottom.component';
 
 
 const routes = [
@@ -26,7 +29,10 @@ const routes = [
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    RgbComponent,
+    ColorsComponent,
+    BottomComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +43,9 @@ const routes = [
     FormsModule,
     MatButtonModule,
     MatListModule,
-    MatSliderModule
+    MatSliderModule,
+    MatIconModule,
+    MatToolbarModule
   ],
   providers: [ColorService],
   bootstrap: [AppComponent]

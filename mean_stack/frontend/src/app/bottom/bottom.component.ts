@@ -11,7 +11,8 @@ import { Component } from '@angular/core';
     </h1>
     `
   })
-  export class TabComponent {
+  
+export class BottomComponent {
     constructor(private colorService : ColorService){}
-    title = 'tab';
+    title = 'bottom component';
   }

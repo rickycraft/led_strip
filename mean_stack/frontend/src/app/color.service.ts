@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Led } from './led';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'
 
 const base_url = 'http://192.168.1.110:3000';
 

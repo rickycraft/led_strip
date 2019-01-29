@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 /*
 reactiveform to change dinamically the values as i move the values on the slider
@@ -35,6 +36,10 @@ export class AppComponent {
       .subscribe( res => {
         this.status = res;
       });
+  }
+
+  getStatusValues(){
+    return Object.values(this.status);
   }
 
   title = 'frontend';

@@ -1,22 +1,18 @@
-<div>
+<mat-toolbar color="primary">
+    <h1>Led Strip</h1>
+    <span class="spacer"></span>
+    <mat-icon>favorite</mat-icon>
+</mat-toolbar>
+<div fxFlex fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutWrap>
   <button mat-stroked-button color="primary" (click)="getStatus()">GetStatus</button>
   <button mat-stroked-button color="primary" (click)="setLed()">SetLed</button>
   <mat-list>
-    <mat-list-item>
-      RED: {{status.red}}
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item>
-      GREEN: {{status.green}}
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item>
-      BLU: {{status.blu}}
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item>
-      LUX: {{status.lux}} 
+    <mat-list-item *ngFor="let value of getStatusValues()" >
+      {{value}}
+      <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
-  <mat-slider min="0" max="10" step="1" [(ngModel)]="status.lux" thumbLabel></mat-slider>
+  <div style="display: flex;justify-content: center;">
+    <mat-slider class="color-slider" min="0" max="10" step="1" [(ngModel)]="status.lux" thumbLabel></mat-slider>
   </div>
+</div>
