@@ -6,6 +6,7 @@ import { FormsModule }   from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule} from '@angular/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
   MatSliderModule,
@@ -41,6 +42,7 @@ const routes = [
     HttpClientModule,
     HttpModule,
     FormsModule,
+    FlexLayoutModule,
     MatButtonModule,
     MatListModule,
     MatSliderModule,

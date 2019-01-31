@@ -39,7 +39,9 @@ export class AppComponent {
   }
 
   getStatusValues(){
-    return Object.values(this.status);
+    let values = Object.entries(this.status);
+    values.pop();
+    return values;
   }
 
   title = 'frontend';
