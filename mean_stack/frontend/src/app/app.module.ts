@@ -11,9 +11,11 @@ import {
   MatButtonModule,
   MatSliderModule,
   MatListModule,
-  MatIconModule
+  MatIconModule,
+  MatTabsModule,
+  MatToolbarModule
 } from '@angular/material';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatCardModule} from '@angular/material/card';
 import 'hammerjs';
 
 //app component
@@ -47,7 +49,9 @@ const routes = [
     MatListModule,
     MatSliderModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCardModule,
+    MatTabsModule
   ],
   providers: [ColorService],
   bootstrap: [AppComponent]

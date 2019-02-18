@@ -1,23 +1,31 @@
-<div fxLayout="column" fxLayoutAlign="center start">
+<div fxLayout="column" fxFill>
   <mat-toolbar color="primary">
       <h1>Led Strip</h1>
       <span class="spacer"></span>
       <mat-icon>favorite</mat-icon>
   </mat-toolbar>
-  <div>
-    <button mat-stroked-button color="primary" (click)="getStatus()">GetStatus</button>
-    <button mat-stroked-button color="primary" (click)="setLed()">SetLed</button>
+  <mat-tab-group dynamicHeight style="height: 100%;"> 
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon" style="margin-right: 10px;" >thumb_up</mat-icon>button
+      </ng-template>
+      <div class="mat-tab">
+        buttons
+      </div>
+    </mat-tab>    
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon" style="margin-right: 10px;" >thumb_up</mat-icon>rgb
+      </ng-template>
+      <div class="mat-tab">
+        rgb
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  <mat-divider></mat-divider>
+  <div fxLayout="row" fxLayoutAlign="space-around center" style="margin:15px;">
+      <button mat-fab disabled><mat-icon>bolt</mat-icon></button>
+      <mat-slider class="color-slider" min="0" max="10" step="1" [(ngModel)]="status.lux" thumbLabel></mat-slider>
+      <button mat-fab><mat-icon>tonality</mat-icon></button>
   </div>
-  <mat-list>
-    <mat-list-item *ngFor="let value of getStatusValues()">
-      <span>
-        {{value[0] | uppercase }}: {{value[1]}}
-      </span>
-      <span *ngIf="value[0] == 'lux'">
-        __lux 
-      </span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-  </mat-list>
-  <mat-slider class="color-slider"  min="0" max="10" step="1" [(ngModel)]="status.lux" thumbLabel></mat-slider>
 </div>
