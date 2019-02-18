@@ -18,7 +18,7 @@ IPAddress subnet(255,255,255,0);  //network mask
 const int LED_COUNT = 3;      //3 for RGB leds, 5 for RGB + Cold and Warm leds
 int lux = 0;
 //arrays are set up to hold the values in the order: red blue green cold warm
-const int ledPin[LED_COUNT] = {12, 5, 4}; //D5 D6 D7 on weMos d1 mini
+const int ledPin[LED_COUNT] = {4, 12, 5}; //D5 D6 D7 on weMos d1 mini
 int ledCurrentVal[LED_COUNT] = {0, 0, 0};   //the current value of leds
 int ledFadeTo[LED_COUNT] = {0, 0, 0};       //the final value leds are fading towards
 unsigned int unavailableCount = 0;
