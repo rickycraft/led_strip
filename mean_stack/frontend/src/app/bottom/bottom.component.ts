@@ -1,18 +1,16 @@
 //bottom navbar component
 import { ColorService } from 'src/app/color.service';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 //rgb component
 @Component({
-    selector: 'app-tab',
-    template: `
-    <h1>
-      Welcome to {{ title }}!
-    </h1>
-    `
+    selector: 'bottom-navbar',
+    templateUrl: './bottom.component.html',
   })
   
 export class BottomComponent {
-    constructor(private colorService : ColorService){}
-    title = 'bottom component';
+  constructor(private colorService : ColorService){}
+    
+  @Input() lux: number;
+
   }
