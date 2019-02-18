@@ -38,11 +38,9 @@ export class AppComponent {
       });
   }
 
-  getStatusValues(){
+  getStatusValues(){ //but not lux
     let values = Object.entries(this.status);
     values.pop();
     return values;
   }
-
-  title = 'frontend';
 }

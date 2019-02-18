@@ -13,4 +13,17 @@ export class BottomComponent {
     
   @Input() lux: number;
 
+  getLux(): void{
+    this.colorService.getStatus()
+      .subscribe( (res) => {
+        this.lux = res.lux;
+      });
   }
+
+  setLux(): void{
+    this.colorService.setLux(this.lux)
+      .subscribe( res => {
+        this.lux = res;
+      })
+  }
+}

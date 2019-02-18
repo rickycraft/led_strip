@@ -14,7 +14,7 @@ export class ColorService {
 
     readonly root_url = 'http://192.168.1.110:3000';
     
-    private status: Led;
+    public status: Led;
 
     constructor(private http: HttpClient, private route: Router){}
 
@@ -25,5 +25,8 @@ export class ColorService {
     setLed(data: Led): Observable<Led>{
         return this.http.post<Led>(this.root_url+'/rgb', data);
     }
-   
+    
+    setLux(data: number): Observable<number>{
+        return this.http.post<number>(this.root_url+'/lux', data);
+    }
 }
