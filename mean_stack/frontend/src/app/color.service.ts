@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Led } from './led';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators'
 
 const base_url = 'http://192.168.1.110:3000';
@@ -14,23 +14,32 @@ export class ColorService {
 
     readonly root_url = 'http://192.168.1.110:3000';
     
-    public status: Led;
+    //public status: Led;
+    private status = new BehaviorSubject(new Led);
+    status$: Observable<Led> = this.status.asObservable();
 
     constructor(private http: HttpClient, private route: Router){}
 
-    getStatus(): Observable<Led> {
-        return this.http.get<Led>(base_url+'/status');
+    getStatus(){
+        this.http.get<Led>(base_url+'/status')
+            .subscribe( data => {
+                this.status.next(data);
+            });
     }
 
-    setLed(data: Led): Observable<Led>{
+    setLed(data: Led){
         //console.log('Sending ', data);
-        return this.http.post<Led>(this.root_url+'/rgb', data);
+        this.http.post<Led>(this.root_url+'/rgb', data)
+            .subscribe( data => {
+                this.status.next(data);
+            })
     }
     
-    setLux(data: number): Observable<Led>{
+    setLux(data: number){
         console.log(data);
-        return this.http.post<Led>(this.root_url+'/rgb', {
-            lux: data
-        });
+        this.http.post<Led>(this.root_url+'/rgb', {lux: data})
+            .subscribe( data => {
+                this.status.next(data);
+            })
     }
 }

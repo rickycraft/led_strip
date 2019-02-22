@@ -12,29 +12,32 @@ import { Observable } from 'rxjs';
 reactiveform to change dinamically the values as i move the values on the slider
 debounce operator
 */
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  status$ = this.colorService.status$;
+  status: Led = new Led();
+
   constructor(private colorService : ColorService){
-    this.status = new Led(0,0,0,0,false);
+    this.status$.subscribe( data => {
+      this.status = data;
+    })
   }
 
-  status: Led;
-
   ngOnInit(){
-    this.getStatus();
+    this.colorService.getStatus();
   }
 
   getStatus(){
-    this.colorService.getStatus()
-      .subscribe( (res) => {
-        this.status = res;
-        console.log(res);
-      });
+    this.colorService.getStatus();  
   }
 
   setLed(){
-    this.colorService.setLed(this.status)
-      .subscribe( res => {
-        this.status = res;
+    this.colorService.setLed({
+        red:25,
+        green:10,
+        blu: 5,
+        lux:10,
+        ew: null
       });
   }
 

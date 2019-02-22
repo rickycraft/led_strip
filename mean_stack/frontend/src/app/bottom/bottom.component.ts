@@ -1,7 +1,9 @@
 //bottom navbar component
 import { ColorService } from 'src/app/color.service';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Led } from '../led';
+import { Observable, Subject} from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 //rgb component
 @Component({
@@ -9,28 +11,41 @@ import { Led } from '../led';
     templateUrl: './bottom.component.html',
   })
   
-export class BottomComponent {
-  constructor(private colorService : ColorService){}
-    
-  @Input() lux: number;
-
-  getLux(): void{
-    this.colorService.getStatus()
-      .subscribe( (res) => {
-        this.lux = res.lux;
-      });
-  }
+export class BottomComponent implements OnInit, OnDestroy{
   
+  @Input() lux: number;
+  debouncer: Subject<any> = new Subject();
+
+  ngOnInit(){
+    this.debouncer.next('initvalue');
+    this.debouncer.pipe(debounceTime(500)).subscribe(event => {
+      console.log('led set');
+      this.setLed();
+    });
+  }
+
+  ngOnDestroy(){
+    console.log('unsubscribe');
+    this.debouncer.unsubscribe();
+  }
+
+  constructor(private colorService : ColorService){
+    this.colorService.status$
+      .subscribe(data => {
+        this.lux = data.lux;
+      })
+  }
+
+  getStatus(){
+    this.colorService.getStatus();
+  }
+
   setLed(){
-    this.colorService.setLed(new Led(this.lux))
-      .subscribe( res => {
-        this.lux = res.lux;
-      });
+    this.colorService.setLed(new Led(this.lux));
   }
 
   hasUpdated(event){
     this.lux = event.value;
-    this.setLed();
-    this.getLux();
+    this.debouncer.next(event);
   }
 }
