@@ -11,6 +11,10 @@
       </ng-template>
       <div class="mat-tab">
         buttons
+        <button mat-button-raised (click)="getStatus()">request</button>
+        <ul>
+          <li *ngFor="let item of getStatusValues()">{{item[0]}}: {{item[1]}}</li>
+        </ul>
       </div>
     </mat-tab>    
     <mat-tab>
@@ -24,5 +28,5 @@
   </mat-tab-group>
   <mat-divider></mat-divider>
   <bottom-navbar [(lux)]="status.lux" ></bottom-navbar>
-  <h1>to do 2 way binding</h1>
+  <span>to do 2 way binding</span>
 </div>

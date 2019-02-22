@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
+//const bodyParser = require("body-parser");
 const request = require('request');
 const app = express();
 const port = 3000;
@@ -14,9 +14,8 @@ var led = {
     green: 0,
     blu: 0,
     lux: 0,
+    ew: false
 };
-
-var elwire = false;
 
 app.get('/status', async (req, res) => {
     await request.get(baseUrl+'/status', (err,response,body) => {
@@ -28,30 +27,20 @@ app.get('/status', async (req, res) => {
             res.status(200).send(body);
         }
     })
-    console.log("status requested");
-})
-
-app.post('/rgbl', (req,res) => {
-    led = req.body;
-    setLed();
-    
-})
-
-app.post('/lux', async (req, res) => {
-    led.lux = req.body;
-    setLed();
+    //console.log("status requested");
 })
 
 app.post('/rgb', async (req, res) => {
-    led.red = req.body.red;
-    led.green = req.body.green;
-    led.blu = req.body.blu;
-    setLed();
+    (req.body.red != null) ? led.red = req.body.red : '' ;
+    (req.body.green != null) ? led.green = req.body.green : '';
+    (req.body.blu != null) ? led.blu = req.body.blu : '';
+    (req.body.lux != null) ? led.lux = req.body.lux : '';
+    setLed(res);
 })
 
-async function setLed(){
+async function setLed(res){
     await request.get(
-        baseUrl+'/led/&'+checkColor(led.red)+':'+checkColor(led.green)+':'+checkColor(led.blu)+':'+checkColor(led.lux),
+        baseUrl+'/led/&'+checkValue(led.red)+':'+checkValue(led.green)+':'+checkValue(led.blu)+':'+checkValue(led.lux),
         (err, response, body) => { //get request
             if (response.statusCode == 500) {
                 res.sendStatus(500); 
@@ -60,11 +49,10 @@ async function setLed(){
                  
            } 
        });
-    console.log("rgb request");
-    console.log(led);
+    console.log("rgb request ", led);
 }
 
-function checkColor(color){
+function checkValue(color){
     if (color<10){
         return "0"+color;
     } else {
@@ -72,8 +60,8 @@ function checkColor(color){
     }
 }
 
-app.post('/elwire', async (req,res) => {
-    await request.get(baseUrl+'/elwire', (err,response,body) => {
+app.post('/ew', async (req,res) => {
+    await request.get(baseUrl+'/ew', (err,response,body) => {
         if (err) {
             console.log(err);
             res.sendStatus(500);
@@ -81,8 +69,8 @@ app.post('/elwire', async (req,res) => {
             res.status(200).send(JSON.parse(body));
         }
     })
-    elwire = !elwire;
-    console.log(elwire);
+    led.ew = !led.ew;
+    console.log(led.ew);
 })
 
 app.listen(port);

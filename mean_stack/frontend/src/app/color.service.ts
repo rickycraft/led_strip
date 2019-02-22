@@ -23,10 +23,14 @@ export class ColorService {
     }
 
     setLed(data: Led): Observable<Led>{
+        //console.log('Sending ', data);
         return this.http.post<Led>(this.root_url+'/rgb', data);
     }
     
-    setLux(data: number): Observable<number>{
-        return this.http.post<number>(this.root_url+'/lux', data);
+    setLux(data: number): Observable<Led>{
+        console.log(data);
+        return this.http.post<Led>(this.root_url+'/rgb', {
+            lux: data
+        });
     }
 }
