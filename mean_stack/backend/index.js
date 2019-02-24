@@ -18,17 +18,24 @@ var led = {
 };
 
 app.get('/status', async (req, res) => {
-    await request.get(baseUrl+'/status', (err,response,body) => {
+    await getRequest('/status', res);
+})
+
+app.get('/rgb/off', async (req, res) => {
+    await getRequest('/led/off', res);
+})
+
+async function getRequest(url, res){
+    await request.get(baseUrl+url, (err,response,body) => {
         if (err) {
             console.log(err);
             res.sendStatus(500);
         } else {
             led = JSON.parse(body);
-            res.status(200).send(body);
+            res.status(200).json(led);
         }
     })
-    //console.log("status requested");
-})
+}
 
 app.post('/rgb', async (req, res) => {
     (req.body.red != null) ? led.red = req.body.red : '' ;
@@ -40,7 +47,7 @@ app.post('/rgb', async (req, res) => {
 
 async function setLed(res){
     await request.get(
-        baseUrl+'/led/&'+checkValue(led.red)+':'+checkValue(led.green)+':'+checkValue(led.blu)+':'+checkValue(led.lux),
+        baseUrl+'/led/&'+checkValue(led.green)+':'+checkValue(led.red)+':'+checkValue(led.blu)+':'+checkValue(led.lux),
         (err, response, body) => { //get request
             if (response.statusCode == 500) {
                 res.sendStatus(500); 
