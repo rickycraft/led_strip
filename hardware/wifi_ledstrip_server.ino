@@ -192,7 +192,7 @@ void setupWifi(){
   server.on("/", handleRoot);
   server.on("/led", handleLed);
   server.on("/status", handleStatus);
-  server.on("/elwire", handleElwire);
+  server.on("/ew", handleElwire);
   server.on("/fade", handleFade);
   server.onNotFound(handleNotFound);
 
