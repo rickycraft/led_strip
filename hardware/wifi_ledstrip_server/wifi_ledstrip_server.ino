@@ -20,7 +20,7 @@ IPAddress subnet(255,255,255,0);  //network mask
 //-----------LED Settings-----------
 const int LED_COUNT = 3;      //3 for RGB leds, 5 for RGB + Cold and Warm leds
 //arrays are set up to hold the values in the order: red blue green cold warm
-const int ledPin[LED_COUNT] = {4, 12, 5}; //D5 D6 D7 on weMos d1 mini
+const int ledPin[LED_COUNT] = {12, 4, 5}; //D5 D6 D7 on weMos d1 mini
 int ledCurrentVal[LED_COUNT] = {0, 0, 0};   //the current value of leds
 int ledFadeTo[LED_COUNT] = {0, 0, 0};       //the final value leds are fading towards
 unsigned int unavailableCount = 0;
@@ -54,7 +54,6 @@ void setup()
 
 void loop()
 {
-  delay(10);
   server.handleClient();
   MDNS.update();
   incrementLights();
@@ -67,7 +66,7 @@ void handleRoot(){
 void handleStatus(){ //responding with current status
   String out = "";
   serializeJson(root, out); //creating serialized json
-  Serial.println(out);
+  //Serial.println(out);
   server.send(200, "application/json", out);
 }
 
@@ -104,14 +103,11 @@ void updateLedValue(String rawValue, int pos){ //update led value in json and fa
 }
 
 void handleLed(){ //handle led request reading parameters
-  if (server.hasArg("l"))
-    updateLedValue(server.arg("l"), 3);
-  if (server.hasArg("r"))
-    updateLedValue(server.arg("r"), 0);
-  if (server.hasArg("g"))
-    updateLedValue(server.arg("g"), 1);
-  if (server.hasArg("b"))
-    updateLedValue(server.arg("b"), 2);
+  updateLedValue(server.arg("lux"), 3);
+  updateLedValue(server.arg("red"), 0);
+  updateLedValue(server.arg("green"), 1);
+  updateLedValue(server.arg("blu"), 2);
+  handleStatus();
 }
 
 void handleNotFound(){
@@ -186,7 +182,7 @@ void setupWifi(){
   Serial.println(ip);
   Serial.println("");
 
-  if (MDNS.begin("esp8266")){
+  if (MDNS.begin("wifi_ledstrip")){
     Serial.println("MDNS responder started");
   }
 
