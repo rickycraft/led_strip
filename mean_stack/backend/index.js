@@ -3,6 +3,7 @@ const cors = require("cors");
 //const bodyParser = require("body-parser");
 const request = require('request');
 const app = express();
+const querystring = require('querystring');
 const port = 3000;
 
 const baseUrl = 'http://192.168.1.220';
@@ -46,8 +47,12 @@ app.post('/rgb', async (req, res) => {
 })
 
 async function setLed(res){
+    let tmpLed = led;
+    delete tmpLed.ew;
+    let params = querystring.stringify(tmpLed);
+    console.log(baseUrl+'/led?'+params);
     await request.get(
-        baseUrl+'/led/&'+checkValue(led.green)+':'+checkValue(led.red)+':'+checkValue(led.blu)+':'+checkValue(led.lux),
+        baseUrl+'/led?'+params,
         (err, response, body) => { //get request
             if (response.statusCode == 500) {
                 res.sendStatus(500); 
@@ -57,14 +62,6 @@ async function setLed(res){
            } 
        });
     console.log("rgb request ", led);
-}
-
-function checkValue(color){
-    if (color<10){
-        return "0"+color;
-    } else {
-        return color;
-    }
 }
 
 app.post('/ew', async (req,res) => {
