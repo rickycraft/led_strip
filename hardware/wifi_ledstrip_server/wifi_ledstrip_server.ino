@@ -56,7 +56,7 @@ void loop()
 {
   delay(10);
   server.handleClient();
-  MNDS.update();
+  MDNS.update();
   incrementLights();
 }
 
@@ -81,20 +81,21 @@ void handleFade(){  //TODO fade
   handleStatus();
 }
 
-void updateLedValue(int rawValue, int pos){ //update led value in json and fade to
-  int value = checkReadVal(rawValue);
-  case (pos) {
+void updateLedValue(String rawValue, int pos){ //update led value in json and fade to
+  int value = checkReadVal(rawValue.toInt());
+  int tmpLux = root["lux"];
+  switch (pos) {
     case 0:
       root["red"] = value;
-      ledFadeTo[pos] = value*root["lux"];
+      ledFadeTo[pos] = value*tmpLux;
       break;
     case 1:
       root["green"] = value;
-      ledFadeTo[pos] = value*root["lux"];
+      ledFadeTo[pos] = value*tmpLux;
       break;
     case 2:
       root["blu"] = value;
-      ledFadeTo[pos] = value*root["lux"];
+      ledFadeTo[pos] = value*tmpLux;
       break;
     case 3:
       root["lux"] = value;
@@ -114,7 +115,7 @@ void handleLed(){ //handle led request reading parameters
 }
 
 void handleNotFound(){
-  server.send(404, "text/plain", "Not Found")
+  server.send(404, "text/plain", "Not Found");
 }
 
 int checkReadVal(int inVal){ //check if values are between 0 and 255
