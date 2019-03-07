@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ColorService } from './color.service';
 import { Led } from './led';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,11 @@ import { Observable } from 'rxjs';
 reactiveform to change dinamically the values as i move the values on the slider
 debounce operator
 */
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit{
 
   status$ = this.colorService.status$;
   status: Led = new Led();
+  debouncer: Subject<any> = new Subject();
 
   constructor(private colorService : ColorService){
     this.status$.subscribe( data => {
@@ -25,6 +27,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
     this.colorService.getStatus();
+    this.debouncer.pipe(debounceTime(500)).subscribe(event => {
+      this.colorService.setColor( event.color, event.value);
+    });
   }
 
   getStatus(){
@@ -32,18 +37,16 @@ export class AppComponent implements OnInit {
   }
 
   setLed(){
-    this.colorService.setLed({
-        red:25,
-        green:10,
-        blu: 5,
-        lux:10,
-        ew: null
-      });
+    this.colorService.setLed(null);
+  }
+
+  setColor(event, color){
+    event.color = color;
+    this.debouncer.next(event);
   }
 
   getStatusValues(){ //but not lux
     let values = Object.entries(this.status);
-    values.pop();
     return values;
   }
 }

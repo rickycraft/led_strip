@@ -17,10 +17,10 @@ export class BottomComponent implements OnInit, OnDestroy{
   debouncer: Subject<any> = new Subject();
 
   ngOnInit(){
-    this.debouncer.next('initvalue');
+    //this.debouncer.next('initvalue');
     this.debouncer.pipe(debounceTime(500)).subscribe(event => {
-      console.log('led set');
-      this.setLed();
+      //console.log(event.value);
+      this.colorService.setLux(this.lux);
     });
   }
 
@@ -34,14 +34,6 @@ export class BottomComponent implements OnInit, OnDestroy{
       .subscribe(data => {
         this.lux = data.lux;
       })
-  }
-
-  getStatus(){
-    this.colorService.getStatus();
-  }
-
-  setLed(){
-    this.colorService.setLed(new Led(this.lux));
   }
 
   hasUpdated(event){

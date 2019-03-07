@@ -14,9 +14,10 @@ var led = {
     red: 0,
     green: 0,
     blu: 0,
-    lux: 0,
-    ew: false
+    lux: 0
 };
+
+var ew = false;
 
 app.get('/status', async (req, res) => {
     await getRequest('/status', res);
@@ -28,10 +29,15 @@ app.get('/rgb/off', async (req, res) => {
 })
 
 async function getRequest(url, res){
-    await request.get(baseUrl+url, (err,response,body) => {
+    await request.get(baseUrl+url, {timeout: 10000},(err,response,body) => {
         if (err) {
-            console.log(err);
-            res.sendStatus(500);
+            if (err.code === 'ETIMEDOUT'){
+                console.log("timeout error ");
+                res.sendStatus(408);
+            } else {
+                console.log("error occurred");
+                res.sendStatus(500);
+            }
         } else {
             led = JSON.parse(body);
             res.status(200).json(led);
@@ -48,24 +54,31 @@ app.post('/rgb', async (req, res) => {
 })
 
 async function setLed(res){
-    let tmpLed = led;
-    delete tmpLed.ew;
-    let params = querystring.stringify(tmpLed);
+    console.log(led);
+    let params = querystring.stringify(led);
     //console.log(baseUrl+'/led?'+params);
     await request.get(
         baseUrl+'/led?'+params,
         (err, response, body) => { //get request
             if (!response) {
-                res.sendStatus(500); 
-           } else{ 
+                console.log("response undefined");
+                res.sendStatus(500);
+            } else if (err) {
+                if (err.code === 'ETIMEDOUT'){
+                    console.log("timeout error ");
+                    res.sendStatus(408);
+                } else {
+                    console.log("error occurred");
+                    res.sendStatus(500);
+                }
+            } else{ 
                 res.status(200).send(JSON.parse(body));
-                 
-           } 
+            } 
        });
     //console.log("rgb request ", led);
 }
 
-app.post('/ew', async (req,res) => {
+app.get('/ew', async (req,res) => {
     await request.get(baseUrl+'/ew', (err,response,body) => {
         if (err) {
             console.log(err);
@@ -74,8 +87,8 @@ app.post('/ew', async (req,res) => {
             res.status(200).send(JSON.parse(body));
         }
     })
-    led.ew = !led.ew;
-    console.log(led.ew);
+    ew = !ew;
+    console.log(ew);
 })
 
 app.listen(port);

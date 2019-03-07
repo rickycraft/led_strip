@@ -4,12 +4,8 @@ import { Component } from '@angular/core';
 
 //rgb component
 @Component({
-    selector: 'app-colors',
-    template: `
-    <h1>
-      Welcome to {{ title }}!
-    </h1>
-    `
+    selector: 'app-color',
+    templateUrl: './color.component.html'
   })
   export class ColorsComponent {
     constructor(private colorService : ColorService){}

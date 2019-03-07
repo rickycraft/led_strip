@@ -28,16 +28,34 @@ export class ColorService {
     }
 
     setLed(data: Led){
-        //console.log('Sending ', data);
+        console.log("set led ", data);
         this.http.post<Led>(this.root_url+'/rgb', data)
             .subscribe( data => {
                 this.status.next(data);
             })
     }
+
+    setColor(type, value: Number){
+        console.log("set color", type, value);
+        let tmp = {};
+        tmp[type] = value;
+        this.http.post<Led>(this.root_url+'/rgb', tmp)
+            .subscribe( data => {
+                this.status.next(data);
+            })
+    }
     
-    setLux(data: number){
-        console.log(data);
+    setLux(data: Number){
+        console.log("set lux ", data);
         this.http.post<Led>(this.root_url+'/rgb', {lux: data})
+            .subscribe( data => {
+                this.status.next(data);
+            })
+    }
+
+    setEw(data: boolean){ //TODO control of sync of data
+        console.log("set ew ", data);
+        this.http.get<Led>(this.root_url+'/ew')
             .subscribe( data => {
                 this.status.next(data);
             })

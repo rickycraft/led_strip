@@ -1,0 +1,27 @@
+<mat-tab-group class="mat-tab-group"> 
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon" style="margin-right: 10px;" >thumb_up</mat-icon>button
+      </ng-template>
+      <div class="mat-tab">
+        buttons
+        <button mat-button-raised (click)="getStatus()">request</button>
+        <ul>
+          <li *ngFor="let item of getStatusValues()">{{item[0]}}: {{item[1]}}</li>
+        </ul>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon" style="margin-right: 10px;" >thumb_up</mat-icon>rgb
+      </ng-template>
+      <div class="mat-tab" fxFlex fxLayout="column" fxFlexAlign="end">
+        <div fxFlex class="mid">
+          uno
+        </div>
+        <div fxFlex>
+          due
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>

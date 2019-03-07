@@ -13,9 +13,9 @@ import {
   MatListModule,
   MatIconModule,
   MatTabsModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatCardModule,
 } from '@angular/material';
-import {MatCardModule} from '@angular/material/card';
 import 'hammerjs';
 
 //app component
