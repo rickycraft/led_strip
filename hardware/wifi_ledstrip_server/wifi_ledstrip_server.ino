@@ -26,14 +26,15 @@ int ledFadeTo[LED_COUNT] = {0, 0, 0};       //the final value leds are fading to
 unsigned int unavailableCount = 0;
 
 WiFiClient client;
+bool changed;
 
 //-----------Other Variables-----------
 bool ewStatus = false;
 const int ewPin = 1; //D6
 
 //-------JSON-------
-const int capacity = JSON_OBJECT_SIZE(5);
-StaticJsonDocument<capacity> root;
+const int capacity = JSON_OBJECT_SIZE(10);
+StaticJsonDocument<110> root;
 
 void setup()
 {
@@ -55,8 +56,8 @@ void setup()
 void loop()
 {
   server.handleClient();
-  MDNS.update();
-  incrementLights();
+  //MDNS.update();
+  //incrementLights();
 }
 
 void handleRoot(){
@@ -64,10 +65,21 @@ void handleRoot(){
 }
 
 void handleStatus(){ //responding with current status
+  unsigned int start_time = millis();
+  //Serial.println("sending response");
+
   String out = "";
   serializeJson(root, out); //creating serialized json
-  //Serial.println(out);
+  Serial.println(out);
   server.send(200, "application/json", out);
+
+  Serial.print("response sent in ");
+  Serial.println(millis() - start_time);
+
+  for (int i = 0; i < 3; i++){
+    analogWrite(ledPin[i], ledFadeTo[i]);
+    ledCurrentVal[i] = ledFadeTo[i];
+  }
 }
 
 void handleElwire(){
@@ -103,11 +115,13 @@ void updateLedValue(String rawValue, int pos){ //update led value in json and fa
 }
 
 void handleLed(){ //handle led request reading parameters
+  Serial.println("Handling led");
   updateLedValue(server.arg("lux"), 3);
   updateLedValue(server.arg("red"), 0);
   updateLedValue(server.arg("green"), 1);
   updateLedValue(server.arg("blu"), 2);
   handleStatus();
+  delay(100);
 }
 
 void handleNotFound(){
@@ -133,6 +147,7 @@ void incrementLights(){    //if final led values have changed this funciton fade
 
   if (isChanged){ //if value has changed, fade to value for each color
     Serial.println("fading to color");
+    
     float fadeTime = 1020; //total ms to fade
     int deltaValue[LED_COUNT] = {0,0,0};
     float incrementValue[LED_COUNT] = {0,0,0};
@@ -162,6 +177,7 @@ void incrementLights(){    //if final led values have changed this funciton fade
 }
 
 void setupWifi(){
+  unsigned int start_time = millis();
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.hostname("wemos d1");
@@ -171,19 +187,21 @@ void setupWifi(){
 
   while (WiFi.status() != WL_CONNECTED){
     Serial.print(".");
-    delay(500);
+    delay(100);
   }
   Serial.println("\nWiFi connected");
-
-  server.begin();   //starting server on ESP8266
+  
+  
   Serial.println("Server started");
   Serial.print("Local IP adress: ");
   Serial.println(WiFi.localIP());
   Serial.println(ip);
   Serial.println("");
-
+  
   if (MDNS.begin("wifi_ledstrip")){
     Serial.println("MDNS responder started");
+  } else {
+    Serial.println("Error setting up MDNS responder!");
   }
 
   server.on("/", handleRoot);
@@ -193,6 +211,9 @@ void setupWifi(){
   server.on("/fade", handleFade);
   server.onNotFound(handleNotFound);
 
-  Serial.println("Server setup compleated");
+  server.begin();   //starting server on ESP8266
+
+  Serial.print("Server setup compleated in ");
+  Serial.println(millis() - start_time);
   //WiFi.printDiag(Serial);
 }
