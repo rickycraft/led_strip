@@ -26,7 +26,6 @@ int ledFadeTo[LED_COUNT] = {0, 0, 0};       //the final value leds are fading to
 unsigned int unavailableCount = 0;
 
 WiFiClient client;
-bool changed;
 
 //-----------Other Variables-----------
 bool ewStatus = false;
@@ -66,20 +65,17 @@ void handleRoot(){
 
 void handleStatus(){ //responding with current status
   unsigned int start_time = millis();
-  //Serial.println("sending response");
 
   String out = "";
   serializeJson(root, out); //creating serialized json
-  Serial.println(out);
   server.send(200, "application/json", out);
 
-  Serial.print("response sent in ");
-  Serial.println(millis() - start_time);
+  Serial.print(out);
+  Serial.print("\t in ");
+  Serial.print(millis() - start_time);
+  Serial.println("ms");
 
-  for (int i = 0; i < 3; i++){
-    analogWrite(ledPin[i], ledFadeTo[i]);
-    ledCurrentVal[i] = ledFadeTo[i];
-  }
+  incrementLights();
 }
 
 void handleElwire(){
@@ -90,28 +86,6 @@ void handleElwire(){
 
 void handleFade(){  //TODO fade
   handleStatus();
-}
-
-void updateLedValue(String rawValue, int pos){ //update led value in json and fade to
-  int value = checkReadVal(rawValue.toInt());
-  int tmpLux = root["lux"];
-  switch (pos) {
-    case 0:
-      root["red"] = value;
-      ledFadeTo[pos] = value*tmpLux;
-      break;
-    case 1:
-      root["green"] = value;
-      ledFadeTo[pos] = value*tmpLux;
-      break;
-    case 2:
-      root["blu"] = value;
-      ledFadeTo[pos] = value*tmpLux;
-      break;
-    case 3:
-      root["lux"] = value;
-      break;
-  }
 }
 
 void handleLed(){ //handle led request reading parameters
@@ -137,43 +111,72 @@ int checkReadVal(int inVal){ //check if values are between 0 and 255
     return inVal;
 }
 
-void incrementLights(){    //if final led values have changed this funciton fades lights up or down
-  bool isChanged = false;
-  for(int i = 0; i < LED_COUNT; i++) //if value are changed
-    if (ledCurrentVal[i] != ledFadeTo[i]){
-      isChanged = true;
+void updateLedValue(String rawValue, int pos){ //update led value in json and fade to
+  int value = checkReadVal(rawValue.toInt());
+  int tmpLux = root["lux"];
+  switch (pos) {
+    case 0:
+      root["red"] = value;
+      ledFadeTo[pos] = value*tmpLux;
       break;
-    }
+    case 1:
+      root["green"] = value;
+      ledFadeTo[pos] = value*tmpLux;
+      break;
+    case 2:
+      root["blu"] = value;
+      ledFadeTo[pos] = value*tmpLux;
+      break;
+    case 3:
+      root["lux"] = value;
+      break;
+  }
+}
 
-  if (isChanged){ //if value has changed, fade to value for each color
-    Serial.println("fading to color");
-    
-    float fadeTime = 1020; //total ms to fade
-    int deltaValue[LED_COUNT] = {0,0,0};
-    float incrementValue[LED_COUNT] = {0,0,0};
-    float fadeValue[LED_COUNT] = {ledCurrentVal[0],ledCurrentVal[1],ledCurrentVal[2]};
+void rawIncrementLights(){
+  for (int i = 0; i < 3; i++){
+    analogWrite(ledPin[i], ledFadeTo[i]);
+    ledCurrentVal[i] = ledFadeTo[i];
+  }
+}
 
-    for(int i = 0; i < LED_COUNT; i++){ //calculate how much increment value each time
-      deltaValue[i] = (ledFadeTo[i]) - (ledCurrentVal[i]);
-      incrementValue[i] = deltaValue[i]/fadeTime;
-    }
-    for(int i = 0; i < fadeTime; i++){ //fade to value
-      for(int j = 0; j < LED_COUNT; j++){
+void incrementLights(){    //if final led values have changed this funciton fades lights up or down
+  Serial.print("Fading to color in ");
+  unsigned int start_time = millis();
+  
+  float fadeTime = 1020; //total ms to fade
+  int deltaValue[LED_COUNT] = {0,0,0};
+  float incrementValue[LED_COUNT] = {0,0,0};
+  float fadeValue[LED_COUNT] = {ledCurrentVal[0],ledCurrentVal[1],ledCurrentVal[2]};
+
+  for(int i = 0; i < LED_COUNT; i++){ //calculate how much increment value each time
+    deltaValue[i] = (ledFadeTo[i]) - (ledCurrentVal[i]);
+    incrementValue[i] = deltaValue[i]/fadeTime;
+  }
+  for(int i = 0; i < fadeTime; i++){
+    for(int j = 0; j < LED_COUNT; j++){ //fade to value
         fadeValue[j] += incrementValue[j];//increment value
         analogWrite(ledPin[j], (int) fadeValue[j]);
       }
-      delay(1);
-    }
-    for(int i = 0; i < LED_COUNT; i++){ //final value
-      if(abs(ledFadeTo[i] - fadeValue[i]) > 10){
-        Serial.println("Error in fading to value");
-        Serial.print(fadeValue[i]);
-        Serial.println(ledFadeTo[i]);
-      }
-      ledCurrentVal[i] = ledFadeTo[i];
-      analogWrite(ledPin[i], ledCurrentVal[i]);
-    }
+    delay(1);
   }
+
+  Serial.print(millis() - start_time - (int)fadeTime);
+  Serial.println("ms");
+  Serial.println("####################");
+  
+  for(int i = 0; i < LED_COUNT; i++){ //final value
+    /*
+    if(abs(ledFadeTo[i] - fadeValue[i]) > 10){
+      Serial.println("Error in fading to value");
+      Serial.print(fadeValue[i]);
+      Serial.println(ledFadeTo[i]);
+    }
+    */
+    ledCurrentVal[i] = ledFadeTo[i];
+    analogWrite(ledPin[i], ledCurrentVal[i]);
+  }
+  
 }
 
 void setupWifi(){
