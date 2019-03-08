@@ -14,10 +14,9 @@ var led = {
     red: 0,
     green: 0,
     blu: 0,
-    lux: 0
+    lux: 0,
+    ew: false,
 };
-
-var ew = false;
 
 app.get('/status', async (req, res) => {
     await getRequest('/status', res);
@@ -25,6 +24,14 @@ app.get('/status', async (req, res) => {
 
 app.get('/rgb/off', async (req, res) => {
     led.lux = 0;
+    await setLed(res);
+})
+
+app.post('/rgb', async (req, res) => {
+    (req.body.red != null) ? led.red = req.body.red : '' ;
+    (req.body.green != null) ? led.green = req.body.green : '';
+    (req.body.blu != null) ? led.blu = req.body.blu : '';
+    (req.body.lux != null) ? led.lux = req.body.lux : '';
     await setLed(res);
 })
 
@@ -44,14 +51,6 @@ async function getRequest(url, res){
         }
     })
 }
-
-app.post('/rgb', async (req, res) => {
-    (req.body.red != null) ? led.red = req.body.red : '' ;
-    (req.body.green != null) ? led.green = req.body.green : '';
-    (req.body.blu != null) ? led.blu = req.body.blu : '';
-    (req.body.lux != null) ? led.lux = req.body.lux : '';
-    await setLed(res);
-})
 
 async function setLed(res){
     console.log(led);
@@ -78,7 +77,7 @@ async function setLed(res){
     //console.log("rgb request ", led);
 }
 
-app.get('/ew', async (req,res) => {
+app.get('/ew', async (req,res) => { //TODO parameter with value
     await request.get(baseUrl+'/ew', (err,response,body) => {
         if (err) {
             console.log(err);
@@ -87,8 +86,8 @@ app.get('/ew', async (req,res) => {
             res.status(200).send(JSON.parse(body));
         }
     })
-    ew = !ew;
-    console.log(ew);
+    led.ew = !led.ew;
+    console.log(led.ew);
 })
 
 app.listen(port);

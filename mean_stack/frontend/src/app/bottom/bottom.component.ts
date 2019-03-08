@@ -14,12 +14,11 @@ import { debounceTime } from 'rxjs/operators';
 export class BottomComponent implements OnInit, OnDestroy{
   
   @Input() lux: number;
+  @Input() ew: boolean;
   debouncer: Subject<any> = new Subject();
 
   ngOnInit(){
-    //this.debouncer.next('initvalue');
     this.debouncer.pipe(debounceTime(500)).subscribe(event => {
-      //console.log(event.value);
       this.colorService.setLux(this.lux);
     });
   }
@@ -33,10 +32,16 @@ export class BottomComponent implements OnInit, OnDestroy{
     this.colorService.status$
       .subscribe(data => {
         this.lux = data.lux;
+        this.ew = data.ew;
       })
   }
 
-  hasUpdated(event){
+  toggleEw(){
+    this.ew = !this.ew;
+    this.colorService.setEw(this.ew);
+  }
+
+  hasUpdated(event: any){
     this.lux = event.value;
     this.debouncer.next(event);
   }

@@ -14,7 +14,6 @@ export class ColorService {
 
     readonly root_url = 'http://192.168.1.110:3000';
     
-    //public status: Led;
     private status = new BehaviorSubject(new Led);
     status$: Observable<Led> = this.status.asObservable();
 
@@ -35,17 +34,17 @@ export class ColorService {
             })
     }
 
-    setColor(type, value: Number){
-        console.log("set color", type, value);
+    setColor( color, value: number){
+        console.log("set color", color , value);
         let tmp = {};
-        tmp[type] = value;
+        tmp[color] = value;
         this.http.post<Led>(this.root_url+'/rgb', tmp)
             .subscribe( data => {
                 this.status.next(data);
             })
     }
     
-    setLux(data: Number){
+    setLux(data: number){
         console.log("set lux ", data);
         this.http.post<Led>(this.root_url+'/rgb', {lux: data})
             .subscribe( data => {

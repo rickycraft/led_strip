@@ -15,12 +15,11 @@ debounce operator
 */
 export class AppComponent implements OnInit{
 
-  status$ = this.colorService.status$;
   status: Led = new Led();
   debouncer: Subject<any> = new Subject();
 
   constructor(private colorService : ColorService){
-    this.status$.subscribe( data => {
+    this.colorService.status$.subscribe( data => {
       this.status = data;
     })
   }
@@ -36,11 +35,7 @@ export class AppComponent implements OnInit{
     this.colorService.getStatus();  
   }
 
-  setLed(){
-    this.colorService.setLed(null);
-  }
-
-  setColor(event, color){
+  setColor(event, color: string){
     event.color = color;
     this.debouncer.next(event);
   }
