@@ -3,7 +3,7 @@ import { ColorService } from 'src/app/color.service';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Led } from '../led';
 import { Observable, Subject} from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 //rgb component
 @Component({
@@ -18,7 +18,7 @@ export class BottomComponent implements OnInit, OnDestroy{
   debouncer: Subject<any> = new Subject();
 
   ngOnInit(){
-    this.debouncer.pipe(debounceTime(500)).subscribe(event => {
+    this.debouncer.pipe(debounceTime(200),distinctUntilChanged()).subscribe(event => {
       this.colorService.setLux(this.lux);
     });
   }

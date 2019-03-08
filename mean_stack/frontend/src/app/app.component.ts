@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ColorService } from './color.service';
 import { Led } from './led';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit{
 
   ngOnInit(){
     this.colorService.getStatus();
-    this.debouncer.pipe(debounceTime(500)).subscribe(event => {
+    this.debouncer.pipe(debounceTime(200), distinctUntilChanged()).subscribe(event => {
       this.colorService.setColor( event.color, event.value);
     });
   }

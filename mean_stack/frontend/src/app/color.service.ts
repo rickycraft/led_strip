@@ -23,6 +23,8 @@ export class ColorService {
         this.http.get<Led>(base_url+'/status')
             .subscribe( data => {
                 this.status.next(data);
+            }, error => {
+                console.log("Error ", error);
             });
     }
 
