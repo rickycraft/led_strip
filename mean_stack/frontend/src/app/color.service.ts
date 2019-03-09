@@ -54,9 +54,9 @@ export class ColorService {
 
     setColorName(name: String){ //set color by name
         let curr_color: Led = this.status_val;
-        switch (name) {
-            case "pink":
-                curr_color.setColor(Colors.pink());
+        switch (name.toLowerCase()) {
+            case "fuchsia":
+                curr_color.setColor(Colors.fuchsia());
                 break;
             case "yellow":
                 curr_color.setColor(Colors.yellow());

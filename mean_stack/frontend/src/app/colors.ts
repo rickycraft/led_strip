@@ -4,12 +4,28 @@ export class Colors{
     green: number;
     blu: number;
 
-    static pink(): Colors{
+    static fuchsia(): Colors{
         return new Colors(25,0,25);
     }
 
     static yellow(): Colors{
         return new Colors(25,25,0);
+    }
+
+    static cyan(): Colors{
+        return new Colors(0,25,25);
+    }
+
+    static purple(): Colors{
+        return new Colors(13,0,13);
+    }
+
+    static warm(): Colors{
+        return new Colors(25,10,0);
+    }
+
+    static cold(): Colors{
+        return new Colors(10,20,25);
     }
 
     static white(): Colors{
