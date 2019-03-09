@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Led } from './led';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators'
+import { Colors } from './colors';
 
 const base_url = 'http://192.168.1.110:3000';
 
@@ -16,8 +17,13 @@ export class ColorService {
     
     private status = new BehaviorSubject(new Led);
     status$: Observable<Led> = this.status.asObservable();
+    private status_val: Led = new Led();
 
-    constructor(private http: HttpClient, private route: Router){}
+    constructor(private http: HttpClient, private route: Router){
+        this.status$.subscribe( data => {
+            this.status_val = data;
+          })
+    }
 
     getStatus(){
         this.http.get<Led>(base_url+'/status')
@@ -36,7 +42,7 @@ export class ColorService {
             })
     }
 
-    setColor( color, value: number){
+    setColor(color: any, value: number){
         console.log("set color", color , value);
         let tmp = {};
         tmp[color] = value;
@@ -44,6 +50,22 @@ export class ColorService {
             .subscribe( data => {
                 this.status.next(data);
             })
+    }
+
+    setColorName(name: String){ //set color by name
+        let curr_color: Led = this.status_val;
+        switch (name) {
+            case "pink":
+                curr_color.setColor(Colors.pink());
+                break;
+            case "yellow":
+                curr_color.setColor(Colors.yellow());
+                break;
+            case "white":
+                curr_color.setColor(Colors.white());
+                break;
+        }
+        this.setLed(curr_color);
     }
     
     setLux(data: number){

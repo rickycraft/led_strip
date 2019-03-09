@@ -1,3 +1,4 @@
+import {Colors} from './colors';
 export class Led {
     red: number;
     green: number;
@@ -12,4 +13,10 @@ export class Led {
       this.lux = lux;
     }
 
-  }
+    setColor(color: Colors){
+      this.red = color.red;
+      this.green = color.green;
+      this.blu = color.blu;
+    }
+
+}

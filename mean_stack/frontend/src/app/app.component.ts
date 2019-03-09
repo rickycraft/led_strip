@@ -27,7 +27,7 @@ export class AppComponent implements OnInit{
   ngOnInit(){
     this.colorService.getStatus();
     this.debouncer.pipe(debounceTime(200), distinctUntilChanged()).subscribe(event => {
-      this.colorService.setColor( event.color, event.value);
+      this.colorService.setColor(event.color, event.value);
     });
   }
 
