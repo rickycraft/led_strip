@@ -28,6 +28,8 @@ const uint8_t ewPin = 1; //D6
 //-------JSON--------
 StaticJsonDocument<110> root;
 
+unsigned long timer = 0;
+
 void setup()
 {
   Serial.begin(115200);
@@ -49,6 +51,10 @@ void loop()
 {
   server.handleClient();
   //MDNS.update();
+  if ((millis() - timer) > 5000){
+    timer = millis();
+    MDNS.update();
+  }
 }
 
 void handleRoot(){ //handle / as status
@@ -88,7 +94,6 @@ void handleLed(){ //handle led request reading parameters
   updateLedValue(server.arg("green"), 1);
   updateLedValue(server.arg("blu"), 2);
   handleStatus();
-  delay(100);
 }
 
 void handleNotFound(){ //handle not found url request
@@ -96,8 +101,8 @@ void handleNotFound(){ //handle not found url request
 }
 
 int checkReadVal(int inVal){ //check if values are between 0 and 255
-  if(inVal > 255)
-    return 255;
+  if(inVal > 25)
+    return 25;
   else if (inVal < 0)
     return 0;
   else
@@ -154,7 +159,7 @@ void incrementLights(){    //if final led values have changed this funciton fade
     delay(1);
   }
 
-  Serial.print(millis() - start_time - (int)fadeTime);  //printing log time
+  Serial.print(millis() - start_time);  //printing log time
   Serial.println(F("ms"));
   Serial.println(F("####################"));
   
@@ -176,7 +181,7 @@ void setupWifi(){
   unsigned int start_time = millis();
   Serial.print(F("Connecting to "));
   Serial.println(ssid);
-  WiFi.hostname(F("wemos d1"));
+  //WiFi.hostname(F("wemos"));
   WiFi.config(ip, gateway, subnet); //static configuration
   WiFi.begin(ssid, wifiPass);   //connecting to wifi
   WiFi.mode(WIFI_STA);
@@ -194,7 +199,7 @@ void setupWifi(){
   Serial.println(ip);
   Serial.println("");
   
-  if (MDNS.begin("wifi_ledstrip")){  //MDNS started
+  if (MDNS.begin("wemos")){  //MDNS started
     Serial.println(F("MDNS responder started"));
   } else {
     Serial.println(F("Error setting up MDNS responder!"));
@@ -208,6 +213,7 @@ void setupWifi(){
   server.onNotFound(handleNotFound);
 
   server.begin();   //starting server on ESP8266
+  MDNS.addService("http", "tcp", 80); //MDNS service
 
   Serial.print(F("Server setup compleated in "));
   Serial.println(millis() - start_time);
