@@ -24,4 +24,5 @@ export class Colors{
 
     constructor(r: number, g: number, b: number){
         this.setColor(r,g,b);
+    }
 }
