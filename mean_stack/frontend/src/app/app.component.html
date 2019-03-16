@@ -2,25 +2,26 @@
   <mat-toolbar color="primary">
       <h1>Led Strip</h1>
       <span class="spacer"></span>
-      <span>handling errori    </span>
-      <mat-icon style="margin-left:15px;">favorite</mat-icon>
+      <mat-slider disabled [(ngModel)]="lamp.lux" min="1" max="250" step="10" fxFlex color="accent" (input)="setLampLux($event)" style="margin-right: 15px;"></mat-slider>
+      <button disabled mat-fab *ngIf="lamp.status" (click)="setLamp()" ><mat-icon>flash_off</mat-icon></button>
+      <button disabled mat-fab *ngIf="!lamp.status" (click)="setLamp()" ><mat-icon>bolt</mat-icon></button>
   </mat-toolbar>
   <div fxFlex fxLayout="row">
-    <div fxFlex fxLayout="column" fxLayoutAlign="center center" style="margin-bottom: 40px; margin-top: 20px;">
+    <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="slider-container">
       <button mat-flat-button color="primary">RED</button>
-      <mat-slider [(ngModel)]="status.red" min="1" max="25" step="1" 
+      <mat-slider [(ngModel)]="status.red" min="0" max="25" step="1" class="color-slider"
       vertical fxFlex thumbLabel (input)="setColor($event, 'red')"></mat-slider>
       <button mat-flat-button color="primary">{{status.red}}</button>
     </div>
-    <div fxFlex fxLayout="column" fxLayoutAlign="center center" style="margin-bottom: 40px; margin-top: 20px;">
+    <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="slider-container">
       <button mat-flat-button color="primary">GREEN</button>
-      <mat-slider [(ngModel)]="status.green" min="1" max="25" step="1" 
+      <mat-slider [(ngModel)]="status.green" min="0" max="25" step="1" class="color-slider"
       vertical fxFlex thumbLabel (input)="setColor($event, 'green')"></mat-slider>
       <button mat-flat-button color="primary">{{status.green}}</button>
     </div>
-    <div fxFlex fxLayout="column" fxLayoutAlign="center center" style="margin-bottom: 40px; margin-top: 20px;">
+    <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="slider-container">
       <button mat-flat-button color="primary">BLU</button>
-      <mat-slider [(ngModel)]="status.blu" min="1" max="25" step="1" 
+      <mat-slider [(ngModel)]="status.blu" min="0" max="25" step="1" class="color-slider"
       vertical fxFlex thumbLabel (input)="setColor($event, 'blu')"></mat-slider>
       <button mat-flat-button color="primary">{{status.blu}}</button>
     </div>

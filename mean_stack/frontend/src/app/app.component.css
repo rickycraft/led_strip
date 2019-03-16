@@ -13,3 +13,18 @@
 .mat-tab-group.mat-tab-fill-height .mat-tab-body-wrapper {
     flex: 1 1 100%;
  }
+
+ .color-slider{
+    margin: 15px;
+     
+ }
+
+ .slider-container{
+    margin-bottom: 40px;
+    margin-top: 20px;
+ }
+
+ .top-button{
+    margin: 15px;
+    margin-left: 25px;
+ }

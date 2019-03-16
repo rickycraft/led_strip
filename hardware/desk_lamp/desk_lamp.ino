@@ -16,9 +16,9 @@ IPAddress subnet(255,255,255,0);  //network mask
 //-----------LED Settings-----------
 uint8_t buttonPin = 0;
 uint8_t lightPin = 12;
-bool status = false;
+bool lamp_status = false;
 uint8_t buttonStatus;
-uint8_t lux = 0;
+uint16_t lux = 0;
 
 unsigned long timer = 0;
 
@@ -26,10 +26,13 @@ void setup(){
   Serial.begin(115200);
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(lightPin, OUTPUT);
+  analogWrite(lightPin, 100);
+  delay(100);
   buttonStatus = digitalRead(buttonPin);
   //attachInterrupt(digitalPinToInterrupt(buttonPin), toggle, CHANGE);
   setupWifi();    //setting up and connecting to wifi
 
+  digitalWrite(lightPin, LOW);
   Serial.println(F("Setup compleated\n##################"));
 }
 
@@ -42,19 +45,16 @@ void loop(){
   if (digitalRead(buttonPin) != buttonStatus){
     buttonStatus = digitalRead(buttonPin);
     toggleButton();
+    delay(100);
   }
+  server.handleClient();
 }
 
-toggleButton(){
-  if (status && lux != 255){
-    digitalWrite(lightPin, HIGH);
-    setLux(255);
-  } else if (status){
-    status = false;
-    digitalWrite(lightPin, LOW);
+void toggleButton(){
+  if (lamp_status && lux > 250){
+    setLamp(0);
   } else {
-    status = true;
-    digitalWrite(lightPin, HIGH);
+    setLamp(255);
   }
 }
 
@@ -64,7 +64,7 @@ void handleRoot(){ //handle / as status
 
 void handleStatus(){ //responding with current status
   unsigned int start_time = millis();
-  String val = (status)? "true" : "false";
+  String val = (lamp_status)? "true" : "false";
   String s = "{ \"status\" : "+val+", \"lux\" : "+lux+"}";
   server.send(200, "application/json", s); //sending server response
 
@@ -78,18 +78,35 @@ void handleLed(){
 }
 
 void handleLux(){
-  setLux(server.arg("lux").toInt());
-  analogWrite(lightPin, lux);
+  setLamp(server.arg("lux").toInt());
   handleStatus();
 }
 
 void toggle(){
-  status = !status;
-  digitalWrite(lightPin, (status)? HIGH : LOW);
+  if (lamp_status) {
+    setLamp(0);
+  } else {
+    setLamp(255);
+  }
+}
+
+void setLamp(int val){
+  if (val > 249){
+    lamp_status = true;
+    lux = 255;
+    digitalWrite(lightPin, HIGH);
+  } else if ( val < 1){
+    lux = 255;
+    lamp_status = false;
+    digitalWrite(lightPin, LOW);
+  } else {
+    lux = val;
+    analogWrite(lightPin, lux);
+    lamp_status = true;
+  }
 }
 
 void setupWifi(){
-  unsigned int start_time = millis();
   Serial.print(F("Connecting to "));
   Serial.println(ssid);
   //WiFi.hostname(F("wemos"));
@@ -123,20 +140,4 @@ void setupWifi(){
 
   server.begin();   //starting server on ESP8266
   MDNS.addService("http", "tcp", 80); //MDNS service
-
-  Serial.print(F("Server setup compleated in "));
-  Serial.println(millis() - start_time);
-}
-
-void setLux(int val){
-  if (val > 249){
-    status = true;
-    lux = 255;
-  } else if ( val < 1){
-    lux = 255;
-    status = false;
-  } else {
-    lux = val;
-    status = true;
-  }
 }

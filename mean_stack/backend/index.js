@@ -25,7 +25,7 @@ var lamp = {
 };
 
 app.get('/rgb/status', async (req, res) => {
-    await request.get(baseUrl+url, {timeout: 500},(err,response,body) => {
+    await request.get(baseUrl+'/status', {timeout: 500},(err,response,body) => {
         if (err) {
             if (err.code === 'ETIMEDOUT'){
                 console.log("timeout error ");
@@ -102,13 +102,15 @@ app.get('/lamp', async (req,res) => {
     })
 })
 
-app.get('/lamp/lux', async (req, res) => {
+app.post('/lamp/lux', async (req, res) => {
+    lamp.lux = req.body.lux;
     await request.get({ url: lampUrl+'/lux', qs: {lux : lamp.lux}}, (err, response, body) => {
         if(err){
             console.log(err);
             res.sendStatus(500);
         } else {
             lamp = JSON.parse(body);
+            console.log(lamp);
             res.status(200).send(JSON.parse(body));
         }
     })    

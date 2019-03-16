@@ -3,6 +3,8 @@ import { ColorService } from './color.service';
 import { Led } from './led';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { LampService } from './lamp.service';
+import { Lamp } from './lamp';
 
 @Component({
   selector: 'app-root',
@@ -16,32 +18,40 @@ debounce operator
 export class AppComponent implements OnInit{
 
   status: Led = new Led();
-  debouncer: Subject<any> = new Subject();
+  lamp: Lamp = new Lamp();
+  colorDebouncer: Subject<any> = new Subject();
+  lampDebouncer: Subject<any> = new Subject();
 
-  constructor(private colorService : ColorService){
+  constructor(private colorService : ColorService, private lampService: LampService){
     this.colorService.status$.subscribe( data => {
       this.status = data;
+    })
+    this.lampService.lamp$.subscribe( data => {
+      this.lamp = data;
     })
   }
 
   ngOnInit(){
     this.colorService.getStatus();
-    this.debouncer.pipe(debounceTime(200), distinctUntilChanged()).subscribe(event => {
+    this.lampService.getStatus();
+    this.colorDebouncer.pipe(debounceTime(200), distinctUntilChanged()).subscribe(event => {
       this.colorService.setColor(event.color, event.value);
+    });
+    this.lampDebouncer.pipe(debounceTime(200), distinctUntilChanged()).subscribe(event => {
+      this.lampService.setLux(event.value);
     });
   }
 
-  getStatus(){
-    this.colorService.getStatus();  
-  }
-
-  setColor(event, color: string){
+  setColor(event: any, color: string){
     event.color = color;
-    this.debouncer.next(event);
+    this.colorDebouncer.next(event);
   }
 
-  getStatusValues(){ //but not lux
-    let values = Object.entries(this.status);
-    return values;
+  setLampLux(event: any){
+    this.lampDebouncer.next(event);
+  }
+
+  setLamp(){
+    this.lampService.setLamp();
   }
 }

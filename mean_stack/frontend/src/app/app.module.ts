@@ -15,6 +15,7 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatCardModule,
+  MatMenuModule,
 } from '@angular/material';
 import 'hammerjs';
 
@@ -24,6 +25,7 @@ import { ColorService } from './color.service';
 import { RgbComponent } from "./tabs/rgb/rgb.component";
 import { ColorsComponent } from './tabs/color/color.component';
 import { BottomComponent } from './bottom/bottom.component';
+import { LampService } from './lamp.service';
 
 
 const routes = [
@@ -51,9 +53,10 @@ const routes = [
     MatIconModule,
     MatToolbarModule,
     MatCardModule,
-    MatTabsModule
+    MatTabsModule,
+    MatMenuModule,
   ],
-  providers: [ColorService],
+  providers: [ColorService, LampService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
