@@ -7,6 +7,7 @@ const querystring = require('querystring');
 const port = 3000;
 
 const baseUrl = 'http://192.168.1.220';
+const lampUrl = 'http://192.168.1.225';
 app.use(cors());
 app.use(express.json());
 
@@ -18,8 +19,26 @@ var led = {
     ew: false,
 };
 
-app.get('/status', async (req, res) => {
-    await getRequest('/status', res);
+var lamp = {
+    status: false,
+    lux: 0,
+};
+
+app.get('/rgb/status', async (req, res) => {
+    await request.get(baseUrl+url, {timeout: 500},(err,response,body) => {
+        if (err) {
+            if (err.code === 'ETIMEDOUT'){
+                console.log("timeout error ");
+                res.sendStatus(408);
+            } else {
+                console.log("error occurred");
+                res.sendStatus(500);
+            }
+        } else {
+            led = JSON.parse(body);
+            res.status(200).json(led);
+        }
+    })
 })
 
 app.get('/rgb/off', async (req, res) => {
@@ -35,27 +54,9 @@ app.post('/rgb', async (req, res) => {
     await setLed(res);
 })
 
-async function getRequest(url, res){
-    await request.get(baseUrl+url, {timeout: 10000},(err,response,body) => {
-        if (err) {
-            if (err.code === 'ETIMEDOUT'){
-                console.log("timeout error ");
-                res.sendStatus(408);
-            } else {
-                console.log("error occurred");
-                res.sendStatus(500);
-            }
-        } else {
-            led = JSON.parse(body);
-            res.status(200).json(led);
-        }
-    })
-}
-
 async function setLed(res){
     console.log(led);
     let params = querystring.stringify(led);
-    //console.log(baseUrl+'/led?'+params);
     await request.get(
         baseUrl+'/led?'+params,
         (err, response, body) => { //get request
@@ -74,7 +75,6 @@ async function setLed(res){
                 res.status(200).send(JSON.parse(body));
             } 
        });
-    //console.log("rgb request ", led);
 }
 
 app.get('/ew', async (req,res) => { //TODO parameter with value
@@ -88,6 +88,42 @@ app.get('/ew', async (req,res) => { //TODO parameter with value
     })
     led.ew = !led.ew;
     console.log(led.ew);
+})
+
+app.get('/lamp', async (req,res) => {
+    await request.get(lampUrl+'/led', (err, response, body) => {
+        if(err){
+            console.log(err);
+            res.sendStatus(500);
+        } else {
+            lamp = JSON.parse(body);
+            res.status(200).send(JSON.parse(body));
+        }
+    })
+})
+
+app.get('/lamp/lux', async (req, res) => {
+    await request.get({ url: lampUrl+'/lux', qs: {lux : lamp.lux}}, (err, response, body) => {
+        if(err){
+            console.log(err);
+            res.sendStatus(500);
+        } else {
+            lamp = JSON.parse(body);
+            res.status(200).send(JSON.parse(body));
+        }
+    })    
+})
+
+app.get('/lamp/status', async (req, res) => {
+    await request.get(lampUrl+'/status', (err, response, body) => {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else {
+            lamp = JSON.parse(body);
+            res.status(200).send(JSON.parse(body));
+        }
+    })
 })
 
 app.listen(port);

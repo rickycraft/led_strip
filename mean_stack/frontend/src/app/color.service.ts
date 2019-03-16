@@ -26,7 +26,7 @@ export class ColorService {
     }
 
     getStatus(){
-        this.http.get<Led>(base_url+'/status')
+        this.http.get<Led>(base_url+'/rgb/status')
             .subscribe( data => {
                 this.status.next(data);
             }, error => {

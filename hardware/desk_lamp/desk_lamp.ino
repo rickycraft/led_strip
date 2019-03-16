@@ -22,8 +22,7 @@ uint8_t lux = 0;
 
 unsigned long timer = 0;
 
-void setup()
-{
+void setup(){
   Serial.begin(115200);
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(lightPin, OUTPUT);
@@ -34,8 +33,7 @@ void setup()
   Serial.println(F("Setup compleated\n##################"));
 }
 
-void loop()
-{
+void loop(){
   server.handleClient();
   if ((millis() - timer) > 5000){
     timer = millis();
@@ -43,7 +41,20 @@ void loop()
   }
   if (digitalRead(buttonPin) != buttonStatus){
     buttonStatus = digitalRead(buttonPin);
-    toggle();
+    toggleButton();
+  }
+}
+
+toggleButton(){
+  if (status && lux != 255){
+    digitalWrite(lightPin, HIGH);
+    setLux(255);
+  } else if (status){
+    status = false;
+    digitalWrite(lightPin, LOW);
+  } else {
+    status = true;
+    digitalWrite(lightPin, HIGH);
   }
 }
 
@@ -54,13 +65,11 @@ void handleRoot(){ //handle / as status
 void handleStatus(){ //responding with current status
   unsigned int start_time = millis();
   String val = (status)? "true" : "false";
-  String s = "{ \"status\" : "+val+"}";
+  String s = "{ \"status\" : "+val+", \"lux\" : "+lux+"}";
   server.send(200, "application/json", s); //sending server response
 
-  Serial.print(s); //printing log
-  Serial.print(" in ");
-  Serial.print(millis() - start_time);
-  Serial.println("ms");
+  Serial.print(s); Serial.print(" in ");
+  Serial.print(millis() - start_time); Serial.println("ms");
 }
 
 void handleLed(){
@@ -68,9 +77,14 @@ void handleLed(){
   handleStatus();
 }
 
+void handleLux(){
+  setLux(server.arg("lux").toInt());
+  analogWrite(lightPin, lux);
+  handleStatus();
+}
+
 void toggle(){
   status = !status;
-  Serial.println(status);
   digitalWrite(lightPin, (status)? HIGH : LOW);
 }
 
@@ -89,7 +103,6 @@ void setupWifi(){
   }
   Serial.println(F("\nWiFi connected"));
 
-
   Serial.println(F("Server started"));
   Serial.print(F("Local IP adress: "));
   Serial.println(WiFi.localIP());
@@ -105,6 +118,7 @@ void setupWifi(){
   server.on("/", handleRoot);  //handle routes
   server.on("/led", handleLed);
   server.on("/status", handleStatus);
+  server.on("/lux", handleLux);
   //server.onNotFound(handleNotFound);
 
   server.begin();   //starting server on ESP8266
@@ -112,5 +126,17 @@ void setupWifi(){
 
   Serial.print(F("Server setup compleated in "));
   Serial.println(millis() - start_time);
-  //WiFi.printDiag(Serial);
+}
+
+void setLux(int val){
+  if (val > 249){
+    status = true;
+    lux = 255;
+  } else if ( val < 1){
+    lux = 255;
+    status = false;
+  } else {
+    lux = val;
+    status = true;
+  }
 }
