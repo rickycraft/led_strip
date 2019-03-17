@@ -77,6 +77,10 @@ void handleLed(){
   handleStatus();
 }
 
+void handleButton(){
+  server.send(200, "text/plain", String(digitalRead(buttonPin)));
+}
+
 void handleLux(){
   setLamp(server.arg("lux").toInt());
   handleStatus();
@@ -95,14 +99,18 @@ void setLamp(int val){
     lamp_status = true;
     lux = 255;
     digitalWrite(lightPin, HIGH);
+    Serial.println("lamp high");
   } else if ( val < 1){
     lux = 255;
     lamp_status = false;
     digitalWrite(lightPin, LOW);
+    Serial.println("lamp low");
   } else {
     lux = val;
     analogWrite(lightPin, lux);
     lamp_status = true;
+    Serial.print("lamp at");
+    Serial.println(lux);
   }
 }
 
@@ -136,6 +144,7 @@ void setupWifi(){
   server.on("/led", handleLed);
   server.on("/status", handleStatus);
   server.on("/lux", handleLux);
+  server.on("/button", handleButton);
   //server.onNotFound(handleNotFound);
 
   server.begin();   //starting server on ESP8266
