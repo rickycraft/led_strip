@@ -25,7 +25,7 @@ var lamp = {
 };
 
 app.get('/rgb/status', async (req, res) => {
-    await request.get(baseUrl+'/status', {timeout: 500},(err,response,body) => {
+    await request.get(baseUrl+'/status',(err,response,body) => {
         if (err) {
             if (err.code === 'ETIMEDOUT'){
                 console.log("timeout error ");

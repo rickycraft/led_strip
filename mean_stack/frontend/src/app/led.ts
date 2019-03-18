@@ -6,11 +6,11 @@ export class Led {
     lux: number;
     ew: boolean;
 
-    constructor(lux?: number, red?: number, green?: number,blu?: number){
-      this.red = red;
-      this.green = green;
-      this.blu = blu;
-      this.lux = lux;
+    constructor(){
+      this.red = 0;
+      this.green = 0;
+      this.blu = 0;
+      this.lux = 0;
     }
 
     setColor(color: Colors){

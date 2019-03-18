@@ -17,12 +17,19 @@ debounce operator
 */
 export class AppComponent implements OnInit{
 
-  status: Led = new Led();
-  lamp: Lamp = new Lamp();
+  readonly debounceTime: number = 900;
+
+  status: Led;
+  lamp: Lamp;
   colorDebouncer: Subject<any> = new Subject();
+  redDebouncer: Subject<any> = new Subject();
+  greenDebouncer: Subject<any> = new Subject();
+  bluDebouncer: Subject<any> = new Subject();
   lampDebouncer: Subject<any> = new Subject();
 
   constructor(private colorService : ColorService, private lampService: LampService){
+    this.status = new Led();
+    this.lamp = new Lamp();
     this.colorService.status$.subscribe( data => {
       this.status = data;
     })
@@ -34,17 +41,36 @@ export class AppComponent implements OnInit{
   ngOnInit(){
     this.colorService.getStatus();
     this.lampService.getStatus();
-    this.colorDebouncer.pipe(debounceTime(200), distinctUntilChanged()).subscribe(event => {
-      this.colorService.setColor(event.color, event.value);
+    this.colorDebouncer.pipe(debounceTime(this.debounceTime)).subscribe(event => {
+      this.colorService.setLed(this.status);
     });
-    this.lampDebouncer.pipe(debounceTime(200), distinctUntilChanged()).subscribe(event => {
+    /*
+    this.redDebouncer.pipe(debounceTime(this.debounceTime), distinctUntilChanged()).subscribe(event => {
+      this.colorService.setColor("red", event.value);
+    });
+    this.greenDebouncer.pipe(debounceTime(this.debounceTime), distinctUntilChanged()).subscribe(event => {
+      this.colorService.setColor("green", event.value);
+    });
+    this.bluDebouncer.pipe(debounceTime(this.debounceTime)).subscribe(event => {
+      this.colorService.setColor("blu", event.value);
+    });
+    */
+    this.lampDebouncer.pipe(debounceTime(this.debounceTime), distinctUntilChanged()).subscribe(event => {
       this.lampService.setLux(event.value);
     });
   }
 
   setColor(event: any, color: string){
-    event.color = color;
+    this.status[color] = event.value;
     this.colorDebouncer.next(event);
+    /*
+    if (color == "red")
+      this.redDebouncer.next(event);
+    if (color == "green")
+      this.greenDebouncer.next(event);
+    if (color == "blu")
+      this.bluDebouncer.next(event);
+    */
   }
 
   setLampLux(event: any){

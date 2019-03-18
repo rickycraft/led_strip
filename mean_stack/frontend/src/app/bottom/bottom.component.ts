@@ -9,6 +9,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
     selector: 'bottom-navbar',
     templateUrl: './bottom.component.html',
+    styleUrls: ['./bottom.component.css'],
   })
   
 export class BottomComponent implements OnInit, OnDestroy{

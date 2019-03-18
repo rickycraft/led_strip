@@ -5,7 +5,6 @@ export class Lamp {
     constructor(){
         this.status = false;
         this.lux = 0;
-
     }
 
 }

@@ -11,20 +11,19 @@
 }
 
 .mat-tab-group.mat-tab-fill-height .mat-tab-body-wrapper {
-    flex: 1 1 100%;
- }
+flex: 1 1 100%;
+}
 
- .color-slider{
-    margin: 15px;
-     
- }
+.color-slider{
+    margin: 15px;    
+}
 
- .slider-container{
-    margin-bottom: 40px;
-    margin-top: 20px;
- }
+.slider-container{
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
 
- .top-button{
+.top-button{
     margin: 15px;
     margin-left: 25px;
- }
+}

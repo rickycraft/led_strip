@@ -1,6 +1,18 @@
-<div fxLayout="row" fxLayoutAlign="space-around center" style="margin:15px;">
-        <button mat-fab *ngIf="ew" (click)="toggleEw()"><mat-icon>flash_off</mat-icon></button>
-        <button mat-fab *ngIf="!ew" (click)="toggleEw()"><mat-icon>bolt</mat-icon></button>
-        <mat-slider class="color-slider" min="0" max="10" step="1" [(ngModel)]="lux" thumbLabel (input)="hasUpdated($event)"></mat-slider>
-        <button mat-fab disabled><mat-icon>tonality</mat-icon></button>
+<div fxLayout="column">
+        <mat-divider></mat-divider>
+        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutAlign="space-evenly center" style="margin:15px;">
+                        <button mat-mini-fab disabled><mat-icon>tonality</mat-icon></button>
+                        <mat-slider min="0" max="10" step="1" [(ngModel)]="lux" 
+                        thumbLabel (input)="hasUpdated($event)" class="bottom-slider" fxFlex></mat-slider>
+                        <button mat-fab *ngIf="ew" (click)="toggleEw()"><mat-icon>flash_off</mat-icon></button>
+                        <button mat-fab *ngIf="!ew" (click)="toggleEw()"><mat-icon>bolt</mat-icon></button>
+        </div>
+        <mat-divider></mat-divider>
+        <div fxLayout="row" fxLayoutAlign="space-around center" style="margin:15px;">
+                <button mat-fab disabled><mat-icon>tonality</mat-icon></button>
+                <mat-slider min="0" max="10" step="1" [(ngModel)]="lux" 
+                thumbLabel (input)="hasUpdated($event)" class="bottom-slider" fxFlex></mat-slider>
+                <button mat-fab *ngIf="ew" (click)="toggleEw()"><mat-icon>flash_off</mat-icon></button>
+                <button mat-fab *ngIf="!ew" (click)="toggleEw()"><mat-icon>bolt</mat-icon></button>
+        </div>
 </div>

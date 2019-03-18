@@ -32,6 +32,7 @@ unsigned long timer = 0;
 
 void setup()
 {
+  
   Serial.begin(115200);
   for(int i = 0; i < N_LED; i++)
     pinMode(ledPin[i], OUTPUT);           //sets all led pins as output
@@ -43,14 +44,14 @@ void setup()
   root["blu"] = 0;
   root["lux"] = 0;
   root["ew"] = false;
-
+  timer = millis();
+  
   Serial.println(F("Setup compleated\n##################"));
 }
 
 void loop()
 {
   server.handleClient();
-  //MDNS.update();
   if ((millis() - timer) > 5000){
     timer = millis();
     MDNS.update();
@@ -66,13 +67,10 @@ void handleStatus(){ //responding with current status
   int len = measureJson(root)+1;
   char out[len];
   serializeJson(root, out, len); //creating serialized json
-  
   server.send(200, "application/json", out); //sending server response
 
   Serial.print(out); //printing log
-  Serial.print(" in ");
-  Serial.print(millis() - start_time);
-  Serial.println("ms");
+  //Serial.print(" in ");Serial.print(millis() - start_time);Serial.println("ms");
 
   incrementLights();
 }
@@ -142,7 +140,7 @@ void incrementLights(){    //if final led values have changed this funciton fade
   Serial.print(F("Fading to color in "));
   unsigned int start_time = millis();
   
-  float fadeTime = 1020; //total ms to fade
+  float fadeTime = 1020/2; //total ms to fade
   int deltaValue[N_LED] = {0,0,0};
   float incrementValue[N_LED] = {0,0,0};
   float fadeValue[N_LED] = {ledCurrentVal[0],ledCurrentVal[1],ledCurrentVal[2]};
@@ -159,8 +157,7 @@ void incrementLights(){    //if final led values have changed this funciton fade
     delay(1);
   }
 
-  Serial.print(millis() - start_time);  //printing log time
-  Serial.println(F("ms"));
+  Serial.print(millis() - start_time - (int) fadeTime);Serial.println(F("ms"));
   Serial.println(F("####################"));
   
   for(int i = 0; i < N_LED; i++){ //final value
@@ -178,7 +175,6 @@ void incrementLights(){    //if final led values have changed this funciton fade
 }
 
 void setupWifi(){
-  unsigned int start_time = millis();
   Serial.print(F("Connecting to "));
   Serial.println(ssid);
   //WiFi.hostname(F("wemos"));
@@ -214,8 +210,6 @@ void setupWifi(){
 
   server.begin();   //starting server on ESP8266
   MDNS.addService("http", "tcp", 80); //MDNS service
-
-  Serial.print(F("Server setup compleated in "));
-  Serial.println(millis() - start_time);
+  
   //WiFi.printDiag(Serial);
 }
