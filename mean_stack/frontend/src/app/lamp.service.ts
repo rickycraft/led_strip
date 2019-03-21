@@ -44,7 +44,7 @@ export class LampService {
     }
 
     setLux(val: number){
-        this.http.post<Lamp>(base_url+'/lamp/lux', { lux: val})
+        this.http.post<Lamp>(base_url+'/lamp/lux', { lux: val })
             .subscribe( data => {
                 this.lamp.next(data);
             }, error => {

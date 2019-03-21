@@ -103,7 +103,7 @@ app.get('/lamp', async (req,res) => {
 })
 
 app.post('/lamp/lux', async (req, res) => {
-    lamp.lux = req.body.lux;
+    lamp.lux = mapValue(req.body.lux, 0, 10, 0, 255);
     await request.get({ url: lampUrl+'/lux', qs: {lux : lamp.lux}}, (err, response, body) => {
         if(err){
             console.log(err);
@@ -111,7 +111,9 @@ app.post('/lamp/lux', async (req, res) => {
         } else {
             lamp = JSON.parse(body);
             console.log(lamp);
-            res.status(200).send(JSON.parse(body));
+            scaled = lamp;
+            scaled.lux = mapValue(lamp.lux, 0, 255, 0, 10);
+            res.status(200).send(scaled);
         }
     })    
 })
@@ -129,3 +131,9 @@ app.get('/lamp/status', async (req, res) => {
 })
 
 app.listen(port);
+
+function mapValue(x, in_min, in_max, out_min, out_max)
+{
+  i = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  return Math.round(i);
+}

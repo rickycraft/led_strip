@@ -2,9 +2,6 @@
   <mat-toolbar color="primary">
       <h1>Led Strip</h1>
       <span class="spacer"></span>
-      <mat-slider disabled [(ngModel)]="lamp.lux" min="1" max="250" step="10" fxFlex color="accent" (input)="setLampLux($event)" style="margin-right: 15px;"></mat-slider>
-      <button disabled mat-fab *ngIf="lamp.status" (click)="setLamp()" ><mat-icon>flash_off</mat-icon></button>
-      <button disabled mat-fab *ngIf="!lamp.status" (click)="setLamp()" ><mat-icon>bolt</mat-icon></button>
   </mat-toolbar>
   <div fxFlex fxLayout="row">
     <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="slider-container">
@@ -26,5 +23,5 @@
       <button mat-flat-button color="primary">{{status.blu}}</button>
     </div>
   </div>
-  <bottom-navbar [lux]="status.lux" [ew]="status.ew"></bottom-navbar>
+  <bottom-navbar></bottom-navbar>
 </div>

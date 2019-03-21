@@ -47,7 +47,6 @@ void loop(){
     toggleButton();
     delay(100);
   }
-  server.handleClient();
 }
 
 void toggleButton(){
@@ -101,7 +100,7 @@ void setLamp(int val){
     digitalWrite(lightPin, HIGH);
     Serial.println("lamp high");
   } else if ( val < 1){
-    lux = 255;
+    lux = 0;
     lamp_status = false;
     digitalWrite(lightPin, LOW);
     Serial.println("lamp low");

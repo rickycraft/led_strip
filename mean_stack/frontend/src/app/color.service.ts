@@ -79,11 +79,15 @@ export class ColorService {
             })
     }
 
-    setEw(data: boolean){ //TODO control of sync of data
-        console.log("set ew ", data);
+    setEw(){ //TODO control of sync of data
+        console.log("set ew");
         this.http.get<Led>(this.root_url+'/ew')
             .subscribe( data => {
                 this.status.next(data);
             })
+    }
+
+    toggleFade(){
+        
     }
 }

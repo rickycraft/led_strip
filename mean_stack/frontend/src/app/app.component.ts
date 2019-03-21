@@ -22,9 +22,6 @@ export class AppComponent implements OnInit{
   status: Led;
   lamp: Lamp;
   colorDebouncer: Subject<any> = new Subject();
-  redDebouncer: Subject<any> = new Subject();
-  greenDebouncer: Subject<any> = new Subject();
-  bluDebouncer: Subject<any> = new Subject();
   lampDebouncer: Subject<any> = new Subject();
 
   constructor(private colorService : ColorService, private lampService: LampService){
@@ -33,9 +30,11 @@ export class AppComponent implements OnInit{
     this.colorService.status$.subscribe( data => {
       this.status = data;
     })
+    /*
     this.lampService.lamp$.subscribe( data => {
       this.lamp = data;
     })
+    */
   }
 
   ngOnInit(){
@@ -44,17 +43,6 @@ export class AppComponent implements OnInit{
     this.colorDebouncer.pipe(debounceTime(this.debounceTime)).subscribe(event => {
       this.colorService.setLed(this.status);
     });
-    /*
-    this.redDebouncer.pipe(debounceTime(this.debounceTime), distinctUntilChanged()).subscribe(event => {
-      this.colorService.setColor("red", event.value);
-    });
-    this.greenDebouncer.pipe(debounceTime(this.debounceTime), distinctUntilChanged()).subscribe(event => {
-      this.colorService.setColor("green", event.value);
-    });
-    this.bluDebouncer.pipe(debounceTime(this.debounceTime)).subscribe(event => {
-      this.colorService.setColor("blu", event.value);
-    });
-    */
     this.lampDebouncer.pipe(debounceTime(this.debounceTime), distinctUntilChanged()).subscribe(event => {
       this.lampService.setLux(event.value);
     });
@@ -63,21 +51,5 @@ export class AppComponent implements OnInit{
   setColor(event: any, color: string){
     this.status[color] = event.value;
     this.colorDebouncer.next(event);
-    /*
-    if (color == "red")
-      this.redDebouncer.next(event);
-    if (color == "green")
-      this.greenDebouncer.next(event);
-    if (color == "blu")
-      this.bluDebouncer.next(event);
-    */
-  }
-
-  setLampLux(event: any){
-    this.lampDebouncer.next(event);
-  }
-
-  setLamp(){
-    this.lampService.setLamp();
   }
 }
