@@ -1,0 +1,6 @@
+{
+  "appId": "com.rickycraft.led",
+  "appName": "led",
+  "bundledWebRuntime": false,
+  "webDir": "dist/frontend"
+}
