@@ -52,4 +52,8 @@ export class AppComponent implements OnInit{
     this.status[color] = event.value;
     this.colorDebouncer.next(event);
   }
+
+  toggleEw(){
+    this.colorService.setEw();
+  }
 }
