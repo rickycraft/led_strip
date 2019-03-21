@@ -2,10 +2,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Led } from './led';
+import { Led } from '../classes/led';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators'
-import { Colors } from './colors';
+import { Colors } from '../classes/colors';
 
 const base_url = 'http://192.168.1.110:3000';
 

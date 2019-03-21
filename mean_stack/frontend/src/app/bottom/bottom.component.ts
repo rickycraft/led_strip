@@ -1,11 +1,11 @@
 //bottom navbar component
-import { ColorService } from 'src/app/color.service';
+import { ColorService } from 'src/app/services/color.service';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Led } from '../led';
+import { Led } from '../classes/led';
 import { Observable, Subject} from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { LampService } from '../lamp.service';
-import { Lamp } from '../lamp';
+import { LampService } from '../services/lamp.service';
+import { Lamp } from '../classes/lamp';
 
 //rgb component
 @Component({

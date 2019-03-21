@@ -1,4 +1,4 @@
-import { Led } from './led';
+
 export class Colors{
     red: number;
     green: number;

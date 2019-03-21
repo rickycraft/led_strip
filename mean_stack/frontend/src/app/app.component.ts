@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ColorService } from './color.service';
-import { Led } from './led';
+import { ColorService } from './services/color.service';
+import { Led } from './classes/led';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { LampService } from './lamp.service';
-import { Lamp } from './lamp';
+import { LampService } from './services/lamp.service';
+import { Lamp } from './classes/lamp';
 
 @Component({
   selector: 'app-root',

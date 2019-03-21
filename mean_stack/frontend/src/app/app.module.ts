@@ -21,11 +21,10 @@ import 'hammerjs';
 
 //app component
 import { AppComponent } from './app.component';
-import { ColorService } from './color.service';
-import { RgbComponent } from "./tabs/rgb/rgb.component";
+import { ColorService } from './services/color.service';
 import { ColorsComponent } from './tabs/color/color.component';
 import { BottomComponent } from './bottom/bottom.component';
-import { LampService } from './lamp.service';
+import { LampService } from './services/lamp.service';
 
 
 const routes = [
@@ -35,7 +34,6 @@ const routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    RgbComponent,
     ColorsComponent,
     BottomComponent
   ],
