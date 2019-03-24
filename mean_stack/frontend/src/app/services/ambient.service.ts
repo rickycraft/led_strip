@@ -8,12 +8,12 @@ import { Lamp } from '../classes/lamp';
 const base_url = 'http://192.168.1.110:3000';
 
 @Injectable()
-export class LampService {
+export class AmbientService {
 
-    readonly device = '/lamp';
+    readonly device = '/ambient';
     
-    private lamp = new BehaviorSubject(new Lamp);
-    lamp$: Observable<Lamp> = this.lamp.asObservable();
+    private ambient = new BehaviorSubject(new Lamp);
+    ambient$: Observable<Lamp> = this.ambient.asObservable();
 
     constructor(private http: HttpClient, private route: Router){
     }
@@ -21,25 +21,25 @@ export class LampService {
     setLamp(){
         this.http.get<Lamp>(base_url+this.device)
             .subscribe( data => {
-                this.lamp.next(data);
+                this.ambient.next(data);
             }, error => {
                 console.log("Error ", error);
             });
     }
 
     getStatus(){
-        this.http.get<Lamp>(base_url+this.device+'/status')
+        this.http.get<Lamp>(base_url+this.device+ '/status')
             .subscribe( data => {
-                this.lamp.next(data);
+                this.ambient.next(data);
             }, error => {
                 console.log("Error ", error);
             });
     }
 
     setLux(val: number){
-        this.http.post<Lamp>(base_url+this.device+'/lux', { lux: val })
+        this.http.post<Lamp>(base_url+this.device+ '/lux', { lux: val })
             .subscribe( data => {
-                this.lamp.next(data);
+                this.ambient.next(data);
             }, error => {
                 console.log("Error ", error);
             });
