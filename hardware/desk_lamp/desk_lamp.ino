@@ -140,7 +140,7 @@ void setupWifi(){
   }
 
   server.on("/", handleRoot);  //handle routes
-  server.on("/led", handleLed);
+  server.on("/toggle", handleLed);
   server.on("/status", handleStatus);
   server.on("/lux", handleLux);
   server.on("/button", handleButton);
