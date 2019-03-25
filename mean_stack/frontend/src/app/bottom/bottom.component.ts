@@ -32,12 +32,7 @@ export class BottomComponent implements OnInit, OnDestroy {
       this.lux = data.lux;
     }); // only update the value we want
     this.lampService.lamp$.subscribe(data => {
-      if (!data.status) {
-        // FIX UNTIL UPDATE OF ARDUINO CODE
-        this.lamp.lux = 0;
-      } else {
-        this.lamp.lux = data.lux;
-      }
+      this.lamp.lux = data.lux;
       this.lamp.status = data.status;
     });
     this.ambientService.ambient$.subscribe(data => {

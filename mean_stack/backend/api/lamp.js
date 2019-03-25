@@ -22,11 +22,12 @@ router.get("/toggle", async (req, res) => {
 
 router.post("/lux", async (req, res) => {
 	lamp.lux = mapValue(req.body.lux, 0, 10, 0, 255);
-	await request.get({
+	await request.get(
+		{
 			url: lampUrl + "/lux",
 			qs: {
-				lux: lamp.lux
-			}
+				lux: lamp.lux,
+			},
 		},
 		(err, response, body) => {
 			if (err) {
