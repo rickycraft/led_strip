@@ -1,11 +1,11 @@
-//angular import
+// angular import
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule} from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
@@ -19,24 +19,21 @@ import {
 } from '@angular/material';
 import 'hammerjs';
 
-//app component
+// app component
 import { AppComponent } from './app.component';
-import { ColorService } from './services/color.service';
 import { ColorsComponent } from './tabs/color/color.component';
 import { BottomComponent } from './bottom/bottom.component';
+// app services
+import { ColorService } from './services/color.service';
 import { LampService } from './services/lamp.service';
-
+import { AmbientService } from './services/ambient.service';
 
 const routes = [
-  //{path:"", component:PostComponent}
-]
+  // {path:"", component:PostComponent}
+];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ColorsComponent,
-    BottomComponent
-  ],
+  declarations: [AppComponent, ColorsComponent, BottomComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -54,7 +51,7 @@ const routes = [
     MatTabsModule,
     MatMenuModule,
   ],
-  providers: [ColorService, LampService],
-  bootstrap: [AppComponent]
+  providers: [ColorService, LampService, AmbientService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

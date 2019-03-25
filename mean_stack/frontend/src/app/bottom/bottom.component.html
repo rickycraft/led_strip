@@ -1,18 +1,67 @@
 <div fxLayout="column">
-        <mat-divider></mat-divider>
-        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutAlign="space-evenly center" style="margin:15px;">
-                        <button mat-mini-fab disabled><mat-icon>color_lens</mat-icon></button>
-                        <mat-slider min="0" max="10" step="1" [(ngModel)]="lux" tickInterval="1"
-                        thumbLabel (input)="ledSlider($event)" class="bottom-slider" fxFlex></mat-slider>
-                        <button mat-fab *ngIf="isFading" (click)="toggleFade()"><mat-icon style="opacity: 0.6;">flash_off</mat-icon></button>
-                        <button mat-fab *ngIf="!isFading" (click)="toggleFade()"><mat-icon>tonality</mat-icon></button>
-        </div>
-        <mat-divider></mat-divider>
-        <div fxLayout="row" fxLayoutAlign="space-around center" style="margin:15px;">
-                <button mat-mini-fab disabled><mat-icon>brightness_5</mat-icon></button>
-                <mat-slider min="0" max="10" step="1" [(ngModel)]="lamp.lux" tickInterval="1"
-                thumbLabel (input)="lampSlider($event)" class="bottom-slider" fxFlex></mat-slider>
-                <button mat-fab *ngIf="lamp.status" (click)="toggleLamp()"><mat-icon>flash_off</mat-icon></button>
-                <button mat-fab *ngIf="!lamp.status" (click)="toggleLamp()"><mat-icon>bolt</mat-icon></button>
-        </div>
+  <mat-divider></mat-divider>
+  <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutAlign="space-evenly center" style="margin:15px;">
+    <button mat-mini-fab disabled><mat-icon>color_lens</mat-icon></button>
+    <mat-slider
+      min="0"
+      max="10"
+      step="1"
+      [(ngModel)]="lux"
+      tickInterval="1"
+      thumbLabel
+      (input)="ledSlider($event)"
+      class="bottom-slider"
+      fxFlex
+    ></mat-slider>
+    <button mat-fab *ngIf="isFading" (click)="toggleFade()">
+      <mat-icon style="opacity: 0.6;">flash_off</mat-icon>
+    </button>
+    <button mat-fab *ngIf="!isFading" (click)="toggleFade()">
+      <mat-icon>tonality</mat-icon>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <div fxLayout="row" fxLayoutAlign="space-around center" style="margin:15px;">
+    <button mat-mini-fab disabled><mat-icon>brightness_5</mat-icon></button>
+    <mat-slider
+      min="0"
+      max="10"
+      step="1"
+      [(ngModel)]="lamp.lux"
+      tickInterval="1"
+      thumbLabel
+      (input)="lampSlider($event)"
+      class="bottom-slider"
+      fxFlex
+    ></mat-slider>
+    <button mat-fab *ngIf="lamp.status" (click)="toggleLamp()">
+      <mat-icon>flash_off</mat-icon>
+    </button>
+    <button mat-fab *ngIf="!lamp.status" (click)="toggleLamp()">
+      <mat-icon>bolt</mat-icon>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <div fxLayout="row" fxLayoutAlign="space-around center" style="margin:15px;" *ngIf="false">
+    <button mat-mini-fab disabled>
+      <mat-icon>brightness_5</mat-icon>
+    </button>
+    <mat-slider
+      min="0"
+      max="10"
+      step="1"
+      [(ngModel)]="lamp.lux"
+      tickInterval="1"
+      thumbLabel
+      (input)="ambientSlider($event)"
+      class="bottom-slider"
+      fxFlex
+    ></mat-slider>
+    <button mat-fab *ngIf="ambient.status" (click)="toggleAmbient()">
+      <mat-icon>flash_off</mat-icon>
+    </button>
+    <button mat-fab *ngIf="!ambient.status" (click)="toggleAmbient()">
+      <mat-icon>bolt</mat-icon>
+    </button>
+  </div>
 </div>

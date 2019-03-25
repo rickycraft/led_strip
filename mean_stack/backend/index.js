@@ -7,7 +7,8 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use("/rgb", require("./api/rgb"));
-app.use("/lamp", require("./api/lamp"));
+app.use("/rgb", require("./api/rgb")); //rgb led strip
+app.use("/lamp", require("./api/lamp")); //desk lamp
+app.use("/ambient", require("./api/ambient")); //ambient led strip
 
 app.listen(port);
