@@ -5,6 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LampService } from './services/lamp.service';
 import { Lamp } from './classes/lamp';
+import { AmbientService } from './services/ambient.service';
 
 @Component({
   selector: 'app-root',
@@ -15,45 +16,52 @@ import { Lamp } from './classes/lamp';
 reactiveform to change dinamically the values as i move the values on the slider
 debounce operator
 */
-export class AppComponent implements OnInit{
-
+export class AppComponent implements OnInit {
   readonly debounceTime: number = 900;
 
   status: Led;
-  lamp: Lamp;
   colorDebouncer: Subject<any> = new Subject();
   lampDebouncer: Subject<any> = new Subject();
 
-  constructor(private colorService : ColorService, private lampService: LampService){
+  constructor(
+    private colorService: ColorService,
+    private lampService: LampService,
+    private ambientService: AmbientService
+  ) {
     this.status = new Led();
-    this.lamp = new Lamp();
-    this.colorService.status$.subscribe( data => {
+    this.colorService.status$.subscribe(data => {
       this.status = data;
-    })
-    /*
-    this.lampService.lamp$.subscribe( data => {
-      this.lamp = data;
-    })
-    */
+    });
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.colorService.getStatus();
     this.lampService.getStatus();
     this.colorDebouncer.pipe(debounceTime(this.debounceTime)).subscribe(event => {
       this.colorService.setLed(this.status);
     });
-    this.lampDebouncer.pipe(debounceTime(this.debounceTime), distinctUntilChanged()).subscribe(event => {
-      this.lampService.setLux(event.value);
-    });
+    this.lampDebouncer
+      .pipe(
+        debounceTime(this.debounceTime),
+        distinctUntilChanged()
+      )
+      .subscribe(event => {
+        this.lampService.setLux(event.value);
+      });
   }
 
-  setColor(event: any, color: string){
+  setColor(event: any, color: string) {
     this.status[color] = event.value;
     this.colorDebouncer.next(event);
   }
 
-  toggleEw(){
+  toggleEw() {
     this.colorService.setEw();
+  }
+
+  update() {
+    this.colorService.getStatus();
+    this.lampService.getStatus();
+    this.ambientService.getStatus();
   }
 }
