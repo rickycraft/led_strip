@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Led } from '../classes/led';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Colors } from '../classes/colors';
 
 const base_url = 'http://192.168.1.110:3000';
@@ -77,14 +76,6 @@ export class ColorService {
   setLux(data: number) {
     console.log('set lux ', data);
     this.http.post<Led>(this.root_url + '/rgb/color', { lux: data }).subscribe(data => {
-      this.status.next(data);
-    });
-  }
-
-  setEw() {
-    // TODO control of sync of data
-    console.log('set ew');
-    this.http.get<Led>(this.root_url + '/ew').subscribe(data => {
       this.status.next(data);
     });
   }

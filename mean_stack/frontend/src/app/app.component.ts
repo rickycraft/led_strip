@@ -4,8 +4,9 @@ import { Led } from './classes/led';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LampService } from './services/lamp.service';
-import { Lamp } from './classes/lamp';
 import { AmbientService } from './services/ambient.service';
+import { EwService } from './services/elwire.service';
+import { ElWire } from './classes/elwire';
 
 @Component({
   selector: 'app-root',
@@ -20,17 +21,22 @@ export class AppComponent implements OnInit {
   readonly debounceTime: number = 900;
 
   status: Led;
+  ew: ElWire;
   colorDebouncer: Subject<any> = new Subject();
   lampDebouncer: Subject<any> = new Subject();
 
   constructor(
     private colorService: ColorService,
     private lampService: LampService,
-    private ambientService: AmbientService
+    private ambientService: AmbientService,
+    private ewService: EwService
   ) {
     this.status = new Led();
     this.colorService.status$.subscribe(data => {
       this.status = data;
+    });
+    this.ewService.ew$.subscribe(data => {
+      this.ew = data;
     });
   }
 
@@ -56,7 +62,7 @@ export class AppComponent implements OnInit {
   }
 
   toggleEw() {
-    this.colorService.setEw();
+    this.ewService.setEw(!this.ew.status);
   }
 
   update() {

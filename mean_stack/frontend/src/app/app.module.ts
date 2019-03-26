@@ -27,6 +27,7 @@ import { BottomComponent } from './bottom/bottom.component';
 import { ColorService } from './services/color.service';
 import { LampService } from './services/lamp.service';
 import { AmbientService } from './services/ambient.service';
+import { EwService } from './services/elwire.service';
 
 const routes = [
   // {path:"", component:PostComponent}
@@ -51,7 +52,7 @@ const routes = [
     MatTabsModule,
     MatMenuModule,
   ],
-  providers: [ColorService, LampService, AmbientService],
+  providers: [ColorService, LampService, AmbientService, EwService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

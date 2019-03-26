@@ -4,7 +4,6 @@ export class Led {
     green: number;
     blu: number;
     lux: number;
-    ew: boolean;
 
     constructor(){
       this.red = 0;
