@@ -16,6 +16,7 @@ import {
   MatToolbarModule,
   MatCardModule,
   MatMenuModule,
+  MatSnackBarModule,
 } from '@angular/material';
 import 'hammerjs';
 
@@ -51,6 +52,7 @@ const routes = [
     MatCardModule,
     MatTabsModule,
     MatMenuModule,
+    MatSnackBarModule,
   ],
   providers: [ColorService, LampService, AmbientService, EwService],
   bootstrap: [AppComponent],

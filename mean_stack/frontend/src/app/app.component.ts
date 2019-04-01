@@ -7,6 +7,8 @@ import { LampService } from './services/lamp.service';
 import { AmbientService } from './services/ambient.service';
 import { EwService } from './services/elwire.service';
 import { ElWire } from './classes/elwire';
+import { MatSnackBar } from '@angular/material';
+import { update } from 'tar';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +31,8 @@ export class AppComponent implements OnInit {
     private colorService: ColorService,
     private lampService: LampService,
     private ambientService: AmbientService,
-    private ewService: EwService
+    private ewService: EwService,
+    private snackBar: MatSnackBar
   ) {
     this.status = new Led();
     this.colorService.status$.subscribe(data => {
@@ -41,8 +44,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.colorService.getStatus();
-    this.lampService.getStatus();
     this.colorDebouncer.pipe(debounceTime(this.debounceTime)).subscribe(event => {
       this.colorService.setLed(this.status);
     });
@@ -54,6 +55,13 @@ export class AppComponent implements OnInit {
       .subscribe(event => {
         this.lampService.setLux(event.value);
       });
+    this.update();
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, '', {
+      duration: 2000,
+    });
   }
 
   setColor(event: any, color: string) {
@@ -69,5 +77,6 @@ export class AppComponent implements OnInit {
     this.colorService.getStatus();
     this.lampService.getStatus();
     this.ambientService.getStatus();
+    this.ewService.getStatus();
   }
 }

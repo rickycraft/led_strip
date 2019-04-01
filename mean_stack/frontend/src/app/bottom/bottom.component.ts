@@ -66,10 +66,6 @@ export class BottomComponent implements OnInit, OnDestroy {
       .subscribe(event => {
         this.ambientService.setLux(event.value);
       });
-    // get current status
-    this.colorService.getStatus();
-    this.lampService.getStatus();
-    this.ambientService.getStatus();
   }
 
   ngOnDestroy() {
