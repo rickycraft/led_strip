@@ -21,7 +21,7 @@ router.get("/toggle", async (req, res) => {
 });
 
 router.post("/lux", async (req, res) => {
-	lamp.lux = mapValue(req.body.lux, 0, 10, 0, 255);
+	lamp.lux = mapValue(req.body, 0, 10, 0, 255).lux;
 	await request.get(
 		{
 			url: lampUrl + "/lux",
@@ -33,10 +33,8 @@ router.post("/lux", async (req, res) => {
 			if (err) {
 				res.sendStatus(500);
 			} else {
-				lamp = JSON.parse(body);
-				scaled = lamp;
-				scaled.lux = mapValue(lamp.lux, 0, 255, 0, 10);
-				res.status(200).send(scaled);
+				lamp = mapValue(JSON.parse(body), 0, 255, 0, 10);
+				res.status(200).send(lamp);
 			}
 		}
 	);
@@ -47,15 +45,17 @@ router.get("/status", async (req, res) => {
 		if (err) {
 			res.sendStatus(500);
 		} else {
-			lamp = JSON.parse(body);
-			res.status(200).send(JSON.parse(body));
+			lamp = mapValue(JSON.parse(body), 0, 255, 0, 10);
+			res.status(200).send(lamp);
 		}
 	});
 });
 
-function mapValue(x, in_min, in_max, out_min, out_max) {
+function mapValue(data, in_min, in_max, out_min, out_max) {
+	x = data.lux;
 	i = ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
-	return Math.round(i);
+	data.lux = Math.round(i);
+	return data;
 }
 
 module.exports = router;

@@ -73,7 +73,7 @@ export class AppComponent implements OnInit {
     this.ewService.setEw(!this.ew.status);
   }
 
-  update() {
+  async update(){
     this.colorService.getStatus();
     this.lampService.getStatus();
     this.ambientService.getStatus();
