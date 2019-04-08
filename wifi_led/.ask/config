@@ -1,0 +1,41 @@
+{
+  "deploy_settings": {
+    "ricky": {
+      "skill_id": "amzn1.ask.skill.7a226eb7-e766-4133-b431-343dee7f2ce3",
+      "was_cloned": true,
+      "merge": {},
+      "resources": {
+        "manifest": {
+          "eTag": "442f533cafa74b8d8f725cce3f722a8e"
+        },
+        "lambda": [
+          {
+            "arn": "arn:aws:lambda:eu-west-1:510307100003:function:test_led",
+            "awsRegion": "eu-west-1",
+            "functionName": "test_led",
+            "alexaUsage": [
+              "smartHome/default",
+              "smartHome/EU"
+            ],
+            "revisionId": "2d7985e7-0117-4117-b8a6-037e42d55e57",
+            "codeUri": "lambda/eu-west-1_test_led",
+            "handler": "index.handler",
+            "runtime": "nodejs6.10"
+          },
+          {
+            "arn": "arn:aws:lambda:us-east-1:510307100003:function:wifi_led",
+            "awsRegion": "us-east-1",
+            "functionName": "wifi_led",
+            "alexaUsage": [
+              "smartHome/NA"
+            ],
+            "revisionId": "0cffbd40-7f97-4743-9a6a-d3a7d13329ee",
+            "codeUri": "lambda/us-east-1_wifi_led",
+            "handler": "index.handler",
+            "runtime": "nodejs6.10"
+          }
+        ]
+      }
+    }
+  }
+}

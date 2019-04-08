@@ -1,0 +1,38 @@
+{
+  "manifest": {
+    "apis": {
+      "smartHome": {
+        "regions": {
+          "EU": {
+            "endpoint": {
+              "uri": "test_led",
+              "sourceDir": "lambda/eu-west-1_test_led"
+            }
+          },
+          "NA": {
+            "endpoint": {
+              "uri": "wifi_led",
+              "sourceDir": "lambda/us-east-1_wifi_led"
+            }
+          }
+        },
+        "endpoint": {
+          "uri": "test_led",
+          "sourceDir": "lambda/eu-west-1_test_led"
+        },
+        "protocolVersion": "3"
+      }
+    },
+    "manifestVersion": "1.0",
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "name": "wifi led"
+        },
+        "en-GB": {
+          "name": "wifi led"
+        }
+      }
+    }
+  }
+}
