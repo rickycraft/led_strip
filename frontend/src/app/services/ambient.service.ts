@@ -11,8 +11,7 @@ const base_url = 'http://192.168.1.110:3000';
 export class AmbientService {
   readonly device = '/ambient';
 
-  private ambient = new BehaviorSubject(new Lamp());
-  ambient$: Observable<Lamp> = this.ambient.asObservable();
+  ambient: BehaviorSubject<Lamp> = new BehaviorSubject(new Lamp());
 
   constructor(private http: HttpClient, private route: Router) {}
 
@@ -22,7 +21,7 @@ export class AmbientService {
         this.ambient.next(data);
       },
       error => {
-        console.log('Error ', error);
+        console.log('ambient service error ', error);
       }
     );
   }
@@ -33,21 +32,20 @@ export class AmbientService {
         this.ambient.next(data);
       },
       error => {
-        console.log('Error ', error);
+        // console.log('ambient service error ', error);
+        this.ambient.error(error);
       }
     );
   }
 
   setLux(val: number) {
-    this.http
-      .post<Lamp>(base_url + this.device + '/lux', { lux: val })
-      .subscribe(
-        data => {
-          this.ambient.next(data);
-        },
-        error => {
-          console.log('Error ', error);
-        }
-      );
+    this.http.post<Lamp>(base_url + this.device + '/lux', { lux: val }).subscribe(
+      data => {
+        this.ambient.next(data);
+      },
+      error => {
+        console.log('ambient service error ', error);
+      }
+    );
   }
 }

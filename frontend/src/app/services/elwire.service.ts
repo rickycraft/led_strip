@@ -11,8 +11,7 @@ const base_url = 'http://192.168.1.110:3000';
 export class EwService {
   readonly device = '/ew';
 
-  private ew = new BehaviorSubject(new ElWire());
-  ew$: Observable<ElWire> = this.ew.asObservable();
+  ew = new BehaviorSubject(new ElWire());
 
   constructor(private http: HttpClient, private route: Router) {}
 

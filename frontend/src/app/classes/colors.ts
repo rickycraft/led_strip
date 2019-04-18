@@ -1,44 +1,47 @@
+export class Colors {
+  constructor(r: number, g: number, b: number) {
+    this.setColor(r, g, b);
+  }
 
-export class Colors{
-    red: number;
-    green: number;
-    blu: number;
+  static list = {
+    fuchsia: new Colors(25, 0, 25),
+  };
 
-    static fuchsia(): Colors{
-        return new Colors(25,0,25);
-    }
+  red: number;
+  green: number;
+  blu: number;
 
-    static yellow(): Colors{
-        return new Colors(25,25,0);
-    }
+  static fuchsia(): Colors {
+    return new Colors(25, 0, 25);
+  }
 
-    static cyan(): Colors{
-        return new Colors(0,25,25);
-    }
+  static yellow(): Colors {
+    return new Colors(25, 25, 0);
+  }
 
-    static purple(): Colors{
-        return new Colors(13,0,13);
-    }
+  static cyan(): Colors {
+    return new Colors(0, 25, 25);
+  }
 
-    static warm(): Colors{
-        return new Colors(25,10,0);
-    }
+  static purple(): Colors {
+    return new Colors(13, 0, 13);
+  }
 
-    static cold(): Colors{
-        return new Colors(10,20,25);
-    }
+  static warm(): Colors {
+    return new Colors(25, 11, 3);
+  }
 
-    static white(): Colors{
-        return new Colors(25,25,25);
-    }
+  static cold(): Colors {
+    return new Colors(10, 20, 25);
+  }
 
-    setColor(r: number, g: number, b: number){
-        this.red = r;
-        this.green = g;
-        this.blu = b;
-    }
+  static white(): Colors {
+    return new Colors(25, 25, 25);
+  }
 
-    constructor(r: number, g: number, b: number){
-        this.setColor(r,g,b);
-    }
+  setColor(r: number, g: number, b: number) {
+    this.red = r;
+    this.green = g;
+    this.blu = b;
+  }
 }

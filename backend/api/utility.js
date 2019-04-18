@@ -8,11 +8,10 @@ const base_request = async function(url, res, success) {
 			} else {
 				res.sendStatus(500);
 			}
-			console.log("error occurred", errorTitle, msg);
+			console.log("error occurred on ", url);
 		} else {
 			let tmp = JSON.parse(body);
 			delete tmp.ew;
-
 			res.status(200).json(success(tmp));
 		}
 	});

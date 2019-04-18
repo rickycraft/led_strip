@@ -9,6 +9,7 @@ import { EwService } from './services/elwire.service';
 import { ElWire } from './classes/elwire';
 import { MatSnackBar } from '@angular/material';
 import { update } from 'tar';
+import { Colors } from 'frontend-darwin-x64/frontend.app/Contents/Resources/app/src/app/classes/colors';
 
 @Component({
   selector: 'app-root',
@@ -35,10 +36,10 @@ export class AppComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.status = new Led();
-    this.colorService.status$.subscribe(data => {
+    this.colorService.status.subscribe(data => {
       this.status = data;
     });
-    this.ewService.ew$.subscribe(data => {
+    this.ewService.ew.subscribe(data => {
       this.ew = data;
     });
   }
@@ -73,10 +74,16 @@ export class AppComponent implements OnInit {
     this.ewService.setEw(!this.ew.status);
   }
 
-  async update(){
-    this.colorService.getStatus();
+  update() {
     this.lampService.getStatus();
+    this.colorService.getStatus();
     this.ambientService.getStatus();
-    this.ewService.getStatus();
+    // this.ewService.getStatus();
+  }
+
+  setColorName(event) {
+    const color = event.target.innerText;
+    this.colorService.setColorName(color);
+    console.log(event.target.innerText);
   }
 }

@@ -1,6 +1,6 @@
 <div fxLayout="column">
   <mat-divider></mat-divider>
-  <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutAlign="space-evenly center" style="margin:15px;">
+  <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutAlign="space-evenly center" class="slider-container" *ngIf="isAvailable.rgb">
     <button mat-mini-fab disabled><mat-icon>color_lens</mat-icon></button>
     <mat-slider
       min="0"
@@ -21,7 +21,7 @@
     </button>
   </div>
   <mat-divider></mat-divider>
-  <div fxLayout="row" fxLayoutAlign="space-around center" style="margin:15px;">
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="slider-container">
     <button mat-mini-fab disabled><mat-icon>brightness_5</mat-icon></button>
     <mat-slider
       min="0"
@@ -42,9 +42,9 @@
     </button>
   </div>
   <mat-divider></mat-divider>
-  <div fxLayout="row" fxLayoutAlign="space-around center" style="margin:15px;" *ngIf="false">
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="slider-container" *ngIf="isAvailable.ambient">
     <button mat-mini-fab disabled>
-      <mat-icon>brightness_5</mat-icon>
+      <mat-icon>gradient</mat-icon>
     </button>
     <mat-slider
       min="0"

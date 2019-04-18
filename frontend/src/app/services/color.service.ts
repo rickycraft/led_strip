@@ -6,6 +6,7 @@ import { Led } from '../classes/led';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { Colors } from '../classes/colors';
 import { MatSnackBar } from '@angular/material';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 const base_url = 'http://192.168.1.110:3000';
 
@@ -14,23 +15,19 @@ export class ColorService {
   readonly root_url: string = 'http://192.168.1.110:3000';
   readonly snackErrorTime: number = 2000;
 
-  private status = new BehaviorSubject<Led>(new Led());
-  status$: Observable<Led> = this.status.asObservable();
-  private status_val: Led = new Led();
+  status = new BehaviorSubject<Led>(new Led());
 
-  constructor(private http: HttpClient, private route: Router, private snackBar: MatSnackBar) {
-    this.status$.subscribe(data => {
-      this.status_val = data;
-    });
-  }
+  constructor(private http: HttpClient, private route: Router, private snackBar: MatSnackBar) {}
 
   getStatus() {
     this.http.get<Led>(base_url + '/rgb/status').subscribe(
       data => {
+        // console.log('led status \n', this.status.value, '\n', this.status.value);
         this.status.next(data);
       },
       error => {
-        this.openSnack(error.name);
+        // this.openSnack(error.name);
+        this.status.error(error);
       }
     );
   }
@@ -47,37 +44,26 @@ export class ColorService {
     );
   }
 
-  setColor(color: string, value: number) {
-    console.log('set color', color, value);
-    const tmp = {};
-    tmp[color] = value;
-    this.http.post<Led>(this.root_url + '/rgb/color', tmp).subscribe(
-      data => {
-        const tmp_status = this.status_val;
-        tmp_status[color] = data[color];
-        this.status.next(tmp_status);
-      },
-      error => {
-        this.openSnack(error.name);
-      }
-    );
-  }
-
   setColorName(name: String) {
     // set color by name
-    const curr_color: Led = this.status_val;
+    const curr_color: Led = this.status.getValue();
     switch (name.toLowerCase()) {
       case 'fuchsia':
-        curr_color.setColor(Colors.fuchsia());
+        this.setColor(Colors.fuchsia());
         break;
       case 'yellow':
-        curr_color.setColor(Colors.yellow());
+        this.setColor(Colors.yellow());
         break;
       case 'white':
-        curr_color.setColor(Colors.white());
+        this.setColor(Colors.white());
+        break;
+      case 'warm':
+        this.setColor(Colors.warm());
+        break;
+      case 'cyan':
+        this.setColor(Colors.cyan());
         break;
     }
-    this.setLed(curr_color);
   }
 
   setLux(data: number) {
@@ -98,5 +84,14 @@ export class ColorService {
     this.snackBar.open(message, 'LED STRIP', {
       duration: this.snackErrorTime,
     });
+  }
+
+  setColor(color: Colors) {
+    const led: Led = new Led();
+    led.red = color.red;
+    led.green = color.green;
+    led.blu = color.blu;
+    delete led.lux;
+    this.setLed(led);
   }
 }

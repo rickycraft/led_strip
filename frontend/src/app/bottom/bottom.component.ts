@@ -16,9 +16,15 @@ import { AmbientService } from '../services/ambient.service';
 })
 export class BottomComponent implements OnInit, OnDestroy {
   lux: number;
+  isFading = false;
+  isAvailable = {
+    rgb: false,
+    ambient: false,
+  };
+
   lamp: Lamp = new Lamp();
   ambient: Lamp = new Lamp();
-  isFading = false;
+
   luxDebouncer: Subject<any> = new Subject();
   lampDebouncer: Subject<any> = new Subject();
   ambientDebouncer: Subject<any> = new Subject();
@@ -28,16 +34,31 @@ export class BottomComponent implements OnInit, OnDestroy {
     private lampService: LampService,
     private ambientService: AmbientService
   ) {
-    this.colorService.status$.subscribe(data => {
-      this.lux = data.lux;
-    }); // only update the value we want
-    this.lampService.lamp$.subscribe(data => {
-      this.lamp.lux = data.lux;
-      this.lamp.status = data.status;
+    this.colorService.status.subscribe(
+      data => {
+        this.lux = data.lux;
+        this.isAvailable.rgb = true;
+      },
+      error => {
+        console.log('rgb not aviable');
+        this.isAvailable.rgb = false;
+      }
+    ); // only update the value we want
+    this.lampService.lamp.subscribe(data => {
+      this.lamp = data;
     });
-    this.ambientService.ambient$.subscribe(data => {
-      this.ambient = data;
-    });
+    this.ambientService.ambient.subscribe(
+      data => {
+        this.ambient = data;
+        this.isAvailable.ambient = true;
+      },
+      error => {
+        console.log('ambient error aviable');
+        this.isAvailable.ambient = false;
+      }
+    );
+    this.isAvailable.ambient = false;
+    this.isAvailable.rgb = false;
   }
 
   ngOnInit() {
@@ -66,6 +87,7 @@ export class BottomComponent implements OnInit, OnDestroy {
       .subscribe(event => {
         this.ambientService.setLux(event.value);
       });
+    // getting status to check if available
   }
 
   ngOnDestroy() {

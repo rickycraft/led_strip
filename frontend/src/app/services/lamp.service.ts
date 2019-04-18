@@ -12,8 +12,7 @@ export class LampService {
   readonly device = '/lamp';
   readonly snackErrorTime: number = 2000;
 
-  private lamp = new BehaviorSubject(new Lamp());
-  lamp$: Observable<Lamp> = this.lamp.asObservable();
+  lamp = new BehaviorSubject(new Lamp());
 
   constructor(private http: HttpClient, private route: Router, private snackBar: MatSnackBar) {}
 
