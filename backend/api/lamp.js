@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const request = require("request");
+const querystring = require("querystring");
+const std_req = require("./utility").request;
+const mapValue = require("./utility").mapValue;
 
 const lampUrl = "http://192.168.1.225";
 
@@ -10,52 +12,29 @@ var lamp = {
 };
 
 router.get("/toggle", async (req, res) => {
-	await request.get(lampUrl + "/toggle", (err, response, body) => {
-		if (err) {
-			res.sendStatus(500);
-		} else {
-			lamp = JSON.parse(body);
-			res.status(200).send(JSON.parse(body));
-		}
+	std_req(lampUrl + "/toggle", res, data => {
+		lamp = data;
+		return lamp;
 	});
 });
 
 router.post("/lux", async (req, res) => {
-	lamp.lux = mapValue(req.body, 0, 10, 0, 255).lux;
-	await request.get(
-		{
-			url: lampUrl + "/lux",
-			qs: {
-				lux: lamp.lux,
-			},
-		},
-		(err, response, body) => {
-			if (err) {
-				res.sendStatus(500);
-			} else {
-				lamp = mapValue(JSON.parse(body), 0, 255, 0, 10);
-				res.status(200).send(lamp);
-			}
-		}
-	);
-});
-
-router.get("/status", async (req, res) => {
-	await request.get(lampUrl + "/status", (err, response, body) => {
-		if (err) {
-			res.sendStatus(500);
-		} else {
-			lamp = mapValue(JSON.parse(body), 0, 255, 0, 10);
-			res.status(200).send(lamp);
-		}
+	let params = querystring.stringify({
+		lux: mapValue(req.body.lux, 0, 10, 0, 255),
+	});
+	std_req(lampUrl + "/lux?" + params, res, data => {
+		lamp.lux = mapValue(data.lux, 0, 255, 0, 10);
+		lamp.status = data.status;
+		return lamp;
 	});
 });
 
-function mapValue(data, in_min, in_max, out_min, out_max) {
-	x = data.lux;
-	i = ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
-	data.lux = Math.round(i);
-	return data;
-}
+router.get("/status", async (req, res) => {
+	std_req(lampUrl + "/status", res, data => {
+		data.lux = mapValue(data.lux, 0, 255, 0, 10);
+		lamp = data;
+		return data;
+	});
+});
 
 module.exports = router;
