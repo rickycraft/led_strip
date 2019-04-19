@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ColorService } from './services/color.service';
 import { Led } from './classes/led';
 import { Observable, Subject } from 'rxjs';
@@ -20,7 +20,7 @@ import { Colors } from 'frontend-darwin-x64/frontend.app/Contents/Resources/app/
 reactiveform to change dinamically the values as i move the values on the slider
 debounce operator
 */
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   readonly debounceTime: number = 900;
 
   status: Led;
@@ -56,6 +56,9 @@ export class AppComponent implements OnInit {
       .subscribe(event => {
         this.lampService.setLux(event.value);
       });
+  }
+
+  ngAfterViewInit() {
     this.update();
   }
 
@@ -81,7 +84,7 @@ export class AppComponent implements OnInit {
     // this.ewService.getStatus();
   }
 
-  setColorName(event) {
+  setColorName(event: any) {
     const color = event.target.innerText;
     this.colorService.setColorName(color);
     console.log(event.target.innerText);

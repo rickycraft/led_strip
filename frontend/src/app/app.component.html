@@ -8,7 +8,7 @@
   </mat-toolbar>
   <div fxFlex fxLayout="column" fxLayoutAlign="top">
     <div fxLayout="row" fxLayoutAlign="space-around center" class="slider-container">
-      <button mat-flat-button color="primary">RED</button>
+      <button mat-flat-button class="red">R</button>
       <mat-slider
         [(ngModel)]="status.red"
         min="0"
@@ -19,10 +19,10 @@
         thumbLabel
         (input)="setColor($event, 'red')"
       ></mat-slider>
-      <button mat-flat-button color="primary">{{ status.red }}</button>
+      <button mat-flat-button class="red">{{ status.red }}</button>
     </div>
     <div fxLayout="row" fxLayoutAlign="space-around center" class="slider-container">
-      <button mat-flat-button color="primary">GREEN</button>
+      <button mat-flat-button class="green">G</button>
       <mat-slider
         [(ngModel)]="status.green"
         min="0"
@@ -33,10 +33,10 @@
         thumbLabel
         (input)="setColor($event, 'green')"
       ></mat-slider>
-      <button mat-flat-button color="primary">{{ status.green }}</button>
+      <button mat-flat-button class="green">{{ status.green }}</button>
     </div>
     <div fxLayout="row" fxLayoutAlign="space-around center" class="slider-container">
-      <button mat-flat-button color="primary">BLU</button>
+      <button mat-flat-button class="blu">B</button>
       <mat-slider
         [(ngModel)]="status.blu"
         min="0"
@@ -47,15 +47,15 @@
         thumbLabel
         (input)="setColor($event, 'blu')"
       ></mat-slider>
-      <button mat-flat-button color="primary">{{ status.blu }}</button>
+      <button mat-flat-button class="blu">{{ status.blu }}</button>
     </div>
     <mat-divider></mat-divider>
     <div fxFlex fxLayout="column" fxLayoutAlign="">
-        <div fxFlex fxLayout="row" fxLayoutAlign="space-around start" class="color-slider">
-            <button mat-raised-button (click)="setColorName($event)">white</button>
-            <button mat-raised-button (click)="setColorName($event)">warm</button>
-            <button mat-raised-button (click)="setColorName($event)">cyan</button>
-            <button mat-raised-button (click)="setColorName($event)">fuchsia</button>
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between start" class="color-slider">
+            <button mat-raised-button (click)="setColorName($event)" class="white">white</button>
+            <button mat-raised-button (click)="setColorName($event)" class="warm">warm</button>
+            <button mat-raised-button (click)="setColorName($event)" class="cyan">cyan</button>
+            <button mat-raised-button (click)="setColorName($event)" class="fuchsia">fuchsia</button>
         </div>
     </div>
   </div>

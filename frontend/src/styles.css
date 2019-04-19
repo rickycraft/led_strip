@@ -5,3 +5,36 @@ html, body {
     height: 100%;
     margin: 0;
 }
+
+.red{
+    background-color: red;
+    color: white;
+}
+
+.green{
+    background-color: green;
+    color: white;
+}
+
+.blu{
+    background-color: blue;
+    color: white;
+}
+
+.fuchsia{
+    background-color: fuchsia;
+    color: white;
+}
+
+.cyan{
+    background-color: cyan;
+}
+
+.warm{
+    background-color: coral;
+}
+
+.white{
+    background-color: black;
+    color: white;
+}
