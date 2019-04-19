@@ -27,6 +27,7 @@ export class ColorService {
       },
       error => {
         // this.openSnack(error.name);
+        this.status.next(new Led());
         this.status.error(error);
       }
     );

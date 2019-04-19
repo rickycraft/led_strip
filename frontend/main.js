@@ -4,8 +4,8 @@ let win;
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 600,
-    height: 1000,
+    width: 400,
+    height: 700,
     backgroundColor: "#ffffff",
     icon: `file://${__dirname}/dist/frontend/favicon.ico`,
   });

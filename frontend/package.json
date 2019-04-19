@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "electron .",
-    "build-all": "ng build --prod; electron-packager . --platform=darwin; npx cap sync"
+    "build-all": "ng build --prod; electron-packager . --platform=darwin  --overwrite; npx cap sync"
   },
   "private": true,
   "dependencies": {
