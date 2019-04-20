@@ -1,7 +1,7 @@
 const request = require("request");
 
-const base_request = async function(url, res, success) {
-	await request.get(url, { timeout: 1000 }, (err, response, body) => {
+const base_request = (url, res, success) => {
+	request.get(url, { timeout: 1000 }, async (err, response, body) => {
 		if (err) {
 			if (err.code === "ETIMEDOUT") {
 				res.sendStatus(408);
@@ -10,9 +10,17 @@ const base_request = async function(url, res, success) {
 			}
 			console.log("error occurred on ", url);
 		} else {
-			let tmp = JSON.parse(body);
-			delete tmp.ew;
-			res.status(200).json(success(tmp));
+			try {
+				let tmp = JSON.parse(body);
+				let result = await success(tmp);
+				console.log(result);
+				res.status(200).json(result);
+			} catch (err) {
+				console.log(body);
+				res.status(500).json({
+					error: err,
+				});
+			}
 		}
 	});
 };

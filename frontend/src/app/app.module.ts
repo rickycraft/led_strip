@@ -22,7 +22,6 @@ import 'hammerjs';
 
 // app component
 import { AppComponent } from './app.component';
-import { ColorsComponent } from './tabs/color/color.component';
 import { BottomComponent } from './bottom/bottom.component';
 // app services
 import { ColorService } from './services/color.service';
@@ -35,7 +34,7 @@ const routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, ColorsComponent, BottomComponent],
+  declarations: [AppComponent, BottomComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
