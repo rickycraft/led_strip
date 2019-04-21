@@ -2,10 +2,8 @@ const express = require("express");
 const router = express.Router();
 const std_req = require("./utility").request;
 
-const mongoose = require("mongoose");
-const Sensor = require("../models/sensor");
 const { DateTime } = require("luxon");
-const db_utility = require("./db_utility");
+const db_sensor = require("../database/db.sensor");
 
 const base_url = "http://192.168.1.230";
 
@@ -18,7 +16,7 @@ const sensor = {
 router.get("/save", (req, res) => {
 	std_req(base_url + "/data", res, async data => {
 		data = mapDecimal(data);
-		await db_utility.saveValue(data);
+		await db_sensor.saveValue(data);
 		return data;
 	});
 });
@@ -42,7 +40,7 @@ router.get("/range", async (req, res) => {
 router.get("/avg", async (req, res) => {
 	try {
 		const result = getResult(req.body);
-		result = db_utility.aggregate(result); //reduce data to average
+		result = db_sensor.aggregate(result); //reduce data to average
 		result = mapDecimal(result); //map to decimal
 		res.status(200).json(result);
 	} catch (err) {
@@ -58,9 +56,7 @@ router.get("/test", (req, res) => {
 
 async function getResult(data) {
 	//TODO more data validation
-	return data.start != null
-		? await db_utility.inRange(data)
-		: await db_utility.inDate(data.year, data.month, data.day);
+	return data.start != null ? await db_sensor.inRange(data) : await db_sensor.inDate(data.year, data.month, data.day);
 }
 
 function mapDecimal(obj) {
