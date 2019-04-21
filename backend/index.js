@@ -6,6 +6,7 @@ const port = 3000;
 
 mongoose.connect("mongodb+srv://ricky:321riccardo@maincluster-ryh3k.mongodb.net/test?retryWrites=true", {
 	useNewUrlParser: true,
+	useCreateIndex: true,
 });
 
 app.use(cors());

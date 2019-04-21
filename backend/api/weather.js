@@ -9,7 +9,7 @@ const db_utility = require("./db_utility");
 
 const base_url = "http://192.168.1.230";
 
-var sensor = {
+const sensor = {
 	temp: 0, // 27.2 C
 	bar: 0, // 1023 mBar
 	humi: 0, // 36%
@@ -17,22 +17,21 @@ var sensor = {
 
 router.get("/save", (req, res) => {
 	std_req(base_url + "/data", res, async data => {
-		sensor = mapDecimal(data);
-		db_utility.saveValue(sensor);
-		return sensor;
+		data = mapDecimal(data);
+		await db_utility.saveValue(data);
+		return data;
 	});
 });
 
 router.get("/status", (req, res) => {
 	std_req(base_url + "/", res, data => {
-		sensor = mapDecimal(data);
-		return sensor;
+		return mapDecimal(data);
 	});
 });
 
 router.get("/date", async (req, res) => {
 	try {
-		const result = await db_utility.inDate(req.body.year, req.body.month, req.body.day);
+		let result = await db_utility.inDate(req.body.year, req.body.month, req.body.day);
 		res.status(200).json(result);
 	} catch (err) {
 		console.log("err", err);
@@ -50,15 +49,32 @@ router.get("/range", async (req, res) => {
 	}
 });
 
+router.get("/avg", async (req, res) => {
+	try {
+		let result =
+			req.body.start != null
+				? await db_utility.inRange(req.body)
+				: await db_utility.inDate(req.body.year, req.body.month, req.body.day);
+		result = db_utility.aggregate(result); //reduce data to average
+		result = mapDecimal(result); //map to decimal
+		res.status(200).json(result);
+	} catch (err) {
+		console.log("catched error", err);
+		if (err == "empty_array") res.status(200).json({});
+		else res.status(500).send(err);
+	}
+});
+
 router.get("/test", (req, res) => {
 	res.status(200).json({ date: DateTime.fromObject({ month: 10 }).toString() });
 });
 
 function mapDecimal(obj) {
-	obj.temp = obj.temp.toFixed(1);
-	obj.humi = obj.humi.toFixed(0);
-	obj.bar = obj.bar.toFixed(0);
-	return obj;
+	let res = {};
+	res.temp = obj.temp.toFixed(1);
+	res.humi = obj.humi.toFixed(0);
+	res.bar = obj.bar.toFixed(0);
+	return res;
 }
 
 module.exports = router;

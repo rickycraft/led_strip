@@ -3,10 +3,13 @@ const Sensor = require("../models/sensor");
 const { DateTime } = require("luxon");
 
 const inRange = async range => {
-	let start = range.start;
-	let end = range.end;
-	start["zone"] = "Europe/Rome";
-	end["zone"] = "Europe/Rome";
+	let start;
+	let end;
+	if (range.start != null && range.end != null) {
+		start = range.start;
+		end = range.end;
+	} else throw "Give end an start";
+
 	try {
 		start = DateTime.fromObject(start);
 		end = DateTime.fromObject(end);
@@ -14,21 +17,15 @@ const inRange = async range => {
 		throw "Invalid date format";
 	}
 	if (start > end) throw "Start is greater than end";
-
-	let out = 0;
-	await Sensor.find(
-		{
-			date: {
-				$gte: start,
-				$lte: end,
-			},
+	const query = await Sensor.find({
+		date: {
+			$gte: start,
+			$lte: end,
 		},
-		(err, data) => {
-			if (err) throw err;
-			else out = data;
-		}
-	);
-	return out;
+	}).catch(err => {
+		throw err;
+	});
+	return query;
 };
 
 const saveValue = async sensor => {
@@ -69,34 +66,36 @@ const inDate = async (year, month, day) => {
 	} else {
 		throw "At least one parameter";
 	}
-	let result;
-	await Sensor.find(
-		{
-			date: {
-				$gte: s_date,
-				$lte: e_date,
-			},
+	const query = await Sensor.find({
+		date: {
+			$gte: s_date,
+			$lte: e_date,
 		},
-		(err, data) => {
-			if (err) throw err;
-			else {
-				result = data;
-			}
-		}
-	);
-	return result;
+	}).catch(err => {
+		throw errr;
+	});
+	return query;
 };
 
-function validateDate(rawDate) {
-	try {
-		return DateTime.fromObject(rawDate);
-	} catch (err) {
-		throw "Invalid date format";
+function aggregate(list) {
+	if (list.length < 1) {
+		throw "empty_array";
 	}
+	let tmp = list.reduce((acc, curr) => {
+		acc.temp += curr.temp;
+		acc.bar += curr.bar;
+		acc.humi += curr.humi;
+		return acc;
+	});
+	tmp.temp = tmp.temp / list.length;
+	tmp.bar = tmp.bar / list.length;
+	tmp.humi = tmp.humi / list.length;
+	return tmp;
 }
 
 module.exports = {
 	inRange: inRange,
 	saveValue: saveValue,
 	inDate: inDate,
+	aggregate: aggregate,
 };
