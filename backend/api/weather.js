@@ -29,9 +29,9 @@ router.get("/status", (req, res) => {
 	});
 });
 
-router.get("/date", async (req, res) => {
+router.get("/range", async (req, res) => {
 	try {
-		let result = await db_utility.inDate(req.body.year, req.body.month, req.body.day);
+		const result = await getResult(req.body);
 		res.status(200).json(result);
 	} catch (err) {
 		console.log("err", err);
@@ -39,22 +39,9 @@ router.get("/date", async (req, res) => {
 	}
 });
 
-router.get("/range", async (req, res) => {
-	try {
-		const data = await db_utility.inRange(req.body);
-		res.status(200).json(data);
-	} catch (err) {
-		console.log("catched error", err);
-		res.status(500).send(err);
-	}
-});
-
 router.get("/avg", async (req, res) => {
 	try {
-		let result =
-			req.body.start != null
-				? await db_utility.inRange(req.body)
-				: await db_utility.inDate(req.body.year, req.body.month, req.body.day);
+		const result = getResult(req.body);
 		result = db_utility.aggregate(result); //reduce data to average
 		result = mapDecimal(result); //map to decimal
 		res.status(200).json(result);
@@ -68,6 +55,13 @@ router.get("/avg", async (req, res) => {
 router.get("/test", (req, res) => {
 	res.status(200).json({ date: DateTime.fromObject({ month: 10 }).toString() });
 });
+
+async function getResult(data) {
+	//TODO more data validation
+	return data.start != null
+		? await db_utility.inRange(data)
+		: await db_utility.inDate(data.year, data.month, data.day);
+}
 
 function mapDecimal(obj) {
 	let res = {};
