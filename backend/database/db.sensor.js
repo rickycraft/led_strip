@@ -36,6 +36,7 @@ const saveValue = async sensor => {
 		bar: sensor.bar,
 		date: DateTime.local(),
 	});
+	console.log("saving", sensor);
 	await newData
 		.save()
 		.then(result => {

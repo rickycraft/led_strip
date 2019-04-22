@@ -1,9 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const std_req = require("./utility").request;
+const request = require("request");
 
 const { DateTime } = require("luxon");
 const db_sensor = require("../database/db.sensor");
+const schedule = require("node-schedule");
+
+var j = schedule.scheduleJob("0,30 * * * *", () => {
+	request.get(base_url + "/data", async (err, response, body) => {
+		try {
+			if (err) {
+				console.log("error occurred on ", err);
+				throw err;
+			} else {
+				let result = JSON.parse(body);
+				result = mapDecimal(result);
+				await db_sensor.saveValue(result);
+			}
+		} catch (err) {
+			console.log("error on trigger", err);
+		}
+	});
+});
 
 const base_url = "http://192.168.1.230";
 
