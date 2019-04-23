@@ -9,6 +9,7 @@ const schedule = require("node-schedule");
 
 var j = schedule.scheduleJob("0,30 * * * *", () => {
 	request.get(base_url + "/data", async (err, response, body) => {
+		//console.log("current time", DateTime.local().toString());
 		try {
 			if (err) {
 				console.log("error occurred on ", err);
@@ -58,7 +59,7 @@ router.get("/range", async (req, res) => {
 
 router.get("/avg", async (req, res) => {
 	try {
-		const result = getResult(req.body);
+		let result = await getResult(req.body);
 		result = db_sensor.aggregate(result); //reduce data to average
 		result = mapDecimal(result); //map to decimal
 		res.status(200).json(result);

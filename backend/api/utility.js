@@ -13,7 +13,7 @@ const base_request = (url, res, success) => {
 			try {
 				let tmp = JSON.parse(body);
 				let result = await success(tmp);
-				console.log(result);
+				//console.log(result);
 				res.status(200).json(result);
 			} catch (err) {
 				console.log(body);
