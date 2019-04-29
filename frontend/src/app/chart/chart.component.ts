@@ -7,7 +7,16 @@ import { Color, Label } from 'ng2-charts';
   templateUrl: './chart.component.html',
 })
 export class ChartComponent implements OnInit {
-  public lineChartData: ChartDataSets[] = [{ data: [20.5, 20.6, 20, 21.1, 21.3, 21, 21.5, 22], label: 'Series A' }];
+  public lineChartData: ChartDataSets[] = [
+    {
+      data: [22.3, 23.0, 23.4, 23.3, 23.3, 23.3, 23.2, 23.2, 23.1, 23.2, 23.4, 23.6, 23.8, 23.9, 24.0],
+      label: 'Temps',
+    },
+    {
+      data: [55, 52, 50, 50, 50, 50, 50, 50, 50, 49, 49, 48, 47, 47, 47],
+      label: 'Humi',
+    },
+  ];
   public lineChartLabels: Label[] = [];
 
   public lineChartColors: Color[] = [
@@ -20,7 +29,7 @@ export class ChartComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 14; i++) {
       this.lineChartLabels.push(i.toString());
     }
   }

@@ -70,11 +70,10 @@ router.get("/avg", async (req, res) => {
 });
 
 router.get("/avgH/:type/", async (req, res) => {
-	console.log(req.params);
 	try {
 		let result = await getResult(req.body);
 		result = utility.avgHour(result); //reduce data to average
-		result = utility.mapType(req.params.type);
+		result = utility.mapType(req.params.type, result);
 		res.status(200).json(result);
 	} catch (err) {
 		console.log("catched error", err);
