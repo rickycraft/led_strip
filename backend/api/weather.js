@@ -61,7 +61,18 @@ router.get("/avg", async (req, res) => {
 	try {
 		let result = await getResult(req.body);
 		result = db_sensor.aggregate(result); //reduce data to average
-		result = mapDecimal(result); //map to decimal
+		res.status(200).json(result);
+	} catch (err) {
+		console.log("catched error", err);
+		if (err == "empty_array") res.status(200).json({});
+		else res.status(500).send(err);
+	}
+});
+
+router.get("/avgH", async (req, res) => {
+	try {
+		let result = await getResult(req.body);
+		result = db_sensor.avgHour(result); //reduce data to average
 		res.status(200).json(result);
 	} catch (err) {
 		console.log("catched error", err);
