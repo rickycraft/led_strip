@@ -1,13 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const std_req = require("./utility").request;
+const std_req = require("../utility").request;
 const request = require("request");
 
 const { DateTime } = require("luxon");
-const db_sensor = require("../database/db.sensor");
+const utility = require("./weather.utility");
+const db = require("./weather.database");
 const schedule = require("node-schedule");
 
-var j = schedule.scheduleJob("0,30 * * * *", () => {
+const sensor = {
+	temp: 0, // 27.2 C
+	bar: 0, // 1023 mBar
+	humi: 0, // 36%
+};
+const base_url = "http://192.168.1.230";
+
+const j = schedule.scheduleJob("0,30 * * * *", () => {
 	request.get(base_url + "/data", async (err, response, body) => {
 		//console.log("current time", DateTime.local().toString());
 		try {
@@ -16,8 +24,8 @@ var j = schedule.scheduleJob("0,30 * * * *", () => {
 				throw err;
 			} else {
 				let result = JSON.parse(body);
-				result = mapDecimal(result);
-				await db_sensor.saveValue(result);
+				result = utility.mapDecimal(result);
+				await db.saveValue(result);
 			}
 		} catch (err) {
 			console.log("error on trigger", err);
@@ -25,25 +33,17 @@ var j = schedule.scheduleJob("0,30 * * * *", () => {
 	});
 });
 
-const base_url = "http://192.168.1.230";
-
-const sensor = {
-	temp: 0, // 27.2 C
-	bar: 0, // 1023 mBar
-	humi: 0, // 36%
-};
-
 router.get("/save", (req, res) => {
 	std_req(base_url + "/data", res, async data => {
 		data = mapDecimal(data);
-		await db_sensor.saveValue(data);
+		await db.saveValue(data);
 		return data;
 	});
 });
 
 router.get("/status", (req, res) => {
 	std_req(base_url + "/", res, data => {
-		return mapDecimal(data);
+		return utility.mapDecimal(data);
 	});
 });
 
@@ -60,7 +60,7 @@ router.get("/range", async (req, res) => {
 router.get("/avg", async (req, res) => {
 	try {
 		let result = await getResult(req.body);
-		result = db_sensor.aggregate(result); //reduce data to average
+		result = utility.aggregate(result); //reduce data to average
 		res.status(200).json(result);
 	} catch (err) {
 		console.log("catched error", err);
@@ -69,10 +69,12 @@ router.get("/avg", async (req, res) => {
 	}
 });
 
-router.get("/avgH", async (req, res) => {
+router.get("/avgH/:type/", async (req, res) => {
+	console.log(req.params);
 	try {
 		let result = await getResult(req.body);
-		result = db_sensor.avgHour(result); //reduce data to average
+		result = utility.avgHour(result); //reduce data to average
+		result = utility.mapType(req.params.type);
 		res.status(200).json(result);
 	} catch (err) {
 		console.log("catched error", err);
@@ -87,15 +89,7 @@ router.get("/test", (req, res) => {
 
 async function getResult(data) {
 	//TODO more data validation
-	return data.start != null ? await db_sensor.inRange(data) : await db_sensor.inDate(data.year, data.month, data.day);
-}
-
-function mapDecimal(obj) {
-	let res = {};
-	res.temp = obj.temp.toFixed(1);
-	res.humi = obj.humi.toFixed(0);
-	res.bar = obj.bar.toFixed(0);
-	return res;
+	return data.start != null ? await db.inRange(data) : await db.inDate(data.year, data.month, data.day);
 }
 
 module.exports = router;

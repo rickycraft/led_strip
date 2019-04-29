@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const querystring = require("querystring");
-const std_req = require("./utility").request;
-const mapValue = require("./utility").mapValue;
+const std_req = require("../utility").request;
+const mapValue = require("../utility").mapValue;
 
 const lampUrl = "http://192.168.1.225";
 
