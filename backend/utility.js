@@ -25,14 +25,14 @@ const base_request = (url, res, success) => {
 	});
 };
 
-const check_params = function(inp, out) {
+const check_params = (inp, out) => {
 	for (val in inp) {
 		if (inp[val] != null) out[val] = inp[val];
 	}
 	return out;
 };
 
-const map_val = function(x, in_min, in_max, out_min, out_max) {
+const map_val = (x, in_min, in_max, out_min, out_max) => {
 	i = ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 	return Math.round(i);
 };

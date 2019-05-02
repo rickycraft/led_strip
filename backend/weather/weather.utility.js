@@ -1,3 +1,5 @@
+const utility = require("../utility");
+
 const aggregate = list => {
 	if (list.length < 1) {
 		throw "empty_array";
@@ -31,7 +33,6 @@ const avgHour = list => {
 };
 
 const mapAverage = list => {
-	let res = {};
 	let tmp = list.reduce((acc, curr) => {
 		acc.temp += curr.temp;
 		acc.bar += curr.bar;
@@ -43,11 +44,7 @@ const mapAverage = list => {
 	tmp.bar = tmp.bar / list.length;
 	tmp.humi = tmp.humi / list.length;
 
-	res.temp = tmp.temp.toFixed(1);
-	res.humi = tmp.humi.toFixed(0);
-	res.bar = tmp.bar.toFixed(0);
-
-	return res;
+	return mapDecimal(tmp);
 };
 
 const mapType = (type, list) => {
@@ -73,10 +70,20 @@ const mapType = (type, list) => {
 
 const mapDecimal = obj => {
 	let res = {};
-	res.temp = obj.temp.toFixed(1);
-	res.humi = obj.humi.toFixed(0);
-	res.bar = obj.bar.toFixed(0);
+	res.temp = parseInt(obj.temp.toFixed(1));
+	res.humi = parseInt(obj.humi);
+	res.bar = parseInt(obj.bar);
 	return res;
+};
+
+const fixZero = list => {
+	let zero = [];
+	list.forEach((val, i) => {
+		if (val == 0) {
+			zero.push(i);
+		}
+	});
+	zero.forEach((val, i));
 };
 
 module.exports = {
