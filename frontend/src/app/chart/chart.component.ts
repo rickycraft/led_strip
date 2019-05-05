@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
+import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
+import { flattenStyles } from '@angular/platform-browser/src/dom/dom_renderer';
 
 @Component({
   selector: 'chart',
   templateUrl: './chart.component.html',
+  styleUrls: ['./chart.component.css'],
 })
 export class ChartComponent implements OnInit {
   public lineChartData: ChartDataSets[] = [
@@ -27,6 +29,10 @@ export class ChartComponent implements OnInit {
   ];
 
   public lineChartOptions: ChartOptions = {
+    legend: {
+      //  display: false,
+    },
+    aspectRatio: 1.7,
     scales: {
       yAxes: [
         {
@@ -46,15 +52,13 @@ export class ChartComponent implements OnInit {
     });
     const min: number = parseInt(Math.min(...newData).toFixed(0)) - 2;
     const max: number = parseInt(Math.max(...newData).toFixed(0)) + 2;
-    console.log('min', min);
-    console.log('max', max);
     return { min: min, max: max };
   }
 
   constructor() {}
 
   ngOnInit() {
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 24; i++) {
       this.lineChartLabels.push(i.toString() + ':00');
     }
     this.getEdge();
