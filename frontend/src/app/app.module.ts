@@ -24,6 +24,8 @@ import 'hammerjs';
 import { AppComponent } from './app.component';
 import { BottomComponent } from './bottom/bottom.component';
 import { ChartComponent } from './chart/chart.component';
+
+import { LedComponent } from './led/led.component';
 // app services
 import { ColorService } from './services/color.service';
 import { LampService } from './services/lamp.service';
@@ -31,10 +33,10 @@ import { AmbientService } from './services/ambient.service';
 import { EwService } from './services/elwire.service';
 import { ChartsModule } from 'ng2-charts';
 
-const routes: Routes = [{ path: 'chart', component: ChartComponent }];
+const routes: Routes = [{ path: 'chart', component: ChartComponent }, { path: 'led', component: LedComponent }];
 
 @NgModule({
-  declarations: [AppComponent, BottomComponent, ChartComponent],
+  declarations: [AppComponent, BottomComponent, ChartComponent, LedComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
