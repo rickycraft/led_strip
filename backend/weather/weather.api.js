@@ -69,8 +69,9 @@ router.get("/avg", async (req, res) => {
 	}
 });
 
-router.get("/avgH/:type/", async (req, res) => {
+router.post("/avgH/:type/", async (req, res) => {
 	try {
+		console.log(req.body);
 		let result = await getResult(req.body);
 		result = utility.avgHour(result); //reduce data to average
 		result = utility.mapType(req.params.type, result);

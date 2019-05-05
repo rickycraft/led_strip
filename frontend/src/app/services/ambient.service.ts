@@ -13,7 +13,7 @@ export class AmbientService {
 
   ambient: BehaviorSubject<Lamp> = new BehaviorSubject(new Lamp());
 
-  constructor(private http: HttpClient, private route: Router) {}
+  constructor(private http: HttpClient) {}
 
   setLamp() {
     this.http.get<Lamp>(base_url + this.device + '/toggle').subscribe(

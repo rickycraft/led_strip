@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
+import { Color, Label, BaseChartDirective } from 'ng2-charts';
 import { flattenStyles } from '@angular/platform-browser/src/dom/dom_renderer';
+import { WeatherService } from '../services/weather.service';
 
 @Component({
   selector: 'chart',
@@ -9,45 +10,39 @@ import { flattenStyles } from '@angular/platform-browser/src/dom/dom_renderer';
   styleUrls: ['./chart.component.css'],
 })
 export class ChartComponent implements OnInit {
-  public lineChartData: ChartDataSets[] = [
+  constructor(private weatherService: WeatherService) {
+    // weatherService.getAvgH(new Date('2019-04-22'));
+  }
+  public chartLabels: Label[] = [];
+  public t_chartData: ChartDataSets[] = [
     {
-      data: [22.3, 23.0, 23.4, 23.3, 23.3, 23.3, 23.2, 23.2, 23.1, 23.2, 23.4, 23.6, 23.8, 23.9, 24.0],
+      data: new Array<number>(24),
       label: 'temp',
     },
-    /*{
-      data: [55, 52, 50, 50, 50, 50, 50, 50, 50, 49, 49, 48, 47, 47, 47],
-      label: 'Humi',
-    },*/
   ];
-  public lineChartLabels: Label[] = [];
-
-  public lineChartColors: Color[] = [
+  public t_chartColor: Color[] = [
     {
       borderColor: 'yellow',
       backgroundColor: 'rgba(255,0,0,0.5)',
     },
   ];
-
-  public lineChartOptions: ChartOptions = {
-    legend: {
-      //  display: false,
-    },
+  public t_chartOptions: ChartOptions = {
     aspectRatio: 1.7,
     scales: {
       yAxes: [
         {
           ticks: {
-            suggestedMin: this.getEdge().min,
-            suggestedMax: this.getEdge().max,
+            suggestedMin: this.getEdge(this.t_chartData[0].data).min,
+            suggestedMax: this.getEdge(this.t_chartData[0].data).max,
           },
         },
       ],
     },
   };
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective;
 
-  getEdge(): any {
-    const newData: any[] = this.lineChartData[0].data;
-    newData.map(val => {
+  getEdge(list: any[]): any {
+    const newData: any[] = list.map(val => {
       return parseInt(val);
     });
     const min: number = parseInt(Math.min(...newData).toFixed(0)) - 2;
@@ -55,12 +50,16 @@ export class ChartComponent implements OnInit {
     return { min: min, max: max };
   }
 
-  constructor() {}
-
   ngOnInit() {
     for (let i = 0; i < 24; i++) {
-      this.lineChartLabels.push(i.toString() + ':00');
+      this.chartLabels.push(i.toString() + ':00');
+      this.t_chartData[0].data[i] = 20;
     }
-    this.getEdge();
+    console.log(this.t_chartData[0].data);
+    this.chart.update();
+  }
+
+  updateChart() {
+    this.chart.update();
   }
 }
