@@ -35,7 +35,7 @@ const j = schedule.scheduleJob("0,30 * * * *", () => {
 
 router.get("/save", (req, res) => {
 	std_req(base_url + "/data", res, async data => {
-		data = mapDecimal(data);
+		data = utility.mapDecimal(data);
 		await db.saveValue(data);
 		return data;
 	});

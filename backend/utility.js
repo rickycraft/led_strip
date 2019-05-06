@@ -16,7 +16,7 @@ const base_request = (url, res, success) => {
 				//console.log(result);
 				res.status(200).json(result);
 			} catch (err) {
-				console.log(body);
+				console.log(err);
 				res.status(500).json({
 					error: err,
 				});
