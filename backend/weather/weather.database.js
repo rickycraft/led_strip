@@ -13,7 +13,7 @@ const inRange = async range => {
 	try {
 		start = DateTime.fromObject(start);
 		end = DateTime.fromObject(end);
-	} catch {
+	} catch (err) {
 		throw "Invalid date format";
 	}
 	if (start > end) throw "Start is greater than end";
@@ -52,7 +52,7 @@ const inDate = async (year, month, day) => {
 	try {
 		s_date = DateTime.fromObject({ year: year, month: month, day: day }); //zone also needed?
 		e_date = DateTime.fromObject({ year: year, month: month, day: day });
-	} catch {
+	} catch (err) {
 		throw "Invalid date";
 	}
 	if (day != null) {
