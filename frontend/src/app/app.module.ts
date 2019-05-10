@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
@@ -33,7 +32,10 @@ import { AmbientService } from './services/ambient.service';
 import { EwService } from './services/elwire.service';
 import { WeatherService } from './services/weather.service';
 
-const routes: Routes = [{ path: 'chart', component: ChartComponent }, { path: 'led', component: LedComponent }];
+const routes: Routes = [{ path: 'chart', component: ChartComponent },
+{ path: 'led', component: LedComponent },
+{ path: '', component: LedComponent},
+{ path: '**', component: LedComponent}];
 
 @NgModule({
   declarations: [AppComponent, BottomComponent, ChartComponent, LedComponent],
@@ -42,7 +44,6 @@ const routes: Routes = [{ path: 'chart', component: ChartComponent }, { path: 'l
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
-    HttpModule,
     ChartsModule,
     FormsModule,
     FlexLayoutModule,

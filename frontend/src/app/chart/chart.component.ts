@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, BaseChartDirective } from 'ng2-charts';
-import { flattenStyles } from '@angular/platform-browser/src/dom/dom_renderer';
 import { WeatherService } from '../services/weather.service';
 
 @Component({
@@ -45,8 +44,8 @@ export class ChartComponent implements OnInit {
     const newData: any[] = list.map(val => {
       return parseInt(val);
     });
-    const min: number = parseInt(Math.min(...newData).toFixed(0)) - 2;
-    const max: number = parseInt(Math.max(...newData).toFixed(0)) + 2;
+    const min: number = parseInt( Math.min(...newData).toFixed(0) ) - 2;
+    const max: number = parseInt( Math.max(...newData).toFixed(0) ) + 2;
     return { min: min, max: max };
   }
 
