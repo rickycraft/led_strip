@@ -11,6 +11,6 @@ const sensorSchema = mongoose.Schema(
 	{ versionKey: false }
 );
 
-sensorSchema.index({ date: 1 });
+sensorSchema.index({ date: -1 });
 
 module.exports = mongoose.model("Sensor", sensorSchema);

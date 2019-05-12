@@ -47,7 +47,7 @@ router.get("/status", (req, res) => {
 	});
 });
 
-router.get("/range", async (req, res) => {
+router.post("/range", async (req, res) => {
 	try {
 		const result = await getResult(req.body);
 		res.status(200).json(result);
