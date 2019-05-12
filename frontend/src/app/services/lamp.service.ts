@@ -2,13 +2,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Lamp } from '../classes/lamp';
 import { MatSnackBar } from '@angular/material';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class LampService {
-  readonly base_url = 'http://192.168.1.110:3000';
   readonly device = '/lamp';
   readonly snackErrorTime: number = 2000;
 
@@ -17,7 +17,7 @@ export class LampService {
   constructor(private http: HttpClient, private route: Router, private snackBar: MatSnackBar) {}
 
   setLamp() {
-    this.http.get<Lamp>(this.base_url + this.device + '/toggle').subscribe(
+    this.http.get<Lamp>(environment.apiUrl + this.device + '/toggle').subscribe(
       data => {
         this.lamp.next(data);
       },
@@ -28,7 +28,7 @@ export class LampService {
   }
 
   getStatus() {
-    this.http.get<Lamp>(this.base_url + this.device + '/status').subscribe(
+    this.http.get<Lamp>(environment.apiUrl + this.device + '/status').subscribe(
       data => {
         this.lamp.next(data);
       },
@@ -39,7 +39,7 @@ export class LampService {
   }
 
   setLux(val: number) {
-    this.http.post<Lamp>(this.base_url + this.device + '/lux', { lux: val }).subscribe(
+    this.http.post<Lamp>(environment.apiUrl + this.device + '/lux', { lux: val }).subscribe(
       data => {
         this.lamp.next(data);
       },

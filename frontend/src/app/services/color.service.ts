@@ -3,16 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Led } from '../classes/led';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Colors } from '../classes/colors';
 import { MatSnackBar } from '@angular/material';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-
-const base_url = 'http://192.168.1.110:3000';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ColorService {
-  readonly root_url: string = 'http://192.168.1.110:3000';
   readonly snackErrorTime: number = 2000;
 
   status = new BehaviorSubject<Led>(new Led());
@@ -20,7 +17,7 @@ export class ColorService {
   constructor(private http: HttpClient, private route: Router, private snackBar: MatSnackBar) {}
 
   getStatus() {
-    this.http.get<Led>(base_url + '/rgb/status').subscribe(
+    this.http.get<Led>(environment.apiUrl + '/rgb/status').subscribe(
       data => {
         // console.log('led status \n', this.status.value, '\n', this.status.value);
         this.status.next(data);
@@ -35,7 +32,7 @@ export class ColorService {
 
   setLed(data: Led) {
     console.log('set led ', data);
-    this.http.post<Led>(this.root_url + '/rgb/color', data).subscribe(
+    this.http.post<Led>(environment.apiUrl + '/rgb/color', data).subscribe(
       data => {
         this.status.next(data);
       },
@@ -69,7 +66,7 @@ export class ColorService {
 
   setLux(data: number) {
     console.log('set lux ', data);
-    this.http.post<Led>(this.root_url + '/rgb/color', { lux: data }).subscribe(
+    this.http.post<Led>(environment.apiUrl + '/rgb/color', { lux: data }).subscribe(
       data => {
         this.status.next(data);
       },

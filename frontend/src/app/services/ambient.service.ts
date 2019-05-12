@@ -1,22 +1,19 @@
 // service
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Lamp } from '../classes/lamp';
-
-const base_url = 'http://192.168.1.110:3000';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AmbientService {
   readonly device = '/ambient';
-
   ambient: BehaviorSubject<Lamp> = new BehaviorSubject(new Lamp());
 
   constructor(private http: HttpClient) {}
 
   setLamp() {
-    this.http.get<Lamp>(base_url + this.device + '/toggle').subscribe(
+    this.http.get<Lamp>(environment.apiUrl + this.device + '/toggle').subscribe(
       data => {
         this.ambient.next(data);
       },
@@ -27,7 +24,7 @@ export class AmbientService {
   }
 
   getStatus() {
-    this.http.get<Lamp>(base_url + this.device + '/status').subscribe(
+    this.http.get<Lamp>(environment.apiUrl + this.device + '/status').subscribe(
       data => {
         this.ambient.next(data);
       },
@@ -39,7 +36,7 @@ export class AmbientService {
   }
 
   setLux(val: number) {
-    this.http.post<Lamp>(base_url + this.device + '/lux', { lux: val }).subscribe(
+    this.http.post<Lamp>(environment.apiUrl + this.device + '/lux', { lux: val }).subscribe(
       data => {
         this.ambient.next(data);
       },

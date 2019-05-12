@@ -3,8 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Sensor } from '../classes/sensor';
-
-const base_url = 'http://192.168.1.110:3000';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class WeatherService {
@@ -14,7 +13,7 @@ export class WeatherService {
 
   getAvgH(date: Date) {
     this.http
-      .post<Sensor[]>(base_url + '/weather/avgH/a', {
+      .post<Sensor[]>(environment.apiUrl + '/weather/avgH/a', {
         year: date.getFullYear(),
         month: date.getMonth() + 1, // Start from 0 in JS
         day: date.getDate(),

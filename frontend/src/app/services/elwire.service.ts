@@ -2,10 +2,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ElWire } from '../classes/elwire';
-
-const base_url = 'http://192.168.1.110:3000';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class EwService {
@@ -17,7 +16,7 @@ export class EwService {
 
   setEw(status: boolean) {
     const route = status ? '/on' : '/off';
-    this.http.get<ElWire>(base_url + this.device + route).subscribe(
+    this.http.get<ElWire>(environment.apiUrl + this.device + route).subscribe(
       data => {
         this.ew.next(data);
       },
@@ -28,7 +27,7 @@ export class EwService {
   }
 
   getStatus() {
-    this.http.get<ElWire>(base_url + this.device + '/status').subscribe(data => {
+    this.http.get<ElWire>(environment.apiUrl + this.device + '/status').subscribe(data => {
       this.ew.next(data);
     });
   }
