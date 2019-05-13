@@ -70,7 +70,7 @@ const mapType = (type, list) => {
 
 const mapDecimal = obj => {
 	let res = {};
-	res.temp = parparseFloat(obj.temp.toFixed(1));
+	res.temp = parseFloat(obj.temp.toFixed(1));
 	res.humi = parseInt(obj.humi);
 	res.bar = parseInt(obj.bar);
 	return res;
