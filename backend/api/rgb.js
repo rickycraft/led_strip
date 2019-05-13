@@ -36,7 +36,7 @@ router.post("/color", async (req, res) => {
 function setLed(res) {
 	let params = querystring.stringify(led); //stringify parameters
 	std_req(baseUrl + "/led?" + params, res, data => {
-		console.log(data);
+		//console.log(data);
 		led = data;
 		return data;
 	});
