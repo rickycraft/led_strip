@@ -32,17 +32,19 @@ import { AmbientService } from './services/ambient.service';
 import { EwService } from './services/elwire.service';
 import { WeatherService } from './services/weather.service';
 
-const routes: Routes = [{ path: 'chart', component: ChartComponent },
-{ path: 'led', component: LedComponent },
-{ path: '', component: LedComponent},
-{ path: '**', component: LedComponent}];
+const routes: Routes = [
+  { path: 'chart', component: ChartComponent },
+  { path: 'led', component: LedComponent },
+  { path: '', component: LedComponent },
+  { path: '**', component: LedComponent },
+];
 
 @NgModule({
   declarations: [AppComponent, BottomComponent, ChartComponent, LedComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { useHash: true }),
     HttpClientModule,
     ChartsModule,
     FormsModule,

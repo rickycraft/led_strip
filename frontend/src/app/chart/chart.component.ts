@@ -32,8 +32,8 @@ export class ChartComponent implements OnInit {
       yAxes: [
         {
           ticks: {
-          suggestedMin: 10,
-          suggestedMax: 30, // this.getEdge(this.t_data[0].data).max,
+            suggestedMin: 10,
+            suggestedMax: 30, // this.getEdge(this.t_data[0].data).max,
           },
         },
       ],
@@ -45,8 +45,8 @@ export class ChartComponent implements OnInit {
     const list: number[] = arr.map(val => {
       return parseInt(val, 10);
     });
-    const min: number = parseInt( Math.min(...list).toFixed(0), 10 ) - 2;
-    const max: number = parseInt( Math.max(...list).toFixed(0), 10 ) + 2;
+    const min: number = parseInt(Math.min(...list).toFixed(0), 10) - 2;
+    const max: number = parseInt(Math.max(...list).toFixed(0), 10) + 2;
     console.log(min);
     return { min: min, max: max };
   }
@@ -57,10 +57,10 @@ export class ChartComponent implements OnInit {
     }
   }
 
-  public updateChart(list: number[]) {
+  public updateChart() {
     // test values
-    list = [21, 21, 22, 23, 24, 23, 22, 21, 20, 21, 22, 23, 24, 23, 22, 21, 20, 22, 25, 23, 21, 20, 22, 25];
-    list.forEach( (val, i) => {
+    const list = [21, 21, 22, 23, 24, 23, 22, 21, 20, 21, 22, 23, 24, 23, 22, 21, 20, 22, 25, 23, 21, 20, 22, 25];
+    list.forEach((val, i) => {
       this.t_data[0].data[i] = val;
     });
     // this.t_options.scales.yAxes[0].ticks.min
