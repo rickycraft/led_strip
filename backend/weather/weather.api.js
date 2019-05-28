@@ -15,7 +15,7 @@ const sensor = {
 };
 const base_url = "http://192.168.1.230";
 
-const j = schedule.scheduleJob("0,30 * * * *", () => {
+const j = schedule.scheduleJob("0 * * * *", () => {
 	request.get(base_url + "/data", async (err, response, body) => {
 		//console.log("current time", DateTime.local().toString());
 		try {
