@@ -74,16 +74,6 @@ const mapDecimal = obj => {
 	return res;
 };
 
-const fixZero = list => {
-	let zero = [];
-	list.forEach((val, i) => {
-		if (val == 0) {
-			zero.push(i);
-		}
-	});
-	zero.forEach((val, i) => {});
-};
-
 module.exports = {
 	aggregate: aggregate,
 	avgHour: avgHour,

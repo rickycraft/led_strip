@@ -4,15 +4,7 @@
         <span fxFlex></span>
         <button mat-raised-button (click)="updateChart()"><mat-icon>favorite</mat-icon></button>
       </mat-toolbar>
-    <div fxFlex fxLayout="column">
-      <div fxFlex fxLayoutAlign="center end" class="chart">
-          <canvas baseChart
-          [datasets]="t_data"
-          [labels]="chartLabels"
-          [colors]="t_chartColor"
-          [options]="t_options"
-          chartType="line">
-        </canvas>
-      </div>
+    <div fxFlex fxLayout="column" class="chart_container">
+        <canvas id="canvas">{{ chart }}</canvas>
     </div>
 </div>

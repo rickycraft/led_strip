@@ -17,7 +17,6 @@ import {
   MatMenuModule,
   MatSnackBarModule,
 } from '@angular/material';
-import { ChartsModule } from 'ng2-charts';
 import 'hammerjs';
 
 // app component
@@ -46,7 +45,6 @@ const routes: Routes = [
     BrowserAnimationsModule,
     RouterModule.forRoot(routes, { useHash: true }),
     HttpClientModule,
-    ChartsModule,
     FormsModule,
     FlexLayoutModule,
     MatButtonModule,
