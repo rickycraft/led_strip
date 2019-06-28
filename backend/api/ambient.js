@@ -52,8 +52,8 @@ router.get("/status", async (req, res) => {
 });
 
 function mapValue(data, in_min, in_max, out_min, out_max) {
-	x = data.lux;
-	i = ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+	const x = data.lux;
+	const i = ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 	data.lux = Math.round(i);
 	return data;
 }

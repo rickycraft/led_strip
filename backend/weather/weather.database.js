@@ -49,6 +49,8 @@ const saveValue = async sensor => {
 };
 
 const inDate = async (year, month, day) => {
+	let s_date;
+	let e_date;
 	try {
 		s_date = DateTime.fromObject({ year: year, month: month, day: day }); //zone also needed?
 		e_date = DateTime.fromObject({ year: year, month: month, day: day });
@@ -73,7 +75,7 @@ const inDate = async (year, month, day) => {
 			$lte: e_date,
 		},
 	}).catch(err => {
-		throw errr;
+		throw err;
 	});
 	return query;
 };

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const querystring = require("querystring");
-const request = require("request");
 const std_req = require("../utility").request;
 const checkParams = require("../utility").checkParams;
 

@@ -1,5 +1,3 @@
-const utility = require("../utility");
-
 const aggregate = list => {
 	if (list.length < 1) {
 		throw "empty_array";
@@ -13,7 +11,7 @@ const avgHour = list => {
 	}
 	let newList = [];
 	let sameHour = [];
-	for (i = 0; i < 24; i++) {
+	for (let i = 0; i < 24; i++) {
 		list.forEach(element => {
 			if (element.date.getHours() == i) {
 				sameHour[sameHour.length] = element;
@@ -83,7 +81,7 @@ const fixZero = list => {
 			zero.push(i);
 		}
 	});
-	zero.forEach((val, i));
+	zero.forEach((val, i) => {});
 };
 
 module.exports = {
