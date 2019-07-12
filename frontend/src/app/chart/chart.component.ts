@@ -20,7 +20,12 @@ export class ChartComponent implements OnInit {
       chartLabels.push(i.toString() + ':00');
     }
 
-    this.chart = new Chart('canvas', {
+    Chart.defaults.global.legend.display = false;
+    Chart.defaults.global.aspectRatio = 2;
+    Chart.defaults.global.responsive = true;
+    Chart.defaults.global.elements.line.fill = false;
+
+    this.chart = new Chart('temps', {
       type: 'line',
       data: {
         labels: chartLabels,
@@ -28,21 +33,15 @@ export class ChartComponent implements OnInit {
           {
             data: [1, 2, 3, 4, 5, 4, 3, 2, 1, 2, 3, 4, 5, 4, 3, 2, 1],
             borderColor: '#3cba9f',
-            fill: false,
+            label: 'test label'
           },
           {
             data: [1, 2, 3, 4, 5],
-            borderColor: '#ffcc00',
-            fill: false,
+            borderColor: '#ffcc00'
           },
         ],
       },
       options: {
-        responsive: true,
-        aspectRatio: 1.7,
-        legend: {
-          display: false,
-        },
         scales: {
           yAxes: [
             {
