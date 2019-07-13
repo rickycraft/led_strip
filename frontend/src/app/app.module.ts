@@ -6,17 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {
-  MatButtonModule,
-  MatSliderModule,
-  MatListModule,
-  MatIconModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatCardModule,
-  MatMenuModule,
-  MatSnackBarModule,
-} from '@angular/material';
+
 import 'hammerjs';
 
 // app component
@@ -30,6 +20,10 @@ import { LampService } from './services/lamp.service';
 import { AmbientService } from './services/ambient.service';
 import { EwService } from './services/elwire.service';
 import { WeatherService } from './services/weather.service';
+// all material modules
+import { MAT_DATE_LOCALE } from '@angular/material';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MaterialModule } from './material.module';
 
 const routes: Routes = [
   { path: 'chart', component: ChartComponent },
@@ -47,17 +41,16 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule,
     FlexLayoutModule,
-    MatButtonModule,
-    MatListModule,
-    MatSliderModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatTabsModule,
-    MatMenuModule,
-    MatSnackBarModule,
+    MatMomentDateModule,
+    MaterialModule,
   ],
-  providers: [ColorService, LampService, AmbientService, EwService, WeatherService],
+  providers: [
+    ColorService,
+    LampService,
+    AmbientService,
+    EwService,
+    WeatherService,
+    {provide: MAT_DATE_LOCALE, useValue: 'it-IT'}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

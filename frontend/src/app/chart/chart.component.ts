@@ -12,6 +12,7 @@ export class ChartComponent implements OnInit {
     // weatherService.getAvgH(new Date('2019-04-22'));
   }
 
+  currentDate: Date = new Date();
   chart: any = [];
 
   ngOnInit() {
@@ -21,7 +22,7 @@ export class ChartComponent implements OnInit {
     }
 
     Chart.defaults.global.legend.display = false;
-    Chart.defaults.global.aspectRatio = 2;
+    Chart.defaults.global.aspectRatio = 2.2;
     Chart.defaults.global.responsive = true;
     Chart.defaults.global.elements.line.fill = false;
 

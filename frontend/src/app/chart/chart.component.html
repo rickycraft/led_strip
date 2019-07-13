@@ -1,10 +1,22 @@
-<div fxFlexFill fxLayout="column">
-    <mat-toolbar color="primary">
-        <h1>Charts</h1>
-        <span fxFlex></span>
-        <button mat-raised-button (click)="updateChart()"><mat-icon>favorite</mat-icon></button>
-      </mat-toolbar>
-    <div fxFlex fxLayout="column" class="chart_container">
+<mat-toolbar color="primary">
+    <h1>Charts</h1>
+    <span fxFlex></span>
+    <button mat-raised-button (click)="updateChart()"><mat-icon>favorite</mat-icon></button>
+  </mat-toolbar>
+<div fxFlexFill fxLayout="column"> 
+    <div  fxLayout="column" class="chart_container">
         <canvas id="temps">{{ chart }}</canvas>
     </div>
+    <div fxLayout="row" fxLayoutAlign="space-around start">
+        <mat-form-field>
+            <input matInput [matDatepicker]="startDate" placeholder="Choose a start date" [(value)]="currentDate">
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #startDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [matDatepicker]="endDate" placeholder="Choose a end date">
+            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate></mat-datepicker>
+        </mat-form-field>
+    </div>  
 </div>
