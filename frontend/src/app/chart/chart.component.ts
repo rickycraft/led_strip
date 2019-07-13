@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { WeatherService } from '../services/weather.service';
+import { MatDatepickerInputEvent } from '@angular/material';
 
 @Component({
   selector: 'app-chart',
@@ -12,8 +13,25 @@ export class ChartComponent implements OnInit {
     // weatherService.getAvgH(new Date('2019-04-22'));
   }
 
-  currentDate: Date = new Date();
+  startDate: Date;
+  endDate: Date;
   chart: any = [];
+
+  changeDate(isStart: boolean, event: MatDatepickerInputEvent<Date>) {
+    if (isStart) {
+      if (this.endDate && event.value > this.endDate) {
+        this.endDate = event.value;
+      }
+      this.startDate = event.value;
+    } else {
+      this.endDate = event.value;
+    }
+  }
+
+  search() {
+    // send a search request to the server using the service
+    console.log('search');
+  }
 
   ngOnInit() {
     const chartLabels = [];
@@ -55,5 +73,6 @@ export class ChartComponent implements OnInit {
         },
       },
     });
+
   }
 }
