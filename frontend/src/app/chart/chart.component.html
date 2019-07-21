@@ -5,10 +5,10 @@
   </mat-toolbar>
 <div fxFlexFill fxLayout="column">
     <div  fxLayout="column" class="chart_container">
-        <canvas id="temps">{{ chart }}</canvas>
+        <canvas #temps id="temps">{{ chart }}</canvas>
     </div>
     <mat-divider></mat-divider>
-    <div fxLayout="row" fxLayoutAlign="space-around center">
+    <div fxLayout="row" fxLayoutAlign="space-around center" style="margin-top: 10px;">
         <mat-form-field>
                 <input matInput [matDatepicker]="startPicker" placeholder="Choose a start date" 
                 (dateInput)="changeDate(true, $event)">

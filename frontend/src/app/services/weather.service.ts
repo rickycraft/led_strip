@@ -11,40 +11,19 @@ export class WeatherService {
 
   constructor(private http: HttpClient) {}
 
-  getAvgH(date: Date) {
+  getAvgH(startDate: Date, endDate: Date) {
     this.http
-      .post<Sensor[]>(environment.apiUrl + '/weather/avgH/a', {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1, // Start from 0 in JS
-        day: date.getDate(),
+      .post<Sensor[]>(environment.apiUrl + '/weather/avgH', {
+        start: startDate,
+        end: endDate,
       })
       .subscribe(
         data => {
           this.sensor.next(data);
-          console.log(data);
         },
         error => {
-          console.log('weather service ', error);
+          console.error('weather service ', error);
         }
       );
   }
-
-  getAvgType(date: Date, type: String): number[] {
-    this.getAvgH(date);
-    let res: number[];
-    switch (type) {
-      case 't':
-        res = this.sensor.value.map(data => data.temp);
-        break;
-      case 'h':
-        res = this.sensor.value.map(data => data.humi);
-        break;
-      case 'b':
-        res = this.sensor.value.map(data => data.bar);
-        break;
-    }
-    return res;
-  }
-
-  getAvg(date: Date) {}
 }

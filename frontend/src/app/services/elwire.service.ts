@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 export class EwService {
   readonly device = '/ew';
 
-  ew = new BehaviorSubject(new ElWire());
+  ew: BehaviorSubject<ElWire> = new BehaviorSubject(new ElWire());
 
   constructor(private http: HttpClient, private route: Router) {}
 

@@ -36,6 +36,6 @@ const saveValue = async sensor => {
 };
 
 module.exports = {
-	getRange: inRange,
+	inRange: inRange,
 	saveValue: saveValue,
 };

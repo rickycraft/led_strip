@@ -19,14 +19,14 @@ const j = schedule.scheduleJob("0 * * * *", () => {
 	request.get(base_url + "/data", async (err, response, body) => {
 		try {
 			if (err) {
-				console.err(err);
+				console.error(err);
 				throw err;
 			} else {
 				const result = JSON.parse(body);
 				await db.saveValue(result);
 			}
 		} catch (err) {
-			console.err(err);
+			console.error(err);
 		}
 	});
 });
@@ -44,13 +44,13 @@ router.get("/status", (req, res) => {
 	});
 });
 
-router.get("/avgH", async (req, res) => {
+router.post("/avgH", async (req, res) => {
 	try {
 		const result = await db.inRange(req.body); //get all data in this range
 		const avgHour = utility.avgHour(result); //reduce data to average for each hour
 		res.status(200).json(avgHour);
 	} catch (err) {
-		console.err(err);
+		console.error(err);
 		res.status(500).send(err);
 	}
 });
