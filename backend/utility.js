@@ -13,10 +13,8 @@ const base_request = (url, res, success) => {
 			try {
 				let tmp = JSON.parse(body);
 				let result = await success(tmp);
-				//console.log(result);
 				res.status(200).json(result);
 			} catch (err) {
-				console.log(err);
 				res.status(500).json({
 					error: err,
 				});
@@ -26,14 +24,14 @@ const base_request = (url, res, success) => {
 };
 
 const check_params = (inp, out) => {
-	for (val in inp) {
+	for (let val in inp) {
 		if (inp[val] != null) out[val] = inp[val];
 	}
 	return out;
 };
 
 const map_val = (x, in_min, in_max, out_min, out_max) => {
-	i = ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+	const i = ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 	return Math.round(i);
 };
 

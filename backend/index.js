@@ -15,6 +15,6 @@ app.use(express.json());
 app.use("/rgb", require("./api/rgb")); //rgb led strip
 app.use("/lamp", require("./api/lamp")); //desk lamp
 //app.use("/ambient", require("./api/ambient")); //ambient led strip
-app.use("/weather", require("./weather/weather.api")); //bme280 sensor
+app.use("/weather", require("./sensors/weather.api")); //bme280 sensor
 
 app.listen(port);

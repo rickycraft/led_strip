@@ -39,6 +39,7 @@ const saveValue = async sensor => {
 	console.log("saving", sensor, DateTime.local().toString());
 	await newData
 		.save()
+		// eslint-disable-next-line no-unused-vars
 		.then(result => {
 			//sensor = result; uncomment if response should contain all data
 		})
