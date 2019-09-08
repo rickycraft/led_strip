@@ -3,7 +3,7 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPClient.h>
 //-----------Wifi Server----------------
-WiFiClient client;
+HTTPClient http;
 ESP8266WebServer server(80);
 const char* ssid = "TP-LINK";
 const char* wifiPass = "123clienti";
@@ -12,7 +12,7 @@ IPAddress gateway(192, 168, 1, 1); //gateway
 IPAddress subnet(255, 255, 255, 0); //network mask
 
 //-----------LED Settings-----------
-uint8_t lightPin = 12;
+uint8_t lightPin = 14;
 uint8_t ewPin = 10;
 bool lamp_status = false;
 bool ew_status = false;
@@ -36,6 +36,14 @@ void setup() {
 void loop() {
   server.handleClient();
   delay(100);
+}
+
+void httpGet() {
+  http.begin("http://192.168.1.225/toggle");
+  http.setTimeout(200);
+  http.GET();
+  http.end();
+  server.send(200);
 }
 
 void handleEw() {
@@ -82,6 +90,7 @@ void toggle() {
 }
 
 void setLamp(int val) {
+  Serial.println(val);
   if (val > 249) {
     lamp_status = true;
     lux = 255;
@@ -98,8 +107,9 @@ void setLamp(int val) {
 }
 
 void setupWifi() {
+  Serial.println("");
   Serial.print(F("Connecting to "));
-  Serial.println(ssid);
+  Serial.print(ssid);
   WiFi.config(ip, gateway, subnet); //static configuration
   WiFi.begin(ssid, wifiPass);   //connecting to wifi
   WiFi.mode(WIFI_STA);
@@ -121,6 +131,7 @@ void setupWifi() {
   server.on("/status", handleStatus);
   server.on("/lux", handleLux);
   server.on("/ew", handleEw);
+  server.on("/test", httpGet);
 
   server.begin();   //starting server on ESP8266
 }

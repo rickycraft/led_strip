@@ -1,17 +1,17 @@
 //-----------Library-----------
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
+#include <ESP8266HTTPClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <math.h>
 //-----------Wifi Server----------------
-WiFiClient client;
+HTTPClient http;
 ESP8266WebServer server(80);
 const char* ssid = "TP-LINK";
 const char* wifiPass = "123clienti";
-IPAddress ip(192,168,1,225);       //static IP adress of device
-IPAddress gateway(192,168,1,1);   //gateway
-IPAddress subnet(255,255,255,0);  //network mask
+IPAddress ip(192, 168, 1, 225);    //static IP adress of device
+IPAddress gateway(192, 168, 1, 1); //gateway
+IPAddress subnet(255, 255, 255, 0); //network mask
 
 //-----------LED Settings-----------
 uint8_t buttonPin = 0;
@@ -22,70 +22,81 @@ uint16_t lux = 0;
 
 unsigned long timer = 0;
 
-void setup(){
+void setup() {
   Serial.begin(115200);
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(lightPin, OUTPUT);
   analogWrite(lightPin, 100);
-  delay(100);
+  delay(200);
   buttonStatus = digitalRead(buttonPin);
-  //attachInterrupt(digitalPinToInterrupt(buttonPin), toggle, CHANGE);
+
   setupWifi();    //setting up and connecting to wifi
 
   digitalWrite(lightPin, LOW);
   Serial.println(F("Setup compleated\n##################"));
 }
 
-void loop(){
+void loop() {
   server.handleClient();
-  if ((millis() - timer) > 5000){
+
+  if ((millis() - timer) > 5000) {
     timer = millis();
     MDNS.update();
   }
-  if (digitalRead(buttonPin) != buttonStatus){
+
+  if (digitalRead(buttonPin) != buttonStatus) {
     buttonStatus = digitalRead(buttonPin);
     toggleButton();
-    delay(100);
+    delay(300);
   }
+
 }
 
-void toggleButton(){
-  if (lamp_status && lux > 250){
+void ambient(int val) {
+  String url = "http://192.168.1.230/lux?lux=" + String(val);
+  http.begin(url);
+  http.setTimeout(300);
+  http.GET();
+  http.end();
+}
+
+void toggleButton() {
+  if (lamp_status && lux > 250) {
     setLamp(0);
   } else {
     setLamp(255);
   }
 }
 
-void handleRoot(){ //handle / as status
+void handleRoot() { //handle / as status
   handleStatus();
 }
 
-void handleStatus(){ //responding with current status
+void handleStatus() { //responding with current status
   unsigned int start_time = millis();
-  String val = (lamp_status)? "true" : "false";
-  String s = "{ \"status\" : "+val+", \"lux\" : "+lux+"}";
+  String val = (lamp_status) ? "true" : "false";
+  String s = "{ \"status\" : " + val + ", \"lux\" : " + lux + "}";
   server.send(200, "application/json", s); //sending server response
 
   Serial.print(s); Serial.print(" in ");
   Serial.print(millis() - start_time); Serial.println("ms");
 }
 
-void handleLed(){
+void handleLed() {
   toggle();
   handleStatus();
 }
 
-void handleButton(){
+void handleButton() {
   server.send(200, "text/plain", String(digitalRead(buttonPin)));
 }
 
-void handleLux(){
+void handleLux() {
   setLamp(server.arg("lux").toInt());
   handleStatus();
 }
 
-void toggle(){
+void toggle() {
   if (lamp_status) {
     setLamp(0);
   } else {
@@ -93,13 +104,14 @@ void toggle(){
   }
 }
 
-void setLamp(int val){
-  if (val > 249){
+void setLamp(int val) {
+
+  if (val > 249) {
     lamp_status = true;
     lux = 255;
     digitalWrite(lightPin, HIGH);
     Serial.println("lamp high");
-  } else if ( val < 1){
+  } else if ( val < 1) {
     lux = 0;
     lamp_status = false;
     digitalWrite(lightPin, LOW);
@@ -108,20 +120,21 @@ void setLamp(int val){
     lux = val;
     analogWrite(lightPin, lux);
     lamp_status = true;
-    Serial.print("lamp at");
+    Serial.print("lamp at ");
     Serial.println(lux);
   }
+  ambient(val);
 }
 
-void setupWifi(){
+void setupWifi() {
+  Serial.println("");
   Serial.print(F("Connecting to "));
-  Serial.println(ssid);
-  //WiFi.hostname(F("wemos"));
+  Serial.print(ssid);
   WiFi.config(ip, gateway, subnet); //static configuration
   WiFi.begin(ssid, wifiPass);   //connecting to wifi
   WiFi.mode(WIFI_STA);
 
-  while (WiFi.status() != WL_CONNECTED){  //wait wifi for connect
+  while (WiFi.status() != WL_CONNECTED) { //wait wifi for connect
     Serial.print(".");
     delay(100);
   }
@@ -133,7 +146,7 @@ void setupWifi(){
   Serial.println(ip);
   Serial.println("");
 
-  if (MDNS.begin("lamp")){  //MDNS started
+  if (MDNS.begin("lamp")) { //MDNS started
     Serial.println(F("MDNS responder started"));
   } else {
     Serial.println(F("Error setting up MDNS responder!"));
