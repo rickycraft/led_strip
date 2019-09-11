@@ -1,7 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-
-#define VERSION VERSION_3_1_1
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
+#include <PubSubClient.h>
 
 // MQTT: ID, server IP, port, username and password
 const char* WIFI_SSID = "TP-LINK";
@@ -25,7 +26,8 @@ const char* LIGHT_OFF = "OFF";
 // vars
 const uint8_t MIN_LUX = 30;
 const uint8_t BUFFER_SIZE = 5;
-const PROGMEM uint8_t LED_PIN = 15;
+const PROGMEM uint8_t LED_PIN = 12;
+const PROGMEM uint8_t buttonPin = 0;
 boolean light_state = false;
 uint8_t lux = MIN_LUX;
 uint8_t ha_lux = 0;
@@ -75,7 +77,7 @@ void callback(char* topic, byte* p_payload, unsigned int p_length) {
       lux = map(brightness, 0, 255, MIN_LUX, 255);
       ha_lux = brightness;
     }
-  } 
+  }
   setLightState();
   publishLightState();
 }
@@ -109,6 +111,7 @@ void setup() {
 
   // init the led
   pinMode(LED_PIN, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
   setLightState();
   analogWrite(LED_PIN, 150);
 
@@ -124,7 +127,6 @@ void setup() {
     delay(200);
     Serial.print(".");
   }
-
   Serial.println("connected");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
@@ -132,7 +134,7 @@ void setup() {
   // init the MQTT connection
   client.setServer(SERVER_IP, SERVER_PORT);
   client.setCallback(callback);
-
+  espOTA();
   analogWrite(LED_PIN, 0);
 }
 

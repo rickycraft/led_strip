@@ -4,8 +4,6 @@
 #include <ArduinoOTA.h>
 #include <PubSubClient.h>
 
-#define VERSION VERSION_3_1_1
-
 const char* WIFI_SSID = "TP-LINK";
 const char* WIFI_PASSWORD = "123clienti";
 
