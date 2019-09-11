@@ -3,23 +3,20 @@
 
 #define VERSION VERSION_3_1_1
 
+// MQTT: ID, server IP, port, username and password
 const char* WIFI_SSID = "TP-LINK";
 const char* WIFI_PASSWORD = "123clienti";
-
-// MQTT: ID, server IP, port, username and password
-const PROGMEM char* CLIENT_ID = "test_light";
+const PROGMEM char* CLIENT_ID = "desk_light";
 const PROGMEM char* SERVER_IP = "192.168.1.14";
 const PROGMEM uint16_t SERVER_PORT = 1883;
 const PROGMEM char* MQTT_USER = "rick";
 const PROGMEM char* MQTT_PASSWORD = "rick";
 
 // MQTT: topics
-const char* LIGHT_STATE_TOPIC = "led/state";
-const char* LIGHT_COMMAND_TOPIC = "led/switch";
-const char* LUX_COMMAND_TOPIC = "led/lux";
-const char* LUX_STATE_TOPIC = "led/lux/state";
-const char* EW_COMMAND_TOPIC = "ew/switch";
-const char* EW_STATE_TOPIC = "ew/state";
+const char* LIGHT_STATE_TOPIC = "desk/state";
+const char* LIGHT_COMMAND_TOPIC = "desk/switch";
+const char* LUX_COMMAND_TOPIC = "desk/lux";
+const char* LUX_STATE_TOPIC = "desk/lux/state";
 
 // payloads by default (on/off)
 const char* LIGHT_ON = "ON";
@@ -29,9 +26,7 @@ const char* LIGHT_OFF = "OFF";
 const uint8_t MIN_LUX = 30;
 const uint8_t BUFFER_SIZE = 5;
 const PROGMEM uint8_t LED_PIN = 15;
-const PROGMEM uint8_t EW_PIN = 5;
 boolean light_state = false;
-boolean ew_state = false;
 uint8_t lux = MIN_LUX;
 uint8_t ha_lux = 0;
 char msg_buffer[BUFFER_SIZE];
@@ -47,18 +42,12 @@ void publishLightState() {
   // light brightness
   snprintf(msg_buffer, BUFFER_SIZE, "%d", ha_lux);
   client.publish(LUX_STATE_TOPIC, msg_buffer, true);
-  // ew state
-  if (ew_state) client.publish(EW_STATE_TOPIC, LIGHT_ON, true);
-  else client.publish(EW_STATE_TOPIC, LIGHT_OFF, true);
 }
 
 void setLightState() {
   // analog write to led
   if (light_state) analogWrite(LED_PIN, lux);
   else analogWrite(LED_PIN, 0);
-  // digital write to ew
-  if (ew_state) digitalWrite(EW_PIN, HIGH);
-  else digitalWrite(EW_PIN, LOW);
 }
 
 // function called when a MQTT message arrived
@@ -86,14 +75,7 @@ void callback(char* topic, byte* p_payload, unsigned int p_length) {
       lux = map(brightness, 0, 255, MIN_LUX, 255);
       ha_lux = brightness;
     }
-    // handle ew topic
-  } else if ( p_topic == EW_COMMAND_TOPIC) {
-    if (payload == LIGHT_ON && ew_state == false) {
-      ew_state = true;
-    } else if (payload == LIGHT_OFF && ew_state == true) {
-      ew_state = false;
-    }
-  }
+  } 
   setLightState();
   publishLightState();
 }
@@ -109,7 +91,6 @@ void reconnect() {
       // ... and resubscribe
       client.subscribe(LIGHT_COMMAND_TOPIC);
       client.subscribe(LUX_COMMAND_TOPIC);
-      client.subscribe(EW_COMMAND_TOPIC);
     } else {
       Serial.println("");
       Serial.print("ERROR: failed, rc=");
@@ -124,16 +105,13 @@ void reconnect() {
 void setup() {
   // safe startup
   delay(1000);
-  // init the serial
   Serial.begin(115200);
 
   // init the led
   pinMode(LED_PIN, OUTPUT);
-  pinMode(EW_PIN, OUTPUT);
-  pinMode(BUILTIN_LED, OUTPUT);
-  // analogWriteRange(255);
   setLightState();
-  digitalWrite(BUILTIN_LED, LOW);
+  analogWrite(LED_PIN, 150);
+
   // init the WiFi connection
   Serial.println();
   Serial.println();
@@ -155,7 +133,41 @@ void setup() {
   client.setServer(SERVER_IP, SERVER_PORT);
   client.setCallback(callback);
 
-  digitalWrite(BUILTIN_LED, HIGH);
+  analogWrite(LED_PIN, 0);
+}
+
+void espOTA() {
+  ArduinoOTA.setHostname("desk");
+  ArduinoOTA.onStart([]() {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH) {
+      type = "sketch";
+    } else { // U_SPIFFS
+      type = "filesystem";
+    }
+    Serial.println("Start updating " + type);
+  });
+  ArduinoOTA.onEnd([]() {
+    Serial.println("\nEnd");
+  });
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+  });
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) {
+      Serial.println("Auth Failed");
+    } else if (error == OTA_BEGIN_ERROR) {
+      Serial.println("Begin Failed");
+    } else if (error == OTA_CONNECT_ERROR) {
+      Serial.println("Connect Failed");
+    } else if (error == OTA_RECEIVE_ERROR) {
+      Serial.println("Receive Failed");
+    } else if (error == OTA_END_ERROR) {
+      Serial.println("End Failed");
+    }
+  });
+  ArduinoOTA.begin();
 }
 
 void loop() {
@@ -163,5 +175,6 @@ void loop() {
     reconnect();
   }
   client.loop();
+  ArduinoOTA.handle();
   delay(100);
 }

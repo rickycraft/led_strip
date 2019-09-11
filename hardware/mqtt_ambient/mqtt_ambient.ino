@@ -1,4 +1,7 @@
 #include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 #include <PubSubClient.h>
 
 #define VERSION VERSION_3_1_1
@@ -7,7 +10,7 @@ const char* WIFI_SSID = "TP-LINK";
 const char* WIFI_PASSWORD = "123clienti";
 
 // MQTT: ID, server IP, port, username and password
-const PROGMEM char* CLIENT_ID = "test_light";
+const PROGMEM char* CLIENT_ID = "ambient_light";
 const PROGMEM char* SERVER_IP = "192.168.1.14";
 const PROGMEM uint16_t SERVER_PORT = 1883;
 const PROGMEM char* MQTT_USER = "rick";
@@ -154,8 +157,42 @@ void setup() {
   // init the MQTT connection
   client.setServer(SERVER_IP, SERVER_PORT);
   client.setCallback(callback);
-
+  espOTA();
   digitalWrite(BUILTIN_LED, HIGH);
+}
+
+void espOTA() {
+  ArduinoOTA.setHostname("ambient");
+  ArduinoOTA.onStart([]() {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH) {
+      type = "sketch";
+    } else { // U_SPIFFS
+      type = "filesystem";
+    }
+    Serial.println("Start updating " + type);
+  });
+  ArduinoOTA.onEnd([]() {
+    Serial.println("\nEnd");
+  });
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+  });
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) {
+      Serial.println("Auth Failed");
+    } else if (error == OTA_BEGIN_ERROR) {
+      Serial.println("Begin Failed");
+    } else if (error == OTA_CONNECT_ERROR) {
+      Serial.println("Connect Failed");
+    } else if (error == OTA_RECEIVE_ERROR) {
+      Serial.println("Receive Failed");
+    } else if (error == OTA_END_ERROR) {
+      Serial.println("End Failed");
+    }
+  });
+  ArduinoOTA.begin();
 }
 
 void loop() {
@@ -163,5 +200,6 @@ void loop() {
     reconnect();
   }
   client.loop();
+  ArduinoOTA.handle();
   delay(100);
 }
