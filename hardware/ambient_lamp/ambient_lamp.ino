@@ -12,8 +12,8 @@ IPAddress gateway(192, 168, 1, 1); //gateway
 IPAddress subnet(255, 255, 255, 0); //network mask
 
 //-----------LED Settings-----------
-uint8_t lightPin = 14;
-uint8_t ewPin = 10;
+uint8_t lightPin = 15;
+uint8_t ewPin = 5;
 bool lamp_status = false;
 bool ew_status = false;
 uint16_t lux = 0;
@@ -36,14 +36,6 @@ void setup() {
 void loop() {
   server.handleClient();
   delay(100);
-}
-
-void httpGet() {
-  http.begin("http://192.168.1.225/toggle");
-  http.setTimeout(200);
-  http.GET();
-  http.end();
-  server.send(200);
 }
 
 void handleEw() {
@@ -131,7 +123,6 @@ void setupWifi() {
   server.on("/status", handleStatus);
   server.on("/lux", handleLux);
   server.on("/ew", handleEw);
-  server.on("/test", httpGet);
 
   server.begin();   //starting server on ESP8266
 }
