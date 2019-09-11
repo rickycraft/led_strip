@@ -28,6 +28,7 @@ const uint8_t MIN_LUX = 30;
 const uint8_t BUFFER_SIZE = 5;
 const PROGMEM uint8_t LED_PIN = 12;
 const PROGMEM uint8_t buttonPin = 0;
+uint8_t buttonStatus;
 boolean light_state = false;
 uint8_t lux = MIN_LUX;
 uint8_t ha_lux = 0;
@@ -50,6 +51,7 @@ void setLightState() {
   // analog write to led
   if (light_state) analogWrite(LED_PIN, lux);
   else analogWrite(LED_PIN, 0);
+  publishLightState();
 }
 
 // function called when a MQTT message arrived
@@ -79,7 +81,6 @@ void callback(char* topic, byte* p_payload, unsigned int p_length) {
     }
   }
   setLightState();
-  publishLightState();
 }
 
 void reconnect() {
@@ -112,8 +113,8 @@ void setup() {
   // init the led
   pinMode(LED_PIN, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
-  setLightState();
   analogWrite(LED_PIN, 150);
+  buttonStatus = digitalRead(buttonPin);
 
   // init the WiFi connection
   Serial.println();
@@ -134,8 +135,11 @@ void setup() {
   // init the MQTT connection
   client.setServer(SERVER_IP, SERVER_PORT);
   client.setCallback(callback);
+  reconnect();
+
   espOTA();
   analogWrite(LED_PIN, 0);
+  setLightState();
 }
 
 void espOTA() {
@@ -177,6 +181,18 @@ void loop() {
     reconnect();
   }
   client.loop();
+  if (digitalRead(buttonPin) != buttonStatus) {
+    buttonStatus = digitalRead(buttonPin);
+    // switch state
+    light_state = !light_state;
+    // if on set to 255
+    if (light_state) {
+      lux = 255;
+      ha_lux = 255;
+    }
+    setLightState();
+    delay(300);
+  }
   ArduinoOTA.handle();
   delay(100);
 }
