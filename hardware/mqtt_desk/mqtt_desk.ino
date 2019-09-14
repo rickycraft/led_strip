@@ -8,7 +8,7 @@
 const char* WIFI_SSID = "TP-LINK";
 const char* WIFI_PASSWORD = "123clienti";
 const PROGMEM char* CLIENT_ID = "desk_light";
-const PROGMEM char* SERVER_IP = "192.168.1.14";
+const PROGMEM char* SERVER_IP = "192.168.1.100";
 const PROGMEM uint16_t SERVER_PORT = 1883;
 const PROGMEM char* MQTT_USER = "rick";
 const PROGMEM char* MQTT_PASSWORD = "rick";
@@ -177,7 +177,9 @@ void espOTA() {
 }
 
 void loop() {
+  ArduinoOTA.handle();
   if (!client.connected()) {
+    ArduinoOTA.handle();
     reconnect();
   }
   client.loop();
@@ -192,7 +194,6 @@ void loop() {
     }
     setLightState();
     delay(300);
-  }
-  ArduinoOTA.handle();
+  } 
   delay(100);
 }
