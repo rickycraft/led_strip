@@ -26,12 +26,15 @@ const char* LIGHT_OFF = "OFF";
 // vars
 const uint8_t MIN_LUX = 30;
 const uint8_t BUFFER_SIZE = 5;
+const uint8_t FADE_DELAY = 2;
 const PROGMEM uint8_t LED_PIN = 12;
-const PROGMEM uint8_t buttonPin = 0;
-uint8_t buttonStatus;
+const PROGMEM uint8_t BUTTON_PIN = 0;
+
 boolean light_state = false;
 uint8_t lux = MIN_LUX;
+uint8_t curr_lux = MIN_LUX;
 uint8_t ha_lux = 0;
+uint8_t buttonStatus;
 char msg_buffer[BUFFER_SIZE];
 
 WiFiClient wifiClient;
@@ -49,9 +52,26 @@ void publishLightState() {
 
 void setLightState() {
   // analog write to led
-  if (light_state) analogWrite(LED_PIN, lux);
-  else analogWrite(LED_PIN, 0);
   publishLightState();
+  if (light_state) fadeToLight(lux);
+  else fadeToLight(0);
+}
+
+void fadeToLight(int fadeTo) {
+  // increase brightness
+  while ( fadeTo > curr_lux ) {
+    curr_lux++;
+    analogWrite(LED_PIN, curr_lux);
+    delay(FADE_DELAY);
+  }
+  // decrease brightness
+  while ( fadeTo < curr_lux ) {
+    curr_lux--;
+    analogWrite(LED_PIN, curr_lux);
+    delay(FADE_DELAY);
+  }
+  // just in case
+  analogWrite(LED_PIN, fadeTo);
 }
 
 // function called when a MQTT message arrived
@@ -112,9 +132,9 @@ void setup() {
 
   // init the led
   pinMode(LED_PIN, OUTPUT);
-  pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
   analogWrite(LED_PIN, 150);
-  buttonStatus = digitalRead(buttonPin);
+  buttonStatus = digitalRead(BUTTON_PIN);
 
   // init the WiFi connection
   Serial.println();
@@ -183,8 +203,8 @@ void loop() {
     reconnect();
   }
   client.loop();
-  if (digitalRead(buttonPin) != buttonStatus) {
-    buttonStatus = digitalRead(buttonPin);
+  if (digitalRead(BUTTON_PIN) != buttonStatus) {
+    buttonStatus = digitalRead(BUTTON_PIN);
     // switch state
     light_state = !light_state;
     // if on set to 255

@@ -28,12 +28,14 @@ const char* LIGHT_OFF = "OFF";
 
 // vars
 const uint8_t MIN_LUX = 30;
+const uint8_t FADE_DELAY = 2;
 const uint8_t BUFFER_SIZE = 5;
 const PROGMEM uint8_t LED_PIN = 15;
 const PROGMEM uint8_t EW_PIN = 5;
 boolean light_state = false;
 boolean ew_state = false;
 uint8_t lux = MIN_LUX;
+uint8_t curr_lux = MIN_LUX;
 uint8_t ha_lux = 0;
 char msg_buffer[BUFFER_SIZE];
 
@@ -51,15 +53,33 @@ void publishLightState() {
   // ew state
   if (ew_state) client.publish(EW_STATE_TOPIC, LIGHT_ON, true);
   else client.publish(EW_STATE_TOPIC, LIGHT_OFF, true);
+  Serial.println("publish light state");
 }
 
 void setLightState() {
   // analog write to led
-  if (light_state) analogWrite(LED_PIN, lux);
-  else analogWrite(LED_PIN, 0);
+  if (light_state) fadeToLight(lux);
+  else fadeToLight(0);
   // digital write to ew
   if (ew_state) digitalWrite(EW_PIN, HIGH);
   else digitalWrite(EW_PIN, LOW);
+}
+
+void fadeToLight(int fadeTo) {
+  // increase brightness
+  while ( fadeTo > curr_lux ) {
+    curr_lux++;
+    analogWrite(LED_PIN, curr_lux);
+    delay(FADE_DELAY);
+  }
+  // decrease brightness
+  while ( fadeTo < curr_lux ) {
+    curr_lux--;
+    analogWrite(LED_PIN, curr_lux);
+    delay(FADE_DELAY);
+  }
+  // just in case
+  analogWrite(LED_PIN, fadeTo);
 }
 
 // function called when a MQTT message arrived
@@ -95,13 +115,14 @@ void callback(char* topic, byte* p_payload, unsigned int p_length) {
       ew_state = false;
     }
   }
-  setLightState();
   publishLightState();
+  setLightState();
 }
 
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
+    ArduinoOTA.handle();
     Serial.print("Attempting MQTT connection...");
     if (client.connect(CLIENT_ID, MQTT_USER, MQTT_PASSWORD)) {
       Serial.println("connected");
@@ -195,7 +216,6 @@ void espOTA() {
 
 void loop() {
   if (!client.connected()) {
-    ArduinoOTA.handle();
     reconnect();
   }
   client.loop();
